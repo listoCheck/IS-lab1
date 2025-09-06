@@ -5,5 +5,5 @@ public enum MovieGenre {
     COMEDY,
     MUSICAL,
     ADVENTURE,
-    FANTASY;
+    FANTASY
 }
