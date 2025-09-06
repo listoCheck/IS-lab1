@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: postgres-studs
+    environment:
+      POSTGRES_DB: studs
+      POSTGRES_USER: s408145
+      POSTGRES_PASSWORD: JLzD%6772
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - IS-labs
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U s408145 -d studs"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+volumes:
+  postgres_data:
+
+networks:
+  IS-labs:
+    driver: bridge
