@@ -5,7 +5,7 @@ import jakarta.validation.constraints.*;
 import org.openapitools.jackson.nullable.JsonNullable;
 
 @Data
-public class CoordinateUpdate {
+public class CoordinateUpdateDTO {
     @NotNull
     @Min(-355)
     private JsonNullable<Integer> x;

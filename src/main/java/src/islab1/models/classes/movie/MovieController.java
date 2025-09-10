@@ -6,7 +6,7 @@ import jakarta.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/movies")
+@RequestMapping("api/movies")
 public class MovieController {
     private final MovieService service;
 

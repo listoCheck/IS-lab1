@@ -1,14 +1,12 @@
 package src.islab1.models.classes.coordinates.dto;
 
-import jakarta.validation.constraints.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
-public class CoordinateCreate{
-    @NotNull
-    @Min(-355)
+@EqualsAndHashCode(callSuper = false)
+public class CoordinateDTO {
+    private int id;
     private Integer x;
-
-    @Max(878)
     private Float y;
 }

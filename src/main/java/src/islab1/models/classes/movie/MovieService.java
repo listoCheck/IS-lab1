@@ -1,15 +1,13 @@
 package src.islab1.models.classes.movie;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
+@AllArgsConstructor
 public class MovieService {
     private final MovieRepository repository;
-
-    public MovieService(MovieRepository repository) {
-        this.repository = repository;
-    }
 
     @Transactional
     public Movie save(Movie movie) {
