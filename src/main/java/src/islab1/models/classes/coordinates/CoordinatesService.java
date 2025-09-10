@@ -27,4 +27,8 @@ public class CoordinatesService {
     public void deleteById(Integer id) {
         coordinatesRepository.deleteById(id);
     }
+
+    public void save(Coordinates coordinates) {
+        coordinatesRepository.save(coordinates);
+    }
 }
