@@ -16,4 +16,8 @@ public class CoordinatesController {
     public void saveCoordinates(@RequestBody Coordinates coordinates) {
         coordinatesService.save(coordinates);
     }
+    @DeleteMapping("del/{id}")
+    public void deleteCoordinates(@PathVariable int id) {
+        coordinatesService.deleteById(id);
+    }
 }
