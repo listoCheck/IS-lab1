@@ -2,6 +2,8 @@ package src.islab1.models.classes.movie;
 
 import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
+import src.islab1.models.classes.movie.DTO.MovieResponseDTO;
+import src.islab1.models.classes.movie.DTO.MovieRequestDTO;
 
 import java.util.List;
 
@@ -15,18 +17,21 @@ public class MovieController {
     }
 
     @PostMapping
-    public Movie create(@Valid @RequestBody Movie movie) {
-        return service.save(movie);
+    public MovieResponseDTO create(@Valid @RequestBody MovieRequestDTO dto) {
+        Movie movie = MovieMapper.toEntity(dto);
+        return MovieMapper.toDto(service.save(movie));
     }
 
     @GetMapping
-    public List<Movie> getAll() {
-        return service.findAll();
+    public List<MovieResponseDTO> getAll() {
+        return service.findAll().stream()
+                .map(MovieMapper::toDto)
+                .toList();
     }
 
     @GetMapping("/{id}")
-    public Movie getOne(@PathVariable Integer id) {
-        return service.findById(id);
+    public MovieResponseDTO getOne(@PathVariable Integer id) {
+        return MovieMapper.toDto(service.findById(id));
     }
 
     @DeleteMapping("/{id}")

@@ -8,7 +8,7 @@ import src.islab1.models.classes.coordinates.dto.CoordinateDTO;
 @RequestMapping("/api/coordinates")
 public class CoordinatesController {
     CoordinatesService coordinatesService;
-    @GetMapping("/get/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<Coordinates> getCoordinates(@PathVariable int id) {
         return ResponseEntity.ok(coordinatesService.findById(id));
     }
@@ -16,7 +16,7 @@ public class CoordinatesController {
     public void saveCoordinates(@RequestBody Coordinates coordinates) {
         coordinatesService.save(coordinates);
     }
-    @DeleteMapping("del/{id}")
+    @DeleteMapping("/{id}")
     public void deleteCoordinates(@PathVariable int id) {
         coordinatesService.deleteById(id);
     }
