@@ -1,18 +1,18 @@
 package src.islab1jee.models.movie.dto;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
 import lombok.Getter;
 import lombok.Setter;
 import src.islab1jee.enums.MovieGenre;
 import src.islab1jee.enums.MpaaRating;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
+
 @Setter
 @Getter
 public class MovieRequestDto {
 
-    // getters/setters
     @NotBlank
     private String name;
 
