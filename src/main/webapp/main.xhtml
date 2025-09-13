@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+<h:head>
+    <title>ИС Фильмов - Main</title>
+    <link href="recources/css/indexPage.css" rel="stylesheet" type="text/css" />
+    <link href="recources/images/duck.png" rel="icon"/>
+    <style>
+        .accordion-header { font-weight: bold; cursor: pointer; margin-top: 10px; }
+        .accordion-content { margin: 5px 0 15px 20px; display: none; }
+    </style>
+    <script>
+        function toggleAccordion(id) {
+            var e = document.getElementById(id);
+            e.style.display = e.style.display === 'block' ? 'none' : 'block';
+        }
+    </script>
+</h:head>
+
+<h:body>
+    <h:form>
+        <p:button value="Назад" action="index" icon="pi pi-arrow-left" />
+
+        <h2>Управление сущностями</h2>
+
+        <!-- Movies -->
+        <div class="accordion-header" onclick="toggleAccordion('moviesPanel')">Movies</div>
+        <div id="moviesPanel" class="accordion-content">
+            <p:dataTable var="movie" value="#{movieService.getAll()}" paginator="true" rows="10">
+                <p:column headerText="ID"><h:outputText value="#{movie.id}" /></p:column>
+                <p:column headerText="Name"><h:outputText value="#{movie.name}" /></p:column>
+                <p:column headerText="Tagline"><h:outputText value="#{movie.tagline}" /></p:column>
+                <p:column headerText="Genre"><h:outputText value="#{movie.genre}" /></p:column>
+                <p:column headerText="USA Box Office"><h:outputText value="#{movie.usaBoxOffice}" /></p:column>
+                <p:column headerText="Actions">
+                    <p:commandButton value="Edit" actionListener="#{movieBean.prepareEdit(movie)}" update=":movieDialog" oncomplete="PF('movieDialog').show();" />
+                    <p:commandButton value="Delete" actionListener="#{movieService.delete(movie.id)}" update="@form" />
+                </p:column>
+            </p:dataTable>
+
+            <p:commandButton value="Добавить фильм" onclick="PF('movieDialog').show();" type="button" />
+        </div>
+
+        <!-- Persons -->
+        <div class="accordion-header" onclick="toggleAccordion('personsPanel')">Persons</div>
+        <div id="personsPanel" class="accordion-content">
+            <p:dataTable var="person" value="#{personService.getAll()}" paginator="true" rows="10">
+                <p:column headerText="Name"><h:outputText value="#{person.name}" /></p:column>
+                <p:column headerText="Nationality"><h:outputText value="#{person.nationality}" /></p:column>
+                <p:column headerText="Actions">
+                    <p:commandButton value="Edit" actionListener="#{personBean.prepareEdit(person)}" update=":personDialog" oncomplete="PF('personDialog').show();" />
+                    <p:commandButton value="Delete" actionListener="#{personService.delete(person.id)}" update="@form" />
+                </p:column>
+            </p:dataTable>
+
+            <p:commandButton value="Добавить персонажа" onclick="PF('personDialog').show();" type="button" />
+        </div>
+
+        <!-- Coordinates -->
+        <div class="accordion-header" onclick="toggleAccordion('coordsPanel')">Coordinates</div>
+        <div id="coordsPanel" class="accordion-content">
+            <p:dataTable var="coord" value="#{coordinatesService.getAll()}" paginator="true" rows="10">
+                <p:column headerText="X"><h:outputText value="#{coord.x}" /></p:column>
+                <p:column headerText="Y"><h:outputText value="#{coord.y}" /></p:column>
+                <p:column headerText="Actions">
+                    <p:commandButton value="Edit" actionListener="#{coordinatesBean.prepareEdit(coord)}" update=":coordDialog" oncomplete="PF('coordDialog').show();" />
+                    <p:commandButton value="Delete" actionListener="#{coordinatesService.delete(coord.id)}" update="@form" />
+                </p:column>
+            </p:dataTable>
+
+            <p:commandButton value="Добавить координаты" onclick="PF('coordDialog').show();" type="button" />
+        </div>
+
+        <!-- Locations -->
+        <div class="accordion-header" onclick="toggleAccordion('locationsPanel')">Locations</div>
+        <div id="locationsPanel" class="accordion-content">
+            <p:dataTable var="loc" value="#{locationService.getAll()}" paginator="true" rows="10">
+                <p:column headerText="X"><h:outputText value="#{loc.x}" /></p:column>
+                <p:column headerText="Y"><h:outputText value="#{loc.y}" /></p:column>
+                <p:column headerText="Z"><h:outputText value="#{loc.z}" /></p:column>
+                <p:column headerText="Actions">
+                    <p:commandButton value="Edit" actionListener="#{locationBean.prepareEdit(loc)}" update=":locationDialog" oncomplete="PF('locationDialog').show();" />
+                    <p:commandButton value="Delete" actionListener="#{locationService.delete(loc.id)}" update="@form" />
+                </p:column>
+            </p:dataTable>
+
+            <p:commandButton value="Добавить локацию" onclick="PF('locationDialog').show();" type="button" />
+        </div>
+
+        <!-- Special Operations -->
+        <div class="accordion-header" onclick="toggleAccordion('specialOpsPanel')">Специальные операции</div>
+        <div id="specialOpsPanel" class="accordion-content">
+            <p:commandButton value="Среднее USA Box Office" actionListener="#{movieBean.calculateAvgUsaBoxOffice}" update="specialResult" />
+            <p:commandButton value="Фильмы без Оскаров" actionListener="#{movieBean.getMoviesWithoutOscars}" update="specialResult" />
+            <h:outputText id="specialResult" value="#{movieBean.specialResult}" />
+        </div>
+    </h:form>
+
+</h:body>
+</html>
