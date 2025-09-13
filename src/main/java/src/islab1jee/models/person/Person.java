@@ -6,8 +6,8 @@ import src.islab1jee.models.location.Location;
 import src.islab1jee.enums.Color;
 import src.islab1jee.enums.Country;
 
-import javax.persistence.*;
-import javax.validation.constraints.*;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 
 @Setter
 @Getter

@@ -1,12 +1,13 @@
 package src.islab1jee.models.location;
 
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import jakarta.annotation.ManagedBean;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+
 import java.util.List;
 
-@ManagedBean(name = "locationRepository")
+@ManagedBean("locationRepository")
 @RequestScoped
 public class LocationRepository {
 

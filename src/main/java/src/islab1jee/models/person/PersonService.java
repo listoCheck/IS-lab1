@@ -1,8 +1,8 @@
 package src.islab1jee.models.person;
 
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.RequestScoped;
+import jakarta.annotation.ManagedBean;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.faces.annotation.ManagedProperty;
 import src.islab1jee.models.location.Location;
 import src.islab1jee.models.location.LocationRepository;
 import src.islab1jee.models.person.dto.PersonRequestDto;
@@ -11,7 +11,7 @@ import src.islab1jee.models.person.dto.PersonResponseDto;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@ManagedBean(name = "personService")
+@ManagedBean("personService")
 @RequestScoped
 public class PersonService {
 

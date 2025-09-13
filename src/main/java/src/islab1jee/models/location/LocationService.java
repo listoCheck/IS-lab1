@@ -1,13 +1,13 @@
 package src.islab1jee.models.location;
 
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.RequestScoped;
+import jakarta.annotation.ManagedBean;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.faces.annotation.ManagedProperty;
 import src.islab1jee.models.location.dto.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@ManagedBean(name = "locationService")
+@ManagedBean("locationService")
 @RequestScoped
 public class LocationService {
 

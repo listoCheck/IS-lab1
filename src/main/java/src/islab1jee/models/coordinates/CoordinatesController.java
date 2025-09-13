@@ -1,19 +1,20 @@
 package src.islab1jee.models.coordinates;
 
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.RequestScoped;
-import javax.validation.Valid;
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
+
 import java.util.List;
+
+import jakarta.annotation.ManagedBean;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.faces.annotation.ManagedProperty;
+import jakarta.validation.Valid;
+import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.*;
 import src.islab1jee.models.coordinates.dto.*;
 
 @Path("/coordinates")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-@ManagedBean(name = "coordinatesController")
+@ManagedBean("coordinatesController")
 @RequestScoped
 public class CoordinatesController {
 

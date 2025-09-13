@@ -22,19 +22,17 @@ tasks.withType(JavaCompile).configureEach {
 }
 
 dependencies {
-    compileOnly("javax:javaee-api:8.0") // Java EE 8
-    //implementation("org.hibernate:hibernate-core:5.4.35.Final")
-
+    compileOnly("jakarta.platform:jakarta.jakartaee-api:10.0.0")
     implementation("org.glassfish.jaxb:jaxb-runtime:2.3.5")
 
     compileOnly("org.projectlombok:lombok:1.18.40")
     annotationProcessor("org.projectlombok:lombok:1.18.40")
-
     testCompileOnly("org.projectlombok:lombok:1.18.40")
     testAnnotationProcessor("org.projectlombok:lombok:1.18.40")
     testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
 }
+
 
 test {
     useJUnitPlatform()

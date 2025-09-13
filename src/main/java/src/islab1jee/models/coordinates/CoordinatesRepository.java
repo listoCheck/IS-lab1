@@ -1,13 +1,12 @@
 package src.islab1jee.models.coordinates;
 
-import src.islab1jee.models.coordinates.Coordinates;
+import jakarta.ejb.Stateless;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 
-import javax.ejb.Stateless;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import java.util.List;
 
-@Stateless
+//@Stateless
 public class CoordinatesRepository {
 
     @PersistenceContext(unitName = "studsPU")

@@ -1,12 +1,12 @@
 package src.islab1jee.models.coordinates;
 
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
+import jakarta.annotation.ManagedBean;
+import jakarta.enterprise.context.RequestScoped;
 import src.islab1jee.models.coordinates.dto.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@ManagedBean(name = "coordinatesService")
+@ManagedBean("coordinatesService")
 @RequestScoped
 public class CoordinatesService {
 

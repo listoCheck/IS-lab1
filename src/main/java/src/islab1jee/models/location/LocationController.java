@@ -1,28 +1,28 @@
 package src.islab1jee.models.location;
 
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.RequestScoped;
-import javax.validation.Valid;
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
+
 import java.util.List;
+
+import jakarta.annotation.ManagedBean;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.faces.annotation.ManagedProperty;
+import jakarta.validation.Valid;
+import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
+import lombok.Setter;
 import src.islab1jee.models.location.dto.*;
 
+@Setter
 @Path("/locations")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-@ManagedBean(name = "locationController")
+@ManagedBean("locationController")
 @RequestScoped
 public class LocationController {
 
     @ManagedProperty(value = "#{locationService}")
     private LocationService service;
-
-    public void setService(LocationService service) {
-        this.service = service;
-    }
 
     @POST
     public Response create(@Valid LocationRequestDto dto) {

@@ -13,7 +13,6 @@ import src.islab1jee.models.location.dto.LocationResponseDto;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PersonResponseDto {
-    // getters/setters
     private Integer id;
     private String name;
     private Color eyeColor;

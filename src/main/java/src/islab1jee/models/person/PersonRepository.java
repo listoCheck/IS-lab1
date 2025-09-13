@@ -1,11 +1,13 @@
 package src.islab1jee.models.person;
 
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
-import javax.persistence.*;
+import jakarta.annotation.ManagedBean;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+
 import java.util.List;
 
-@ManagedBean(name = "personRepository")
+@ManagedBean("personRepository")
 @RequestScoped
 public class PersonRepository {
 

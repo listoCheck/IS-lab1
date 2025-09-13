@@ -1,9 +1,10 @@
 package src.islab1jee.models.coordinates.dto;
 
+import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.validation.constraints.*;
 
 @Getter
 @Setter

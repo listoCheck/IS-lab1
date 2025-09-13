@@ -1,12 +1,13 @@
 package src.islab1jee.models.movie;
 
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import jakarta.annotation.ManagedBean;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+
 import java.util.List;
 
-@ManagedBean(name = "movieRepository")
+@ManagedBean("movieRepository")
 @RequestScoped
 public class MovieRepository {
 

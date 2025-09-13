@@ -1,29 +1,28 @@
 package src.islab1jee.models.person;
 
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.RequestScoped;
-import javax.validation.*;
-import javax.ws.rs.*;
-import javax.ws.rs.Path;
-import javax.ws.rs.core.*;
+import jakarta.annotation.ManagedBean;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.faces.annotation.ManagedProperty;
+import jakarta.validation.Valid;
+import jakarta.ws.rs.*;
 import java.util.List;
+
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
+import lombok.Setter;
 import src.islab1jee.models.person.dto.PersonRequestDto;
 import src.islab1jee.models.person.dto.PersonResponseDto;
 
+@Setter
 @Path("/persons")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-@ManagedBean(name = "personController")
+@ManagedBean("personController")
 @RequestScoped
 public class PersonController {
 
     @ManagedProperty(value = "#{personService}")
     private PersonService service;
-
-    public void setService(PersonService service) {
-        this.service = service;
-    }
 
     @POST
     public Response create(@Valid PersonRequestDto dto) {

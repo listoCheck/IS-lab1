@@ -1,11 +1,14 @@
 package src.islab1jee.models.coordinates;
 
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import lombok.*;
 
 
-import javax.persistence.*;
-import javax.validation.constraints.*;
 
 @Setter
 @Getter
