@@ -1,17 +1,15 @@
 package src.islab1jee.models.location;
 
-import jakarta.annotation.ManagedBean;
-import jakarta.enterprise.context.RequestScoped;
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 
 import java.util.List;
 
-@ManagedBean("locationRepository")
-@RequestScoped
+@ApplicationScoped
 public class LocationRepository {
 
-    @PersistenceContext(unitName = "studsPU")
+    @PersistenceContext
     private EntityManager em;
 
     public Location save(Location l) {

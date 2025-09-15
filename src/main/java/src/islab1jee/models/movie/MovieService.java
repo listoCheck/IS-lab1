@@ -1,10 +1,8 @@
 package src.islab1jee.models.movie;
 
-
-import jakarta.annotation.ManagedBean;
 import jakarta.enterprise.context.RequestScoped;
-import jakarta.faces.annotation.ManagedProperty;
-import lombok.Setter;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 import src.islab1jee.models.coordinates.Coordinates;
 import src.islab1jee.models.coordinates.CoordinatesRepository;
 import src.islab1jee.models.movie.dto.MovieRequestDto;
@@ -15,18 +13,17 @@ import src.islab1jee.models.person.PersonRepository;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Setter
-@ManagedBean("movieService")
+@Named
 @RequestScoped
 public class MovieService {
 
-    @ManagedProperty(value = "#{movieRepository}")
+    @Inject
     private MovieRepository movieRepository;
 
-    @ManagedProperty(value = "#{coordinatesRepository}")
+    @Inject
     private CoordinatesRepository coordinatesRepository;
 
-    @ManagedProperty(value = "#{personRepository}")
+    @Inject
     private PersonRepository personRepository;
 
     public MovieResponseDto create(MovieRequestDto dto) {

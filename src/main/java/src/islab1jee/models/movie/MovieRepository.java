@@ -1,14 +1,11 @@
 package src.islab1jee.models.movie;
 
-import jakarta.annotation.ManagedBean;
-import jakarta.enterprise.context.RequestScoped;
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-
 import java.util.List;
 
-@ManagedBean("movieRepository")
-@RequestScoped
+@ApplicationScoped
 public class MovieRepository {
 
     @PersistenceContext(unitName = "studsPU")

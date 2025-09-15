@@ -1,12 +1,9 @@
 package src.islab1jee.models.movie;
 
-
-
 import java.util.List;
-
-import jakarta.annotation.ManagedBean;
 import jakarta.enterprise.context.RequestScoped;
-import jakarta.faces.annotation.ManagedProperty;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
@@ -14,19 +11,15 @@ import jakarta.ws.rs.core.Response;
 import src.islab1jee.models.movie.dto.MovieRequestDto;
 import src.islab1jee.models.movie.dto.MovieResponseDto;
 
+@Named
+@RequestScoped
 @Path("/movies")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-@ManagedBean("movieController")
-@RequestScoped
 public class MovieController {
 
-    @ManagedProperty(value = "#{movieService}")
+    @Inject
     private MovieService service;
-
-    public void setService(MovieService service) {
-        this.service = service;
-    }
 
     @POST
     public Response create(@Valid MovieRequestDto dto) {

@@ -1,15 +1,14 @@
 package src.islab1jee.models.coordinates;
 
-import jakarta.ejb.Stateless;
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-
 import java.util.List;
 
-//@Stateless
+@ApplicationScoped
 public class CoordinatesRepository {
 
-    @PersistenceContext(unitName = "studsPU")
+    @PersistenceContext
     private EntityManager em;
 
     public Coordinates save(Coordinates c) {
@@ -26,7 +25,8 @@ public class CoordinatesRepository {
     }
 
     public List<Coordinates> findAll() {
-        return em.createQuery("SELECT c FROM Coordinates c", Coordinates.class).getResultList();
+        return em.createQuery("SELECT c FROM Coordinates c", Coordinates.class)
+                .getResultList();
     }
 
     public void delete(Integer id) {

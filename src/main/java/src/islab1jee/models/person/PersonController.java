@@ -1,27 +1,26 @@
 package src.islab1jee.models.person;
 
-import jakarta.annotation.ManagedBean;
 import jakarta.enterprise.context.RequestScoped;
-import jakarta.faces.annotation.ManagedProperty;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
-import java.util.List;
-
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import lombok.Setter;
+
+import java.util.List;
+
 import src.islab1jee.models.person.dto.PersonRequestDto;
 import src.islab1jee.models.person.dto.PersonResponseDto;
 
-@Setter
+@Named
+@RequestScoped
 @Path("/persons")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-@ManagedBean("personController")
-@RequestScoped
 public class PersonController {
 
-    @ManagedProperty(value = "#{personService}")
+    @Inject
     private PersonService service;
 
     @POST

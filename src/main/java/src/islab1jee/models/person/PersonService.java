@@ -1,8 +1,8 @@
 package src.islab1jee.models.person;
 
-import jakarta.annotation.ManagedBean;
 import jakarta.enterprise.context.RequestScoped;
-import jakarta.faces.annotation.ManagedProperty;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 import src.islab1jee.models.location.Location;
 import src.islab1jee.models.location.LocationRepository;
 import src.islab1jee.models.person.dto.PersonRequestDto;
@@ -11,23 +11,15 @@ import src.islab1jee.models.person.dto.PersonResponseDto;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@ManagedBean("personService")
+@Named
 @RequestScoped
 public class PersonService {
 
-    @ManagedProperty(value = "#{personRepository}")
+    @Inject
     private PersonRepository repository;
 
-    @ManagedProperty(value = "#{locationRepository}")
+    @Inject
     private LocationRepository locationRepository;
-
-    public void setRepository(PersonRepository repository) {
-        this.repository = repository;
-    }
-
-    public void setLocationRepository(LocationRepository locationRepository) {
-        this.locationRepository = locationRepository;
-    }
 
     public PersonResponseDto create(PersonRequestDto dto) {
         Location location = locationRepository.findById(dto.getLocationId());

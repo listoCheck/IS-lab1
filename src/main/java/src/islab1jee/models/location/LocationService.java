@@ -1,22 +1,16 @@
 package src.islab1jee.models.location;
 
-import jakarta.annotation.ManagedBean;
-import jakarta.enterprise.context.RequestScoped;
-import jakarta.faces.annotation.ManagedProperty;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 import src.islab1jee.models.location.dto.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@ManagedBean("locationService")
-@RequestScoped
+@ApplicationScoped
 public class LocationService {
 
-    @ManagedProperty(value = "#{locationRepository}")
+    @Inject
     private LocationRepository repository;
-
-    public void setRepository(LocationRepository repository) {
-        this.repository = repository;
-    }
 
     public LocationResponseDto create(LocationRequestDto dto) {
         Location entity = LocationMapper.toEntity(dto);

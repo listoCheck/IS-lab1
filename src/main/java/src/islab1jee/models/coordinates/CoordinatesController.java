@@ -1,29 +1,21 @@
 package src.islab1jee.models.coordinates;
 
-
 import java.util.List;
-
-import jakarta.annotation.ManagedBean;
 import jakarta.enterprise.context.RequestScoped;
-import jakarta.faces.annotation.ManagedProperty;
-import jakarta.validation.Valid;
+import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.*;
+import jakarta.validation.Valid;
 import src.islab1jee.models.coordinates.dto.*;
 
 @Path("/coordinates")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-@ManagedBean("coordinatesController")
 @RequestScoped
 public class CoordinatesController {
 
-    @ManagedProperty(value = "#{coordinatesService}")
+    @Inject
     private CoordinatesService service;
-
-    public void setService(CoordinatesService service) {
-        this.service = service;
-    }
 
     @POST
     public Response create(@Valid CoordinatesRequestDto dto) {

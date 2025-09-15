@@ -1,16 +1,17 @@
 package src.islab1jee.models.coordinates;
 
-import jakarta.annotation.ManagedBean;
-import jakarta.enterprise.context.RequestScoped;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 import src.islab1jee.models.coordinates.dto.*;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
-@ManagedBean("coordinatesService")
-@RequestScoped
+@ApplicationScoped
 public class CoordinatesService {
 
-    private CoordinatesRepository repository = new CoordinatesRepository();
+    @Inject
+    private CoordinatesRepository repository;
 
     public CoordinatesResponseDto create(CoordinatesRequestDto dto) {
         Coordinates entity = CoordinatesMapper.toEntity(dto);

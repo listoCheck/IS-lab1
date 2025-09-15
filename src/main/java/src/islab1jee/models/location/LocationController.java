@@ -1,27 +1,22 @@
 package src.islab1jee.models.location;
 
-
 import java.util.List;
 
-import jakarta.annotation.ManagedBean;
 import jakarta.enterprise.context.RequestScoped;
-import jakarta.faces.annotation.ManagedProperty;
+import jakarta.inject.Inject;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import lombok.Setter;
 import src.islab1jee.models.location.dto.*;
 
-@Setter
 @Path("/locations")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-@ManagedBean("locationController")
 @RequestScoped
 public class LocationController {
 
-    @ManagedProperty(value = "#{locationService}")
+    @Inject
     private LocationService service;
 
     @POST
