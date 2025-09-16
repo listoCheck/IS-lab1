@@ -8,7 +8,7 @@ import java.util.List;
 @ApplicationScoped
 public class PersonRepository {
 
-    @PersistenceContext(unitName = "studsPU")
+    @PersistenceContext(unitName = "PostgresPU")
     private EntityManager em;
 
     public Person save(Person p) {

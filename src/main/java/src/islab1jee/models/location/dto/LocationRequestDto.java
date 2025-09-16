@@ -9,7 +9,6 @@ import lombok.Setter;
 @Setter
 @Getter
 public class LocationRequestDto {
-    // getters/setters
     @NotNull(message = "Поле x не может быть null")
     private Float x;
 

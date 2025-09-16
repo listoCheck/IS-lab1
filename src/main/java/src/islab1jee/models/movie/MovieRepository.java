@@ -8,7 +8,7 @@ import java.util.List;
 @ApplicationScoped
 public class MovieRepository {
 
-    @PersistenceContext(unitName = "studsPU")
+    @PersistenceContext(unitName = "PostgresPU")
     private EntityManager em;
 
     public Movie save(Movie movie) {

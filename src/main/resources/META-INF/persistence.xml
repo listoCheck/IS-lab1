@@ -5,11 +5,18 @@
                                  https://jakarta.ee/xml/ns/persistence/persistence_3_1.xsd"
              version="3.1">
 
-    <persistence-unit name="studsPU" transaction-type="JTA">
-        <jta-data-source>java:jboss/datasources/ExampleDS</jta-data-source>
+    <persistence-unit name="PostgresPU" transaction-type="JTA">
+        <jta-data-source>java:jboss/PostgresDS</jta-data-source>
+
         <class>src.islab1jee.models.location.Location</class>
+        <class>src.islab1jee.models.coordinates.Coordinates</class>
+        <class>src.islab1jee.models.person.Person</class>
+        <class>src.islab1jee.models.movie.Movie</class>
+
         <properties>
-            <property name="jakarta.persistence.schema-generation.database.action" value="create"/>
+            <property name="jakarta.persistence.schema-generation.database.action" value="update"/>
+            <property name="hibernate.show_sql" value="true"/>
+            <property name="hibernate.format_sql" value="true"/>
         </properties>
     </persistence-unit>
 
