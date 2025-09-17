@@ -13,7 +13,7 @@ import lombok.*;
 @Setter
 @Getter
 @Entity
-@Table(name = "coordinates")
+@Table
 public class Coordinates {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "coordinates_id_seq")
@@ -22,10 +22,10 @@ public class Coordinates {
 
     @NotNull(message = "Поле не может быть null")
     @Min(value = -335, message = "Значение поля должно быть больше -335")
-    @Column(name = "x", nullable = false)
+    @Column(nullable = false)
     private Float x; //Значение поля должно быть больше -335, Поле не может быть null
 
     @Max(value = 878, message = "Максимальное значение поля: 878")
-    @Column(name = "y")
+    @Column
     private long y; //Максимальное значение поля: 878
 }

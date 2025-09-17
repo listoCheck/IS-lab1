@@ -15,7 +15,7 @@ import java.time.LocalDate;
 @Setter
 @Getter
 @Entity
-@Table(name = "movies")
+@Table
 public class Movie {
 
     @Id
@@ -24,62 +24,62 @@ public class Movie {
     private Integer id;
 
     @NotBlank
-    @Column(name = "name", nullable = false)
+    @Column(nullable = false)
     private String name;
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "coordinates_id", nullable = false)
+    @JoinColumn(nullable = false)
     private Coordinates coordinates;
 
-    @Column(name = "creation_date", nullable = false, updatable = false)
+    @Column(nullable = false, updatable = false)
     private LocalDate creationDate = LocalDate.now();
 
     @Positive
-    @Column(name = "oscars_count", nullable = false)
+    @Column(nullable = false)
     private long oscarsCount;
 
     @Positive
-    @Column(name = "budget")
+    @Column
     private Long budget; // может быть null
 
     @Positive
-    @Column(name = "total_box_office", nullable = false)
+    @Column(nullable = false)
     private long totalBoxOffice;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "mpaa_rating")
+    @Column
     private MpaaRating mpaaRating;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "director_id", nullable = false)
+    @JoinColumn(nullable = false)
     private Person director;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "screenwriter_id")
+    @JoinColumn
     private Person screenwriter;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "operator_id", nullable = false)
+    @JoinColumn(nullable = false)
     private Person operator;
 
     @Positive
-    @Column(name = "length")
+    @Column
     private Long length;
 
     @Positive
-    @Column(name = "golden_palm_count", nullable = false)
+    @Column(nullable = false)
     private int goldenPalmCount;
 
     @Positive
-    @Column(name = "usa_box_office", nullable = false)
+    @Column(nullable = false)
     private double usaBoxOffice;
 
     @NotBlank
-    @Column(name = "tagline", nullable = false)
+    @Column(nullable = false)
     private String tagline;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "genre", nullable = false)
+    @Column(nullable = false)
     private MovieGenre genre;
 
 }
