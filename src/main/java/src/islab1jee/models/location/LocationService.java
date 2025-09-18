@@ -2,6 +2,7 @@ package src.islab1jee.models.location;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
 import src.islab1jee.models.location.dto.*;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -12,6 +13,7 @@ public class LocationService {
     @Inject
     private LocationRepository repository;
 
+    @Transactional
     public LocationResponseDto create(LocationRequestDto dto) {
         Location entity = LocationMapper.toEntity(dto);
         Location saved = repository.save(entity);
@@ -32,6 +34,7 @@ public class LocationService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
     public LocationResponseDto update(Integer id, LocationRequestDto dto) {
         Location entity = repository.findById(id);
         if (entity == null) {
@@ -45,6 +48,7 @@ public class LocationService {
         return LocationMapper.toDto(updated);
     }
 
+    @Transactional
     public void delete(Integer id) {
         repository.delete(id);
     }

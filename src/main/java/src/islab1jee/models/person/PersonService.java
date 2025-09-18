@@ -3,6 +3,7 @@ package src.islab1jee.models.person;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
+import jakarta.transaction.Transactional;
 import src.islab1jee.models.location.Location;
 import src.islab1jee.models.location.LocationRepository;
 import src.islab1jee.models.person.dto.PersonRequestDto;
@@ -21,6 +22,7 @@ public class PersonService {
     @Inject
     private LocationRepository locationRepository;
 
+    @Transactional
     public PersonResponseDto create(PersonRequestDto dto) {
         Location location = locationRepository.findById(dto.getLocationId());
         if (location == null) {
@@ -44,6 +46,7 @@ public class PersonService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
     public PersonResponseDto update(Integer id, PersonRequestDto dto) {
         Person entity = repository.findById(id);
         if (entity == null) {
@@ -66,6 +69,7 @@ public class PersonService {
         return PersonMapper.toDto(repository.save(entity));
     }
 
+    @Transactional
     public void delete(Integer id) {
         repository.delete(id);
     }

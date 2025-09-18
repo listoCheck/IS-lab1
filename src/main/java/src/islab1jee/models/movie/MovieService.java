@@ -3,6 +3,7 @@ package src.islab1jee.models.movie;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
+import jakarta.transaction.Transactional;
 import src.islab1jee.models.coordinates.Coordinates;
 import src.islab1jee.models.coordinates.CoordinatesRepository;
 import src.islab1jee.models.movie.dto.MovieRequestDto;
@@ -26,6 +27,7 @@ public class MovieService {
     @Inject
     private PersonRepository personRepository;
 
+    @Transactional
     public MovieResponseDto create(MovieRequestDto dto) {
         Coordinates coordinates = coordinatesRepository.findById(dto.getCoordinatesId());
         Person director = personRepository.findById(dto.getDirectorId());
@@ -52,6 +54,7 @@ public class MovieService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
     public MovieResponseDto update(Integer id, MovieRequestDto dto) {
         Movie movie = movieRepository.findById(id);
         if (movie == null) throw new RuntimeException("Фильм с id=" + id + " не найден");
@@ -83,6 +86,7 @@ public class MovieService {
         return MovieMapper.toDto(movieRepository.save(movie));
     }
 
+    @Transactional
     public void delete(Integer id) {
         movieRepository.delete(id);
     }

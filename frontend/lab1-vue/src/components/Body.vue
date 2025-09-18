@@ -1,3 +1,279 @@
+<script setup lang="ts">
+import {ref, reactive, computed, onMounted} from 'vue'
+
+const baseUrl = 'http://localhost:8080/IS-lab1JEE-1.0-SNAPSHOT/api'
+
+const movies = ref([])
+const page = ref(1)
+const pageSize = ref(10)
+const sortBy = ref('id')
+const sortDir = ref('asc')
+const filterText = ref('')
+const totalPages = ref(1)
+const coordinatesList = ref([])
+const personsList = ref([])
+const mpaaRatings = ref(["G", "PG", "PG_13", "R", "NC_17"])
+const genres = ref(["WESTERN", "COMEDY", "MUSICAL", "ADVENTURE", "FANTASY"])
+
+const showForm = ref(false)
+const formMode = ref('create')
+const editId = ref<number | null>(null)
+
+const form = reactive({
+    name: '', coordinateX: 0, coordinatesY: 0, oscarsCount: 0, budget: null, totalBoxOffice: 0,
+    mpaaRating: null, directorId: null, screenwriterId: null, operatorId: null, length: null,
+    goldenPalmCount: 0, usaBoxOffice: 0.0, tagline: '', genre: ''
+})
+const errors = reactive({})
+const showView = ref(false)
+const currentMovie = reactive({})
+const showDeleteConfirm = ref(false)
+const deleteTarget = reactive({})
+const toast = ref('')
+const opResult = ref('')
+const opGenreThreshold = ref(0)
+const opTaglineThreshold = ref(0)
+const opGenreToStrip = ref('')
+
+const filtered = computed(() => {
+    if (!filterText.value) return movies.value
+    const q = filterText.value.toLowerCase()
+    return movies.value.filter(m => {
+        if (m.name?.toLowerCase().includes(q)) return true
+        if (m.tagline?.toLowerCase().includes(q)) return true
+        if (m.mpaaRating?.toLowerCase().includes(q)) return true
+        if (m.genre?.toLowerCase().includes(q)) return true
+        if (m.director && personName(m.director).toLowerCase().includes(q)) return true
+        return false
+    })
+})
+
+const pagedMovies = computed(() => {
+    const arr = [...filtered.value]
+    arr.sort((a, b) => {
+        let A = a[sortBy.value], B = b[sortBy.value]
+        if (A === undefined) A = '';
+        if (B === undefined) B = ''
+        if (sortBy.value === 'creationDate') {
+            A = new Date(A);
+            B = new Date(B)
+        }
+        if (typeof A === 'string') A = A.toLowerCase();
+        if (typeof B === 'string') B = B.toLowerCase()
+        if (A < B) return sortDir.value === 'asc' ? -1 : 1
+        if (A > B) return sortDir.value === 'asc' ? 1 : -1
+        return 0
+    })
+    totalPages.value = Math.max(1, Math.ceil(arr.length / pageSize.value))
+    const start = (page.value - 1) * pageSize.value
+    return arr.slice(start, start + pageSize.value)
+})
+
+function formatDate(d) {
+    if (!d) return '—';
+    return new Date(d).toLocaleDateString()
+}
+
+function personName(p) {
+    if (!p) return '—';
+    return `${p.firstName ?? ''} ${p.lastName ?? ''}`.trim()
+}
+
+function personDetailed(p) {
+    if (!p) return '—';
+    return `${p.firstName ?? ''} ${p.lastName ?? ''} (id ${p.id ?? '?'})`.trim()
+}
+
+// === API ===
+async function fetchMovies() {
+    try {
+        const res = await fetch(`${baseUrl}`)
+        if (!res.ok) throw new Error(res.statusText)
+        movies.value = await res.json()
+    } catch (e) {
+        toast.value = 'Ошибка загрузки фильмов'
+    }
+}
+
+async function fetchAuxiliary() {
+    try {
+        const res1 = await fetch(`${baseUrl}/coordinates`)
+        coordinatesList.value = await res1.json()
+
+        const res2 = await fetch(`${baseUrl}/persons`)
+        personsList.value = await res2.json()
+    } catch (e) {
+        toast.value = 'Ошибка загрузки справочников'
+    }
+}
+
+function initSSE() {
+    const es = new EventSource(`${baseUrl}/sse`)
+    es.onmessage = ev => {
+        toast.value = `Обновление: ${ev.data}`
+        fetchMovies()
+    }
+}
+
+function refresh() {
+    fetchMovies()
+}
+
+function toggleSort(field: string) {
+    if (sortBy.value === field) {
+        sortDir.value = sortDir.value === 'asc' ? 'desc' : 'asc'
+    } else {
+        sortBy.value = field
+        sortDir.value = 'asc'
+    }
+}
+
+function viewMovie(id: number) {
+    const m = movies.value.find(m => m.id === id)
+    if (m) {
+        Object.assign(currentMovie, m)
+        showView.value = true
+    }
+}
+
+function openEdit(movie: any) {
+    formMode.value = 'edit'
+    editId.value = movie.id
+    Object.assign(form, movie)
+    showForm.value = true
+}
+
+function confirmDelete(movie: any) {
+    Object.assign(deleteTarget, movie)
+    showDeleteConfirm.value = true
+}
+
+// === CRUD actions ===
+async function saveMovie() {
+    const coordinatesDTO = {
+        x: form.coordinateX,
+        y: form.coordinateY,
+    }
+    try {
+        const res = await fetch(`${baseUrl}/coordinates`, {
+            method: "POST",
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(coordinatesDTO)
+        })
+        if (!res.ok) throw new Error(res.statusText)
+        if (!res.ok) throw new Error(res)
+        const ans = await res.json();
+        const coordID = ans.id;
+        fetchMovies()
+    } catch (e) {
+        toast.value = 'Ошибка сохранения'
+    }
+}
+
+async function deleteMovie() {
+    try {
+        const res = await fetch(`${baseUrl}/${deleteTarget.id}`, {method: 'DELETE'})
+        if (!res.ok) throw new Error(res.statusText)
+
+        toast.value = 'Фильм удалён'
+        showDeleteConfirm.value = false
+        fetchMovies()
+    } catch (e) {
+        toast.value = 'Ошибка удаления'
+    }
+}
+
+// === Pagination ===
+function prevPage() {
+    if (page.value > 1) page.value--
+}
+
+function nextPage() {
+    if (page.value < totalPages.value) page.value++
+}
+
+// === Special operations ===
+async function opAvgUsaBoxOffice() {
+    try {
+        const res = await fetch(`${baseUrl}/ops/avg-usaBoxOffice`)
+        opResult.value = await res.text()
+    } catch {
+        opResult.value = 'Ошибка операции'
+    }
+}
+
+async function opCountGenreGreater() {
+    try {
+        const res = await fetch(`${baseUrl}/ops/count-genre?threshold=${opGenreThreshold.value}`)
+        opResult.value = await res.text()
+    } catch {
+        opResult.value = 'Ошибка операции'
+    }
+}
+
+async function opTaglineGreater() {
+    try {
+        const res = await fetch(`${baseUrl}/ops/tagline?threshold=${opTaglineThreshold.value}`)
+        opResult.value = await res.text()
+    } catch {
+        opResult.value = 'Ошибка операции'
+    }
+}
+
+async function opNoOscars() {
+    try {
+        const res = await fetch(`${baseUrl}/ops/no-oscars`)
+        opResult.value = await res.text()
+    } catch {
+        opResult.value = 'Ошибка операции'
+    }
+}
+
+async function opStripOscars() {
+    try {
+        const res = await fetch(`${baseUrl}/ops/strip-oscars?genre=${encodeURIComponent(opGenreToStrip.value)}`, {
+            method: 'POST'
+        })
+        opResult.value = await res.text()
+        fetchMovies()
+    } catch {
+        opResult.value = 'Ошибка операции'
+    }
+}
+
+onMounted(() => {
+    fetchMovies()
+    fetchAuxiliary()
+    initSSE()
+})
+
+
+function openCreate() {
+    formMode.value = 'create'
+    editId.value = null
+    Object.assign(form, {
+        name: '', coordinatesId: null, oscarsCount: 0, budget: null, totalBoxOffice: 0,
+        mpaaRating: null, directorId: null, screenwriterId: null, operatorId: null, length: null,
+        goldenPalmCount: 0, usaBoxOffice: 0.0, tagline: '', genre: ''
+    })
+    showForm.value = true
+}
+
+function closeForm() {
+    showForm.value = false
+}
+
+async function submitForm() {
+    try {
+        toast.value = 'Фильм сохранён'
+        showForm.value = false
+        fetchMovies() // обновляем список
+    } catch (e) {
+        toast.value = 'Ошибка сохранения фильма'
+        console.error(e)
+    }
+}
+</script>
 <template>
     <div>
 
@@ -7,13 +283,9 @@
             <button @click="refresh()" title="Обновить список" class="btn">Обновить</button>
         </div>
 
-        <!-- Main Section -->
         <section class="main-section">
-            <!-- Filter and Pagination -->
             <div class="filter-section">
-                <input v-model="filterText" @input="applyFilter"
-                       placeholder="Фильтрация по строковым колонкам (неполное совпадение)"
-                       class="filter-input"/>
+
                 <label>
                     Показать на странице:
                     <select v-model.number="pageSize" @change="fetchMovies">
@@ -83,6 +355,81 @@
             </div>
         </section>
 
+
+        <!-- Модальное окно -->
+        <div v-if="showForm" class="modal-overlay">
+            <div class="modal-content">
+                <h2>{{ formMode === 'create' ? 'Создать фильм' : 'Редактировать фильм' }}</h2>
+                <form @submit.prevent="submitForm">
+                    <label>
+                        Название:
+                        <input v-model="form.name" required/>
+                    </label>
+
+                    <label>
+                        Координаты:
+                        <form>
+                            X:
+                            <input type="number" v-model.number="form.coordinatesX" required/>
+                            Y:
+                            <input type="number" v-model.number="form.coordinatesY" required/>
+                        </form>
+                    </label>
+
+                    <label>
+                        Кол-во "Оскаров":
+                        <input type="number" v-model.number="form.oscarsCount" min="0"/>
+                    </label>
+
+                    <label>
+                        Бюджет:
+                        <input type="number" v-model.number="form.budget" min="0"/>
+                    </label>
+
+                    <label>
+                        MPAA:
+                        <select v-model="form.mpaaRating">
+                            <option value="">-- выберите --</option>
+                            <option v-for="r in mpaaRatings" :key="r">{{ r }}</option>
+                        </select>
+                    </label>
+
+                    <label>
+                        Режиссёр (ID):
+                        <input type="number" v-model.number="form.directorId" required/>
+                    </label>
+
+                    <label>
+                        Сценарист (ID):
+                        <input type="number" v-model.number="form.screenwriterId"/>
+                    </label>
+
+                    <label>
+                        Оператор (ID):
+                        <input type="number" v-model.number="form.operatorId" required/>
+                    </label>
+
+                    <label>
+                        Жанр:
+                        <select v-model="form.genre" required>
+                            <option value="">-- выберите --</option>
+                            <option v-for="g in genres" :key="g">{{ g }}</option>
+                        </select>
+                    </label>
+
+                    <label>
+                        Tagline:
+                        <input type="text" v-model="form.tagline"/>
+                    </label>
+
+                    <div class="modal-buttons">
+                        <button type="submit" @click="saveMovie">Сохранить</button>
+                        <button type="button" @click="closeForm">Отмена</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
         <!-- Special Operations -->
         <section class="operations-section">
             <h2>Специальные операции</h2>
@@ -126,103 +473,6 @@
 
     </div>
 </template>
-
-<script setup>
-import {ref, reactive, computed, onMounted} from 'vue'
-import axios from 'axios'
-
-const baseUrl = '/movies'
-
-const movies = ref([])
-const page = ref(1)
-const pageSize = ref(10)
-const sortBy = ref('id')
-const sortDir = ref('asc')
-const filterText = ref('')
-const totalPages = ref(1)
-const coordinatesList = ref([])
-const personsList = ref([])
-const mpaaRatings = ref(["G", "PG", "PG_13", "R", "NC_17"])
-const genres = ref(["WESTERN", "COMEDY", "MUSICAL", "ADVENTURE", "FANTASY"])
-
-const showForm = ref(false)
-const formMode = ref('create')
-const editId = ref(null)
-const form = reactive({
-    name: '', coordinatesId: null, oscarsCount: 0, budget: null, totalBoxOffice: 0,
-    mpaaRating: null, directorId: null, screenwriterId: null, operatorId: null, length: null,
-    goldenPalmCount: 0, usaBoxOffice: 0.0, tagline: '', genre: ''
-})
-const errors = reactive({})
-const showView = ref(false)
-const currentMovie = reactive({})
-const showDeleteConfirm = ref(false)
-const deleteTarget = reactive({})
-const toast = ref('')
-const opResult = ref('')
-const opGenreThreshold = ref(0)
-const opTaglineThreshold = ref(0)
-const opGenreToStrip = ref('')
-
-const filtered = computed(() => {
-    if (!filterText.value) return movies.value
-    const q = filterText.value.toLowerCase()
-    return movies.value.filter(m => {
-        if (m.name?.toLowerCase().includes(q)) return true
-        if (m.tagline?.toLowerCase().includes(q)) return true
-        if (m.mpaaRating?.toLowerCase().includes(q)) return true
-        if (m.genre?.toLowerCase().includes(q)) return true
-        if (m.director && personName(m.director).toLowerCase().includes(q)) return true
-        return false
-    })
-})
-
-const pagedMovies = computed(() => {
-    const arr = [...filtered.value]
-    arr.sort((a, b) => {
-        let A = a[sortBy.value], B = b[sortBy.value]
-        if (A === undefined) A = '';
-        if (B === undefined) B = ''
-        if (sortBy.value === 'creationDate') {
-            A = new Date(A);
-            B = new Date(B)
-        }
-        if (typeof A === 'string') A = A.toLowerCase();
-        if (typeof B === 'string') B = B.toLowerCase()
-        if (A < B) return sortDir.value === 'asc' ? -1 : 1
-        if (A > B) return sortDir.value === 'asc' ? 1 : -1
-        return 0
-    })
-    totalPages.value = Math.max(1, Math.ceil(arr.length / pageSize.value))
-    const start = (page.value - 1) * pageSize.value
-    return arr.slice(start, start + pageSize.value)
-})
-
-function formatDate(d) {
-    if (!d) return '—';
-    return new Date(d).toLocaleDateString()
-}
-
-function personName(p) {
-    if (!p) return '—';
-    return `${p.firstName ?? ''} ${p.lastName ?? ''}`.trim()
-}
-
-function personDetailed(p) {
-    if (!p) return '—';
-    return `${p.firstName ?? ''} ${p.lastName ?? ''} (id ${p.id ?? '?'})`.trim()
-}
-
-// API functions, UI actions, special operations, SSE init, etc.
-// Можно перенести полностью из вашего скрипта, без изменений, т.к. setup позволяет держать всё реактивное
-
-onMounted(() => {
-    fetchMovies()
-    fetchAuxiliary()
-    initSSE()
-})
-
-</script>
 
 <style scoped>
 .header {
