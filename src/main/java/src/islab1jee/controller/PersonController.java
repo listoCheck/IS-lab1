@@ -1,26 +1,31 @@
-package src.islab1jee.models.location;
-
-import java.util.List;
+package src.islab1jee.controller;
 
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
+import jakarta.inject.Named;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import src.islab1jee.models.location.dto.*;
 
-@Path("/locations")
+import java.util.List;
+
+import src.islab1jee.models.person.PersonService;
+import src.islab1jee.models.person.dto.PersonRequestDto;
+import src.islab1jee.models.person.dto.PersonResponseDto;
+
+@Named
+@RequestScoped
+@Path("/persons")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-@RequestScoped
-public class LocationController {
+public class PersonController {
 
     @Inject
-    private LocationService service;
+    private PersonService service;
 
     @POST
-    public Response create(@Valid LocationRequestDto dto) {
+    public Response create(@Valid PersonRequestDto dto) {
         return Response.ok(service.create(dto)).build();
     }
 
@@ -32,13 +37,13 @@ public class LocationController {
 
     @GET
     public Response getAll() {
-        List<LocationResponseDto> list = service.getAll();
+        List<PersonResponseDto> list = service.getAll();
         return Response.ok(list).build();
     }
 
     @PUT
     @Path("/{id}")
-    public Response update(@PathParam("id") Integer id, @Valid LocationRequestDto dto) {
+    public Response update(@PathParam("id") Integer id, @Valid PersonRequestDto dto) {
         return Response.ok(service.update(id, dto)).build();
     }
 

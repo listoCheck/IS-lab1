@@ -1,24 +1,27 @@
-package src.islab1jee.models.coordinates;
+package src.islab1jee.controller;
 
 import java.util.List;
+
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
-import jakarta.ws.rs.*;
-import jakarta.ws.rs.core.*;
 import jakarta.validation.Valid;
-import src.islab1jee.models.coordinates.dto.*;
+import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
+import src.islab1jee.models.location.LocationService;
+import src.islab1jee.models.location.dto.*;
 
-@Path("/coordinates")
+@Path("/locations")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 @RequestScoped
-public class CoordinatesController {
+public class LocationController {
 
     @Inject
-    private CoordinatesService service;
+    private LocationService service;
 
     @POST
-    public Response create(@Valid CoordinatesRequestDto dto) {
+    public Response create(@Valid LocationRequestDto dto) {
         return Response.ok(service.create(dto)).build();
     }
 
@@ -30,13 +33,13 @@ public class CoordinatesController {
 
     @GET
     public Response getAll() {
-        List<CoordinatesResponseDto> list = service.getAll();
+        List<LocationResponseDto> list = service.getAll();
         return Response.ok(list).build();
     }
 
     @PUT
     @Path("/{id}")
-    public Response update(@PathParam("id") Integer id, @Valid CoordinatesRequestDto dto) {
+    public Response update(@PathParam("id") Integer id, @Valid LocationRequestDto dto) {
         return Response.ok(service.update(id, dto)).build();
     }
 

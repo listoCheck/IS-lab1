@@ -1,28 +1,25 @@
-package src.islab1jee.models.movie;
+package src.islab1jee.controller;
 
 import java.util.List;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
-import jakarta.inject.Named;
-import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
-import jakarta.ws.rs.core.MediaType;
-import jakarta.ws.rs.core.Response;
-import src.islab1jee.models.movie.dto.MovieRequestDto;
-import src.islab1jee.models.movie.dto.MovieResponseDto;
+import jakarta.ws.rs.core.*;
+import jakarta.validation.Valid;
+import src.islab1jee.models.coordinates.CoordinatesService;
+import src.islab1jee.models.coordinates.dto.*;
 
-@Named
-@RequestScoped
-@Path("/movies")
+@Path("/coordinates")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-public class MovieController {
+@RequestScoped
+public class CoordinatesController {
 
     @Inject
-    private MovieService service;
+    private CoordinatesService service;
 
     @POST
-    public Response create(@Valid MovieRequestDto dto) {
+    public Response create(@Valid CoordinatesRequestDto dto) {
         return Response.ok(service.create(dto)).build();
     }
 
@@ -34,13 +31,13 @@ public class MovieController {
 
     @GET
     public Response getAll() {
-        List<MovieResponseDto> movies = service.getAll();
-        return Response.ok(movies).build();
+        List<CoordinatesResponseDto> list = service.getAll();
+        return Response.ok(list).build();
     }
 
     @PUT
     @Path("/{id}")
-    public Response update(@PathParam("id") Integer id, @Valid MovieRequestDto dto) {
+    public Response update(@PathParam("id") Integer id, @Valid CoordinatesRequestDto dto) {
         return Response.ok(service.update(id, dto)).build();
     }
 

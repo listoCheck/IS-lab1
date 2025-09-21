@@ -1,5 +1,6 @@
-package src.islab1jee.models.person;
+package src.islab1jee.controller;
 
+import java.util.List;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
@@ -7,24 +8,22 @@ import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-
-import java.util.List;
-
-import src.islab1jee.models.person.dto.PersonRequestDto;
-import src.islab1jee.models.person.dto.PersonResponseDto;
+import src.islab1jee.models.movie.MovieService;
+import src.islab1jee.models.movie.dto.MovieRequestDto;
+import src.islab1jee.models.movie.dto.MovieResponseDto;
 
 @Named
 @RequestScoped
-@Path("/persons")
+@Path("/movies")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-public class PersonController {
+public class MovieController {
 
     @Inject
-    private PersonService service;
+    private MovieService service;
 
     @POST
-    public Response create(@Valid PersonRequestDto dto) {
+    public Response create(@Valid MovieRequestDto dto) {
         return Response.ok(service.create(dto)).build();
     }
 
@@ -36,13 +35,13 @@ public class PersonController {
 
     @GET
     public Response getAll() {
-        List<PersonResponseDto> list = service.getAll();
-        return Response.ok(list).build();
+        List<MovieResponseDto> movies = service.getAll();
+        return Response.ok(movies).build();
     }
 
     @PUT
     @Path("/{id}")
-    public Response update(@PathParam("id") Integer id, @Valid PersonRequestDto dto) {
+    public Response update(@PathParam("id") Integer id, @Valid MovieRequestDto dto) {
         return Response.ok(service.update(id, dto)).build();
     }
 
