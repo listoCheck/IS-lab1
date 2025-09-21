@@ -1,4 +1,4 @@
-package src.islab1jee.models.location.dto;
+package src.islab1jee.DTO;
 
 
 import lombok.AllArgsConstructor;

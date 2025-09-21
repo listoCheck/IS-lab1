@@ -1,53 +1,36 @@
-package src.islab1jee.models.movie.dto;
+package src.islab1jee.DTO;
 
-import jakarta.validation.constraints.*;
+
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import src.islab1jee.enums.MovieGenre;
 import src.islab1jee.enums.MpaaRating;
 
+import java.time.LocalDate;
 
 @Setter
 @Getter
-public class MovieRequestDto {
-
-    @NotBlank
+@AllArgsConstructor
+@NoArgsConstructor
+public class MovieResponseDto {
+    private Integer id;
     private String name;
-
-    @NotNull
-    private Integer coordinatesId;
-
-    @Positive
+    private CoordinatesResponseDto coordinates;
+    private LocalDate creationDate;
     private long oscarsCount;
-
     private Long budget;
-
-    @Positive
     private long totalBoxOffice;
-
     private MpaaRating mpaaRating;
-
-    @NotNull
-    private Integer directorId;
-
-    private Integer screenwriterId;
-
-    @NotNull
-    private Integer operatorId;
-
-    @Positive
+    private PersonResponseDto director;
+    private PersonResponseDto screenwriter;
+    private PersonResponseDto operator;
     private Long length;
-
-    @Positive
     private int goldenPalmCount;
-
-    @Positive
     private double usaBoxOffice;
-
-    @NotBlank
     private String tagline;
-
-    @NotNull
     private MovieGenre genre;
+
 
 }

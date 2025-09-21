@@ -1,4 +1,4 @@
-package src.islab1jee.models.coordinates.dto;
+package src.islab1jee.DTO;
 
 import jakarta.validation.constraints.*;
 import jakarta.validation.constraints.NotNull;

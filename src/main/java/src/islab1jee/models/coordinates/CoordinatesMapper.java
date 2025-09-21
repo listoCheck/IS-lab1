@@ -1,7 +1,8 @@
 package src.islab1jee.models.coordinates;
 
 
-import src.islab1jee.models.coordinates.dto.*;
+import src.islab1jee.DTO.CoordinatesRequestDto;
+import src.islab1jee.DTO.CoordinatesResponseDto;
 import src.islab1jee.models.entity.Coordinates;
 
 public class CoordinatesMapper {

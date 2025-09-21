@@ -7,8 +7,8 @@ import jakarta.transaction.Transactional;
 import src.islab1jee.models.entity.Location;
 import src.islab1jee.models.entity.Person;
 import src.islab1jee.models.location.LocationRepository;
-import src.islab1jee.models.person.dto.PersonRequestDto;
-import src.islab1jee.models.person.dto.PersonResponseDto;
+import src.islab1jee.DTO.PersonRequestDto;
+import src.islab1jee.DTO.PersonResponseDto;
 
 import java.util.List;
 import java.util.stream.Collectors;

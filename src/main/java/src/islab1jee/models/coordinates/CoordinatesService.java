@@ -2,7 +2,8 @@ package src.islab1jee.models.coordinates;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import src.islab1jee.models.coordinates.dto.*;
+import src.islab1jee.DTO.CoordinatesRequestDto;
+import src.islab1jee.DTO.CoordinatesResponseDto;
 import jakarta.transaction.Transactional;
 import src.islab1jee.models.entity.Coordinates;
 

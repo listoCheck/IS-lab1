@@ -1,4 +1,4 @@
-package src.islab1jee.models.person.dto;
+package src.islab1jee.DTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import src.islab1jee.enums.Color;
 import src.islab1jee.enums.Country;
-import src.islab1jee.models.location.dto.LocationResponseDto;
 
 @Setter
 @Getter

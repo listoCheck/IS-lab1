@@ -9,8 +9,8 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import src.islab1jee.models.movie.MovieService;
-import src.islab1jee.models.movie.dto.MovieRequestDto;
-import src.islab1jee.models.movie.dto.MovieResponseDto;
+import src.islab1jee.DTO.MovieRequestDto;
+import src.islab1jee.DTO.MovieResponseDto;
 
 @Named
 @RequestScoped
