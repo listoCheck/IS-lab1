@@ -31,6 +31,7 @@ public class CoordinatesController {
     }
 
     @GET
+    @Path("/table/{id}")
     public Response getAll() {
         List<CoordinatesResponseDto> list = service.getAll();
         return Response.ok(list).build();

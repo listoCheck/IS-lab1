@@ -1,5 +1,6 @@
 package src.islab1jee.controller;
 
+import java.util.Collections;
 import java.util.List;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
@@ -34,9 +35,22 @@ public class MovieController {
     }
 
     @GET
-    public Response getAll() {
+    @Path("/table/{slice}")
+    public Response getAll(@PathParam("slice") Integer slice) {
+        if (slice == null || slice <= 0) {
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity("Slice parameter must be a positive integer")
+                    .build();
+        }
+
         List<MovieResponseDto> movies = service.getAll();
-        return Response.ok(movies).build();
+
+        if (movies.isEmpty()) {
+            return Response.ok(Collections.emptyList()).build();
+        }
+
+        int endIndex = Math.min(slice, movies.size());
+        return Response.ok(movies.subList(0, endIndex)).build();
     }
 
     @PUT

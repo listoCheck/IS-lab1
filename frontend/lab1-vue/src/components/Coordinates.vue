@@ -16,10 +16,8 @@ const form = reactive({
   coordinatesY: 0,
 });
 
-// список координат
 const coordinatesList = ref<{ id: number; x: number; y: number }[]>([]);
 
-// сортировка и "пагинация"
 const pagedCoordinates = computed(() => {
   return [...coordinatesList.value].sort((a, b) => {
     const field = sortBy.value as keyof typeof a;
@@ -52,7 +50,10 @@ function confirmDelete(movie: any) {
 
 async function fetchCoordinates() {
   try {
-    const res = await fetch(`${baseUrl}/coordinates`);
+    const res = await fetch(`${baseUrl}/coordinates`, {
+      method: "GET",
+      headers: { "Content-Type": "application/json" }
+    });
     if (!res.ok) throw new Error(res.statusText);
     coordinatesList.value = await res.json();
   } catch (e) {
@@ -89,7 +90,6 @@ async function saveCoordinates() {
   }
 }
 
-// загружаем при монтировании
 fetchCoordinates();
 </script>
 

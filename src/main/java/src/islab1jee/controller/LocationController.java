@@ -33,6 +33,7 @@ public class LocationController {
     }
 
     @GET
+    @Path("/table")
     public Response getAll() {
         List<LocationResponseDto> list = service.getAll();
         return Response.ok(list).build();
