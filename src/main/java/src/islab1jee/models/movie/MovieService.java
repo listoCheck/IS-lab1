@@ -4,11 +4,12 @@ import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import jakarta.transaction.Transactional;
-import src.islab1jee.models.coordinates.Coordinates;
+import src.islab1jee.models.entity.Coordinates;
 import src.islab1jee.models.coordinates.CoordinatesRepository;
+import src.islab1jee.models.entity.Movie;
 import src.islab1jee.models.movie.dto.MovieRequestDto;
 import src.islab1jee.models.movie.dto.MovieResponseDto;
-import src.islab1jee.models.person.Person;
+import src.islab1jee.models.entity.Person;
 import src.islab1jee.models.person.PersonRepository;
 
 import java.util.List;

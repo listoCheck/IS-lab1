@@ -8,10 +8,10 @@
     <persistence-unit name="PostgresPU" transaction-type="JTA">
         <jta-data-source>java:jboss/PostgresDS</jta-data-source>
 
-        <class>src.islab1jee.models.location.Location</class>
-        <class>src.islab1jee.models.coordinates.Coordinates</class>
-        <class>src.islab1jee.models.person.Person</class>
-        <class>src.islab1jee.models.movie.Movie</class>
+        <class>src.islab1jee.models.entity.Location</class>
+        <class>src.islab1jee.models.entity.Coordinates</class>
+        <class>src.islab1jee.models.entity.Person</class>
+        <class>src.islab1jee.models.entity.Movie</class>
 
         <properties>
             <property name="jakarta.persistence.schema-generation.database.action" value="update"/>

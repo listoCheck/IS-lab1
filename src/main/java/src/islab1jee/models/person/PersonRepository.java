@@ -3,6 +3,8 @@ package src.islab1jee.models.person;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import src.islab1jee.models.entity.Person;
+
 import java.util.List;
 
 @ApplicationScoped

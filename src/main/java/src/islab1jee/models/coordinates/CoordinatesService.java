@@ -4,6 +4,8 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import src.islab1jee.models.coordinates.dto.*;
 import jakarta.transaction.Transactional;
+import src.islab1jee.models.entity.Coordinates;
+
 import java.util.List;
 import java.util.stream.Collectors;
 

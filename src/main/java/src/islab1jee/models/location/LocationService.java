@@ -3,6 +3,7 @@ package src.islab1jee.models.location;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
+import src.islab1jee.models.entity.Location;
 import src.islab1jee.models.location.dto.*;
 import java.util.List;
 import java.util.stream.Collectors;

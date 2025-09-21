@@ -1,4 +1,4 @@
-package src.islab1jee.models.movie;
+package src.islab1jee.models.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.*;
@@ -7,8 +7,6 @@ import lombok.Getter;
 import lombok.Setter;
 import src.islab1jee.enums.MovieGenre;
 import src.islab1jee.enums.MpaaRating;
-import src.islab1jee.models.coordinates.Coordinates;
-import src.islab1jee.models.person.Person;
 
 import java.time.LocalDate;
 

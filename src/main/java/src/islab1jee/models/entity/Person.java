@@ -1,8 +1,7 @@
-package src.islab1jee.models.person;
+package src.islab1jee.models.entity;
 
 import lombok.Getter;
 import lombok.Setter;
-import src.islab1jee.models.location.Location;
 import src.islab1jee.enums.Color;
 import src.islab1jee.enums.Country;
 

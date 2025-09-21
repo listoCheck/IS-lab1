@@ -1,10 +1,11 @@
 package src.islab1jee.models.movie;
 
-import src.islab1jee.models.coordinates.Coordinates;
+import src.islab1jee.models.entity.Coordinates;
 import src.islab1jee.models.coordinates.CoordinatesMapper;
+import src.islab1jee.models.entity.Movie;
 import src.islab1jee.models.movie.dto.MovieRequestDto;
 import src.islab1jee.models.movie.dto.MovieResponseDto;
-import src.islab1jee.models.person.Person;
+import src.islab1jee.models.entity.Person;
 import src.islab1jee.models.person.PersonMapper;
 
 import java.time.LocalDate;
