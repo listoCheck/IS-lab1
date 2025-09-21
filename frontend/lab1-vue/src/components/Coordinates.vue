@@ -60,7 +60,7 @@ async function fetchCoordinates() {
   }
 }
 
-async function saveMovie() {
+async function saveCoordinates() {
   const coordinatesDTO = {
     x: form.coordinatesX,
     y: form.coordinatesY,
@@ -98,7 +98,7 @@ fetchCoordinates();
     <div v-if="toast" class="toast">{{ toast }}</div>
 
     <div v-if="showForm">
-      <form @submit.prevent="saveMovie">
+      <form @submit.prevent="saveCoordinates">
         X:
         <input type="number" v-model.number="form.coordinatesX" required />
         Y:
