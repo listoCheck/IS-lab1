@@ -20,7 +20,7 @@ const formMode = ref('create')
 const editId = ref<number | null>(null)
 
 const form = reactive({
-    name: '', coordinateX: 0, coordinatesY: 0, oscarsCount: 0, budget: null, totalBoxOffice: 0,
+    name: '', coordinatesX: 0, coordinatesY: 0, oscarsCount: 0, budget: null, totalBoxOffice: 0,
     mpaaRating: null, directorId: null, screenwriterId: null, operatorId: null, length: null,
     goldenPalmCount: 0, usaBoxOffice: 0.0, tagline: '', genre: ''
 })
@@ -151,8 +151,8 @@ function confirmDelete(movie: any) {
 // === CRUD actions ===
 async function saveMovie() {
     const coordinatesDTO = {
-        x: form.coordinateX,
-        y: form.coordinateY,
+        x: form.coordinatesX,
+        y: form.coordinatesY,
     }
     try {
         const res = await fetch(`${baseUrl}/coordinates`, {

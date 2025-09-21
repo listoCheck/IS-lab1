@@ -4,12 +4,13 @@ import Body from "@/components/Body.vue";
 import Footer from "@/components/Footer.vue";
 import "@/css/page.css"
 import Window from "@/components/Window.vue";
+import Coordinates from "@/components/Coordinates.vue";
 
 </script>
 
 <template>
     <Header/>
-    <Window/>
+    <coordinates/>
     <Footer/>
 </template>
 
