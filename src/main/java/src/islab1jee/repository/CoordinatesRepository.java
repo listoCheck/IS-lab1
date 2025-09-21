@@ -1,9 +1,9 @@
-package src.islab1jee.models.coordinates;
+package src.islab1jee.repository;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import src.islab1jee.models.entity.Coordinates;
+import src.islab1jee.entity.Coordinates;
 
 import java.util.List;
 

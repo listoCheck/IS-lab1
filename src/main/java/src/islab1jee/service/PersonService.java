@@ -1,15 +1,16 @@
-package src.islab1jee.models.person;
+package src.islab1jee.service;
 
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import jakarta.transaction.Transactional;
 import src.islab1jee.mapper.PersonMapper;
-import src.islab1jee.models.entity.Location;
-import src.islab1jee.models.entity.Person;
-import src.islab1jee.models.location.LocationRepository;
+import src.islab1jee.entity.Location;
+import src.islab1jee.entity.Person;
+import src.islab1jee.repository.LocationRepository;
 import src.islab1jee.DTO.PersonRequestDto;
 import src.islab1jee.DTO.PersonResponseDto;
+import src.islab1jee.repository.PersonRepository;
 
 import java.util.List;
 import java.util.stream.Collectors;

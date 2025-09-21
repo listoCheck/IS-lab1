@@ -1,4 +1,4 @@
-package src.islab1jee.models.coordinates;
+package src.islab1jee.service;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -6,7 +6,8 @@ import src.islab1jee.DTO.CoordinatesRequestDto;
 import src.islab1jee.DTO.CoordinatesResponseDto;
 import jakarta.transaction.Transactional;
 import src.islab1jee.mapper.CoordinatesMapper;
-import src.islab1jee.models.entity.Coordinates;
+import src.islab1jee.entity.Coordinates;
+import src.islab1jee.repository.CoordinatesRepository;
 
 import java.util.List;
 import java.util.stream.Collectors;

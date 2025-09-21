@@ -1,9 +1,9 @@
-package src.islab1jee.models.movie;
+package src.islab1jee.repository;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import src.islab1jee.models.entity.Movie;
+import src.islab1jee.entity.Movie;
 
 import java.util.List;
 

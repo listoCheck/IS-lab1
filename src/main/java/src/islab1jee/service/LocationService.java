@@ -1,4 +1,4 @@
-package src.islab1jee.models.location;
+package src.islab1jee.service;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -6,7 +6,8 @@ import jakarta.transaction.Transactional;
 import src.islab1jee.DTO.LocationRequestDto;
 import src.islab1jee.DTO.LocationResponseDto;
 import src.islab1jee.mapper.LocationMapper;
-import src.islab1jee.models.entity.Location;
+import src.islab1jee.entity.Location;
+import src.islab1jee.repository.LocationRepository;
 
 import java.util.List;
 import java.util.stream.Collectors;

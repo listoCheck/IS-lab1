@@ -1,4 +1,4 @@
-package src.islab1jee.models.entity;
+package src.islab1jee.entity;
 
 
 import jakarta.persistence.Entity;

@@ -1,17 +1,18 @@
-package src.islab1jee.models.movie;
+package src.islab1jee.service;
 
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import jakarta.transaction.Transactional;
 import src.islab1jee.mapper.MovieMapper;
-import src.islab1jee.models.entity.Coordinates;
-import src.islab1jee.models.coordinates.CoordinatesRepository;
-import src.islab1jee.models.entity.Movie;
+import src.islab1jee.entity.Coordinates;
+import src.islab1jee.repository.CoordinatesRepository;
+import src.islab1jee.entity.Movie;
 import src.islab1jee.DTO.MovieRequestDto;
 import src.islab1jee.DTO.MovieResponseDto;
-import src.islab1jee.models.entity.Person;
-import src.islab1jee.models.person.PersonRepository;
+import src.islab1jee.entity.Person;
+import src.islab1jee.repository.MovieRepository;
+import src.islab1jee.repository.PersonRepository;
 
 import java.util.List;
 import java.util.stream.Collectors;

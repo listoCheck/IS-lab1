@@ -1,9 +1,9 @@
-package src.islab1jee.models.location;
+package src.islab1jee.repository;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import src.islab1jee.models.entity.Location;
+import src.islab1jee.entity.Location;
 
 import java.util.List;
 

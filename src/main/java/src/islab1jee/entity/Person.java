@@ -1,4 +1,4 @@
-package src.islab1jee.models.entity;
+package src.islab1jee.entity;
 
 import lombok.Getter;
 import lombok.Setter;

@@ -10,7 +10,7 @@ import jakarta.ws.rs.core.Response;
 
 import java.util.List;
 
-import src.islab1jee.models.person.PersonService;
+import src.islab1jee.service.PersonService;
 import src.islab1jee.DTO.PersonRequestDto;
 import src.islab1jee.DTO.PersonResponseDto;
 

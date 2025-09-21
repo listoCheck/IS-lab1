@@ -8,7 +8,7 @@ import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import src.islab1jee.models.movie.MovieService;
+import src.islab1jee.service.MovieService;
 import src.islab1jee.DTO.MovieRequestDto;
 import src.islab1jee.DTO.MovieResponseDto;
 

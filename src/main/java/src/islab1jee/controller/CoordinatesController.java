@@ -8,7 +8,7 @@ import jakarta.ws.rs.core.*;
 import jakarta.validation.Valid;
 import src.islab1jee.DTO.CoordinatesRequestDto;
 import src.islab1jee.DTO.CoordinatesResponseDto;
-import src.islab1jee.models.coordinates.CoordinatesService;
+import src.islab1jee.service.CoordinatesService;
 
 @Path("/coordinates")
 @Produces(MediaType.APPLICATION_JSON)

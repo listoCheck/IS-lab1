@@ -3,7 +3,7 @@ package src.islab1jee.mapper;
 
 import src.islab1jee.DTO.CoordinatesRequestDto;
 import src.islab1jee.DTO.CoordinatesResponseDto;
-import src.islab1jee.models.entity.Coordinates;
+import src.islab1jee.entity.Coordinates;
 
 public class CoordinatesMapper {
     public static Coordinates toEntity(CoordinatesRequestDto dto) {

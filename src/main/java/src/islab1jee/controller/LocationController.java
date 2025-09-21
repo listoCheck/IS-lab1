@@ -10,7 +10,7 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import src.islab1jee.DTO.LocationRequestDto;
 import src.islab1jee.DTO.LocationResponseDto;
-import src.islab1jee.models.location.LocationService;
+import src.islab1jee.service.LocationService;
 
 @Path("/locations")
 @Produces(MediaType.APPLICATION_JSON)
