@@ -1,7 +1,6 @@
-package src.islab1jee.models.person;
+package src.islab1jee.mapper;
 import src.islab1jee.models.entity.Location;
 import src.islab1jee.models.entity.Person;
-import src.islab1jee.models.location.LocationMapper;
 import src.islab1jee.DTO.PersonRequestDto;
 import src.islab1jee.DTO.PersonResponseDto;
 

@@ -5,6 +5,7 @@ import jakarta.inject.Inject;
 import src.islab1jee.DTO.CoordinatesRequestDto;
 import src.islab1jee.DTO.CoordinatesResponseDto;
 import jakarta.transaction.Transactional;
+import src.islab1jee.mapper.CoordinatesMapper;
 import src.islab1jee.models.entity.Coordinates;
 
 import java.util.List;

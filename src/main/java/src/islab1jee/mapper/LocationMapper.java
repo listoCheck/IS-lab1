@@ -1,4 +1,4 @@
-package src.islab1jee.models.location;
+package src.islab1jee.mapper;
 
 import src.islab1jee.DTO.LocationRequestDto;
 import src.islab1jee.DTO.LocationResponseDto;

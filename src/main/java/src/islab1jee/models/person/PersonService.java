@@ -4,6 +4,7 @@ import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import jakarta.transaction.Transactional;
+import src.islab1jee.mapper.PersonMapper;
 import src.islab1jee.models.entity.Location;
 import src.islab1jee.models.entity.Person;
 import src.islab1jee.models.location.LocationRepository;

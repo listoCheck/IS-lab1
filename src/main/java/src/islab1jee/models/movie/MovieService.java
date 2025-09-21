@@ -4,6 +4,7 @@ import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import jakarta.transaction.Transactional;
+import src.islab1jee.mapper.MovieMapper;
 import src.islab1jee.models.entity.Coordinates;
 import src.islab1jee.models.coordinates.CoordinatesRepository;
 import src.islab1jee.models.entity.Movie;
