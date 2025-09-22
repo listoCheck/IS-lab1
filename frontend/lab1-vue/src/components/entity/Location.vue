@@ -48,11 +48,12 @@ function openEdit(movie: any) {
 
 function confirmDelete(movie: any) {
     locationsList.value = locationsList.value.filter((c) => c.id !== movie.id);
+
 }
 
 async function fetchLocations() {
     try {
-        const res = await fetch(`${baseUrl}/location`, {
+        const res = await fetch(`${baseUrl}/location/table`, {
             method: "GET",
             headers: { "Content-Type": "application/json" }
         });

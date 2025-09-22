@@ -26,7 +26,7 @@ const form = reactive({
 
 async function fetchLocations() {
     try {
-        const res = await fetch(`${baseUrl}/location`);
+        const res = await fetch(`${baseUrl}/location/table`);
         if (!res.ok) throw new Error(res.statusText);
         locations.value = await res.json();
     } catch (e) {
@@ -48,7 +48,7 @@ async function savePerson() {
     try {
         let res;
         if (formMode.value === "create") {
-            res = await fetch(`${baseUrl}/person`, {
+            res = await fetch(`${baseUrl}/person/table`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(personDTO),

@@ -36,6 +36,7 @@ public class PersonController {
     }
 
     @GET
+    @Path("/table")
     public Response getAll() {
         List<PersonResponseDto> list = service.getAll();
         return Response.ok(list).build();

@@ -31,11 +31,12 @@ public class CoordinatesController {
     }
 
     @GET
-    @Path("/table/{id}")
+    @Path("/table")
     public Response getAll() {
         List<CoordinatesResponseDto> list = service.getAll();
         return Response.ok(list).build();
     }
+
 
     @PUT
     @Path("/{id}")
