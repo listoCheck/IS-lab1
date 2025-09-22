@@ -12,7 +12,7 @@ import src.islab1jee.DTO.LocationRequestDto;
 import src.islab1jee.DTO.LocationResponseDto;
 import src.islab1jee.service.LocationService;
 
-@Path("/locations")
+@Path("/location")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 @RequestScoped

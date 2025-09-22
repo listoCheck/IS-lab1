@@ -16,7 +16,7 @@ import src.islab1jee.DTO.PersonResponseDto;
 
 @Named
 @RequestScoped
-@Path("/persons")
+@Path("/person")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class PersonController {
