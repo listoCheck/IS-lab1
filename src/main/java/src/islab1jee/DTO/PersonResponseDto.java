@@ -16,11 +16,9 @@ public class PersonResponseDto {
     private String name;
     private Color eyeColor;
     private Color hairColor;
+    private LocationResponseDto location;
     private double weight;
     private String passportID;
     private Country nationality;
-    private LocationResponseDto location;
-
-
 }
 

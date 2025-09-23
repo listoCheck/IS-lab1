@@ -303,7 +303,7 @@ async function submitForm() {
                     <tr>
                         <th @click="toggleSort('id')">ID <small v-if="sortBy==='id'">({{ sortDir }})</small></th>
                         <th @click="toggleSort('name')">Name <small v-if="sortBy==='name'">({{ sortDir }})</small></th>
-                        <th>Coordinates</th>
+                        <th>CoordinatesDTO</th>
                         <th @click="toggleSort('creationDate')">Creation date <small
                             v-if="sortBy==='creationDate'">({{ sortDir }})</small></th>
                         <th @click="toggleSort('oscarsCount')">Oscars</th>

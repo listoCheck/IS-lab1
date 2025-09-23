@@ -117,7 +117,7 @@
                         <input v-model.number="movieForm.budget" type="number" class="border px-2 py-1 w-full" />
 
                         <!-- Select existing coordinates -->
-                        <label>Coordinates *</label>
+                        <label>CoordinatesDTO *</label>
                         <select v-model.number="movieForm.coordinatesId" class="border px-2 py-1 w-full">
                             <option :value="null" disabled>-- выбрать --</option>
                             <option v-for="c in coordinatesList" :key="c.id" :value="c.id">
@@ -169,7 +169,7 @@
                     <div><strong>Оскары:</strong> {{ viewingMovie?.oscarsCount }}</div>
                     <hr/>
                     <div v-if="viewingMovie?.coordinates">
-                        <h4 class="font-semibold">Coordinates</h4>
+                        <h4 class="font-semibold">CoordinatesDTO</h4>
                         <div>ID: {{ viewingMovie.coordinates.id }}, x: {{ viewingMovie.coordinates.x }}, y: {{ viewingMovie.coordinates.y }}</div>
                     </div>
                     <div v-if="viewingMovie?.director">
@@ -199,9 +199,9 @@
             <template #title>Вспомогательные сущности</template>
             <template #body>
                 <div class="grid md:grid-cols-3 gap-4">
-                    <!-- Coordinates manager -->
+                    <!-- CoordinatesDTO manager -->
                     <div>
-                        <h4 class="font-semibold mb-1">Coordinates</h4>
+                        <h4 class="font-semibold mb-1">CoordinatesDTO</h4>
                         <ul class="max-h-40 overflow-auto text-sm border p-2">
                             <li v-for="c in coordinatesList" :key="c.id" class="flex justify-between items-center py-1">
                                 <span>#{{c.id}} x:{{c.x}} y:{{c.y}}</span>
@@ -509,7 +509,7 @@ async function doDelete() {
 
 /* ---------- Auxiliary entities CRUD ---------- */
 
-/* Coordinates */
+/* CoordinatesDTO */
 function openCoordDialog(coord?: CoordinatesDto) {
     clearEntityErrors()
     if (coord) Object.assign(coordForm, coord)

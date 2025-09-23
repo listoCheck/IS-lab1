@@ -26,14 +26,14 @@ classDiagram
     private String passportID
     private Country nationality
     }
-    class Coordinates {
+    class CoordinatesDTO {
         private Float x
         private long y
     }
     class Movie {
         private Integer id
         private String name
-        private Coordinates coordinates
+        private CoordinatesDTO coordinates
         private java.time.LocalDate creationDate
         private long oscarsCount
         private Long budget
@@ -68,7 +68,7 @@ classDiagram
     R
     NC_17
     }
-    Movie <|-- Coordinates
+    Movie <|-- CoordinatesDTO
     Movie <|-- MovieGenre
     Movie <|-- Person
     Movie <|-- MpaaRating

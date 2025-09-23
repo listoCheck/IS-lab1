@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { reactive, ref, computed } from "vue";
+import type {LocationDTO} from "@/ts/dto/LocationDTO.ts";
 
 const baseUrl = 'http://localhost:8080/IS-lab1JEE-1.0-SNAPSHOT/api'
 const toast = ref("");
@@ -38,16 +39,27 @@ function toggleSort(field: "id" | "x" | "y" | "z" | "name") {
     }
 }
 
-function openEdit(movie: any) {
+function openEdit(location: LocationDTO) {
     formMode.value = "edit";
-    editId.value = movie.id;
-    form.locationX = movie.x;
-    form.locationY = movie.y;
+    editId.value = location.id;
+    form.locationX = location.x;
+    form.locationY = location.y;
     showForm.value = true;
 }
 
-function confirmDelete(movie: any) {
-    locationsList.value = locationsList.value.filter((c) => c.id !== movie.id);
+async function confirmDelete(location: LocationDTO) {
+    locationsList.value = locationsList.value.filter((c) => c.id !== location.id);
+    try {
+        const res = await fetch(`${baseUrl}/location/` + location.id, {
+            method: "DELETE",
+            headers: {"Content-Type": "application/json"}
+        });
+        if (!res.ok) throw new Error(res.statusText);
+        locationsList.value = await res.json();
+    } catch (e) {
+        toast.value = "Ошибка удаления";
+    }
+    await fetchLocations();
 
 }
 

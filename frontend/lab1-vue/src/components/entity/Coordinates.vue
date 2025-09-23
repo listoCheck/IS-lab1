@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {reactive, ref, computed} from "vue";
-import type {Coordinates} from "@/ts/dto/Coordinates.ts";
+import type {CoordinatesDTO} from "@/ts/dto/CoordinatesDTO.ts";
 
 const baseUrl = 'http://localhost:8080/IS-lab1JEE-1.0-SNAPSHOT/api'
 const toast = ref("");
@@ -37,15 +37,15 @@ function toggleSort(field: "id" | "x" | "y") {
     }
 }
 
-function openEdit(movie: any) {
+function openEdit(coordinates: CoordinatesDTO) {
     formMode.value = "edit";
-    editId.value = movie.id;
-    form.coordinatesX = movie.x;
-    form.coordinatesY = movie.y;
+    editId.value = coordinates.id;
+    form.coordinatesX = coordinates.x;
+    form.coordinatesY = coordinates.y;
     showForm.value = true;
 }
 
-async function confirmDelete(coordinates: Coordinates) {
+async function confirmDelete(coordinates: CoordinatesDTO) {
     coordinatesList.value = coordinatesList.value.filter((c) => c.id !== coordinates.id);
     try {
         const res = await fetch(`${baseUrl}/coordinates/` + coordinates.id, {

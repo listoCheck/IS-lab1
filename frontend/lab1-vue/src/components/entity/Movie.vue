@@ -38,7 +38,7 @@ async function fetchCoordinates() {
         if (!res.ok) throw new Error(res.statusText);
         coordinates.value = await res.json();
     } catch {
-        toast.value = "Ошибка загрузки Coordinates";
+        toast.value = "Ошибка загрузки CoordinatesDTO";
     }
 }
 
@@ -112,7 +112,7 @@ onMounted(() => {
                 </label>
 
                 <label>
-                    Coordinates:
+                    CoordinatesDTO:
                     <select v-model.number="form.coordinatesId" required>
                         <option disabled value="">-- select coordinates --</option>
                         <option v-for="c in coordinates" :key="c.id" :value="c.id">
