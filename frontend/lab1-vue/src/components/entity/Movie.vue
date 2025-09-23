@@ -1,13 +1,31 @@
 <script setup lang="ts">
-import { reactive, ref, onMounted } from "vue";
+import { reactive, ref, computed, onMounted } from "vue";
 
 const baseUrl = "http://localhost:8080/IS-lab1JEE-1.0-SNAPSHOT/api";
-
 const toast = ref("");
+
+// сортировка
+const sortDir = ref<"asc" | "desc">("asc");
+const sortBy = ref<
+    | "id"
+    | "name"
+    | "oscarsCount"
+    | "budget"
+    | "totalBoxOffice"
+    | "mpaaRating"
+    | "length"
+    | "goldenPalmCount"
+    | "usaBoxOffice"
+    | "tagline"
+    | "genre"
+>("id");
+
+// состояния формы
 const showForm = ref(false);
 const formMode = ref<"create" | "edit">("create");
 const editId = ref<number | null>(null);
 
+// справочники
 const mpaaRatings = ["G", "PG", "PG_13", "R", "NC_17"];
 const genres = ["WESTERN", "COMEDY", "MUSICAL", "ADVENTURE", "FANTASY"];
 
@@ -15,6 +33,7 @@ const genres = ["WESTERN", "COMEDY", "MUSICAL", "ADVENTURE", "FANTASY"];
 const coordinates = ref<{ id: number; x: number; y: number }[]>([]);
 const persons = ref<{ id: number; name: string }[]>([]);
 
+// данные формы
 const form = reactive({
     name: "",
     coordinatesId: null as number | null,
@@ -32,19 +51,75 @@ const form = reactive({
     genre: "",
 });
 
+// список фильмов
+const moviesList = ref<any[]>([]);
+
+const pagedMovies = computed(() => {
+    return [...moviesList.value].sort((a, b) => {
+        const field = sortBy.value as keyof typeof a;
+        if (a[field] < b[field]) return sortDir.value === "asc" ? -1 : 1;
+        if (a[field] > b[field]) return sortDir.value === "asc" ? 1 : -1;
+        return 0;
+    });
+});
+
+function toggleSort(field: typeof sortBy.value) {
+    if (sortBy.value === field) {
+        sortDir.value = sortDir.value === "asc" ? "desc" : "asc";
+    } else {
+        sortBy.value = field;
+        sortDir.value = "asc";
+    }
+}
+
+function openEdit(movie: any) {
+    formMode.value = "edit";
+    editId.value = movie.id;
+    Object.assign(form, {
+        ...movie,
+        coordinatesId: movie.coordinates.id,
+        directorId: movie.director?.id ?? null,
+        screenwriterId: movie.screenwriter?.id ?? null,
+        operatorId: movie.operator?.id ?? null,
+    });
+    showForm.value = true;
+}
+
+async function confirmDelete(movie: any) {
+    try {
+        await fetch(`${baseUrl}/movie/${movie.id}`, {
+            method: "DELETE",
+            headers: { "Content-Type": "application/json" },
+        });
+        await fetchMovies();
+    } catch {
+        toast.value = "Ошибка удаления Movie";
+    }
+}
+
+async function fetchMovies() {
+    try {
+        const res = await fetch(`${baseUrl}/movie/table`);
+        if (!res.ok) throw new Error(res.statusText);
+        moviesList.value = await res.json();
+    } catch {
+        toast.value = "Ошибка загрузки Movie";
+    }
+}
+
 async function fetchCoordinates() {
     try {
-        const res = await fetch(`${baseUrl}/coordinates`);
+        const res = await fetch(`${baseUrl}/coordinates/table`);
         if (!res.ok) throw new Error(res.statusText);
         coordinates.value = await res.json();
     } catch {
-        toast.value = "Ошибка загрузки CoordinatesDTO";
+        toast.value = "Ошибка загрузки Coordinates";
     }
 }
 
 async function fetchPersons() {
     try {
-        const res = await fetch(`${baseUrl}/person`);
+        const res = await fetch(`${baseUrl}/person/table`);
         if (!res.ok) throw new Error(res.statusText);
         persons.value = await res.json();
     } catch {
@@ -86,22 +161,23 @@ async function saveMovie() {
             });
         }
         if (!res || !res.ok) throw new Error(res?.statusText);
-        toast.value = "Movie сохранён!";
+        await fetchMovies();
         showForm.value = false;
+        toast.value = "Movie сохранён!";
     } catch {
         toast.value = "Ошибка сохранения Movie";
     }
 }
 
-// загружаем данные при монтировании
 onMounted(() => {
     fetchCoordinates();
     fetchPersons();
+    fetchMovies();
 });
 </script>
 
 <template>
-    <div class="movie-form-wrapper">
+    <div class="movie-wrapper">
         <div v-if="toast" class="toast">{{ toast }}</div>
 
         <div v-if="showForm">
@@ -112,7 +188,7 @@ onMounted(() => {
                 </label>
 
                 <label>
-                    CoordinatesDTO:
+                    Coordinates:
                     <select v-model.number="form.coordinatesId" required>
                         <option disabled value="">-- select coordinates --</option>
                         <option v-for="c in coordinates" :key="c.id" :value="c.id">
@@ -148,9 +224,7 @@ onMounted(() => {
                     Director:
                     <select v-model.number="form.directorId" required>
                         <option disabled value="">-- select director --</option>
-                        <option v-for="p in persons" :key="p.id" :value="p.id">
-                            {{ p.id }} - {{ p.name }}
-                        </option>
+                        <option v-for="p in persons" :key="p.id" :value="p.id">{{ p.id }} - {{ p.name }}</option>
                     </select>
                 </label>
 
@@ -158,9 +232,7 @@ onMounted(() => {
                     Screenwriter:
                     <select v-model.number="form.screenwriterId">
                         <option value="">-- none --</option>
-                        <option v-for="p in persons" :key="p.id" :value="p.id">
-                            {{ p.id }} - {{ p.name }}
-                        </option>
+                        <option v-for="p in persons" :key="p.id" :value="p.id">{{ p.id }} - {{ p.name }}</option>
                     </select>
                 </label>
 
@@ -168,9 +240,7 @@ onMounted(() => {
                     Operator:
                     <select v-model.number="form.operatorId" required>
                         <option disabled value="">-- select operator --</option>
-                        <option v-for="p in persons" :key="p.id" :value="p.id">
-                            {{ p.id }} - {{ p.name }}
-                        </option>
+                        <option v-for="p in persons" :key="p.id" :value="p.id">{{ p.id }} - {{ p.name }}</option>
                     </select>
                 </label>
 
@@ -207,22 +277,82 @@ onMounted(() => {
             </form>
         </div>
 
-        <button v-else @click="showForm = true; formMode = 'create'; fetchCoordinates(); fetchPersons();">
-            Добавить Movie
-        </button>
+        <button v-else @click="showForm = true; formMode = 'create'">Добавить Movie</button>
+
+        <table>
+            <thead>
+            <tr>
+                <th @click="toggleSort('id')">ID</th>
+                <th @click="toggleSort('name')">Название</th>
+                <th>Координаты</th>
+                <th @click="toggleSort('oscarsCount')">Oscars</th>
+                <th @click="toggleSort('budget')">Бюджет</th>
+                <th @click="toggleSort('totalBoxOffice')">Box Office</th>
+                <th @click="toggleSort('mpaaRating')">MPAA</th>
+                <th>Режиссёр</th>
+                <th>Сценарист</th>
+                <th>Оператор</th>
+                <th @click="toggleSort('length')">Длина</th>
+                <th @click="toggleSort('goldenPalmCount')">Golden Palm</th>
+                <th @click="toggleSort('usaBoxOffice')">USA Box Office</th>
+                <th @click="toggleSort('tagline')">Слоган</th>
+                <th @click="toggleSort('genre')">Жанр</th>
+                <th>Действия</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr v-for="m in pagedMovies" :key="m.id">
+                <td>{{ m.id }}</td>
+                <td>{{ m.name }}</td>
+                <td>{{ m.coordinates?.id }}</td>
+                <td>{{ m.oscarsCount }}</td>
+                <td>{{ m.budget }}</td>
+                <td>{{ m.totalBoxOffice }}</td>
+                <td>{{ m.mpaaRating }}</td>
+                <td>{{ m.director?.name }}</td>
+                <td>{{ m.screenwriter?.name }}</td>
+                <td>{{ m.operator?.name }}</td>
+                <td>{{ m.length }}</td>
+                <td>{{ m.goldenPalmCount }}</td>
+                <td>{{ m.usaBoxOffice }}</td>
+                <td>{{ m.tagline }}</td>
+                <td>{{ m.genre }}</td>
+                <td>
+                    <button @click="openEdit(m)">Редактировать</button>
+                    <button @click="confirmDelete(m)" class="delete-btn">Удалить</button>
+                </td>
+            </tr>
+            <tr v-if="pagedMovies.length === 0">
+                <td colspan="16">Нет данных</td>
+            </tr>
+            </tbody>
+        </table>
     </div>
 </template>
 
 <style scoped>
-.movie-form-wrapper {
+.table-wrapper {
     padding: 1rem;
 }
-label {
-    display: block;
-    margin: 0.5rem 0;
-}
+
 .toast {
     margin-bottom: 1rem;
     color: red;
 }
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+th, td {
+    border: 1px solid black;
+    padding: 8px;
+    text-align: center;
+}
+
+th {
+    background-color: #f2f2f2;
+}
 </style>
+

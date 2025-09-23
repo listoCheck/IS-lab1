@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { reactive, ref, computed } from "vue";
+import {reactive, ref, computed} from "vue";
 import type {LocationDTO} from "@/ts/dto/LocationDTO.ts";
 
 const baseUrl = 'http://localhost:8080/IS-lab1JEE-1.0-SNAPSHOT/api'
@@ -67,7 +67,7 @@ async function fetchLocations() {
     try {
         const res = await fetch(`${baseUrl}/location/table`, {
             method: "GET",
-            headers: { "Content-Type": "application/json" }
+            headers: {"Content-Type": "application/json"}
         });
         if (!res.ok) throw new Error(res.statusText);
         locationsList.value = await res.json();
@@ -88,13 +88,13 @@ async function saveLocations() {
         if (formMode.value === "create") {
             res = await fetch(`${baseUrl}/location`, {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
+                headers: {"Content-Type": "application/json"},
                 body: JSON.stringify(locationDTO),
             });
         } else if (formMode.value === "edit" && editId.value !== null) {
             res = await fetch(`${baseUrl}/location/${editId.value}`, {
                 method: "PUT",
-                headers: { "Content-Type": "application/json" },
+                headers: {"Content-Type": "application/json"},
                 body: JSON.stringify(locationDTO),
             });
         }
@@ -117,13 +117,13 @@ fetchLocations();
         <div v-if="showForm">
             <form @submit.prevent="saveLocations">
                 X:
-                <input type="number" v-model.number="form.locationX" required />
+                <input type="number" v-model.number="form.locationX" required/>
                 Y:
-                <input type="number" v-model.number="form.locationY" required />
+                <input type="number" v-model.number="form.locationY" required/>
                 Z:
-                <input type="number" v-model.number="form.locationZ" required />
+                <input type="number" v-model.number="form.locationZ" required/>
                 Name:
-                <input type="text" v-model.number="form.locationName" required />
+                <input type="text" v-model.number="form.locationName" required/>
                 <button type="submit">Сохранить</button>
             </form>
         </div>
@@ -171,13 +171,29 @@ fetchLocations();
         </table>
     </div>
 </template>
-
 <style scoped>
 .table-wrapper {
     padding: 1rem;
 }
+
 .toast {
     margin-bottom: 1rem;
     color: red;
 }
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+th, td {
+    border: 1px solid black;
+    padding: 8px;
+    text-align: center;
+}
+
+th {
+    background-color: #f2f2f2;
+}
 </style>
+

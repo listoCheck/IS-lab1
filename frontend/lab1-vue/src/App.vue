@@ -11,13 +11,39 @@ import Coordinates from "@/components/entity/Coordinates.vue";
 
 <template>
     <Header/>
-    <Coordinates/>
-    <Location/>
-    <Person/>
+
+    <div class="content-wrapper">
+        <div class="top-row">
+            <Coordinates/>
+            <Location/>
+            <Person/>
+        </div>
+
+        <div class="bottom-row">
+            <Movie/>
+        </div>
+    </div>
 
     <Footer/>
 </template>
 
 <style scoped>
+.content-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 2rem auto;
+}
 
+.top-row {
+    display: flex;
+    gap: 2rem; /* расстояние между блоками */
+    justify-content: center;
+    margin-bottom: 2rem;
+}
+
+.bottom-row {
+    display: flex;
+    justify-content: center;
+}
 </style>
