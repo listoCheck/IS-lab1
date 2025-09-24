@@ -9,13 +9,14 @@ import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import src.islab1jee.DTO.PersonResponseDto;
 import src.islab1jee.service.MovieService;
 import src.islab1jee.DTO.MovieRequestDto;
 import src.islab1jee.DTO.MovieResponseDto;
 
 @Named
 @RequestScoped
-@Path("/movies")
+@Path("/movie")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class MovieController {
@@ -35,22 +36,10 @@ public class MovieController {
     }
 
     @GET
-    @Path("/table/{slice}")
-    public Response getAll(@PathParam("slice") Integer slice) {
-        if (slice == null || slice <= 0) {
-            return Response.status(Response.Status.BAD_REQUEST)
-                    .entity("Slice parameter must be a positive integer")
-                    .build();
-        }
-
-        List<MovieResponseDto> movies = service.getAll();
-
-        if (movies.isEmpty()) {
-            return Response.ok(Collections.emptyList()).build();
-        }
-
-        int endIndex = Math.min(slice, movies.size());
-        return Response.ok(movies.subList(0, endIndex)).build();
+    @Path("/table")
+    public Response getAll() {
+        List<MovieResponseDto> list = service.getAll();
+        return Response.ok(list).build();
     }
 
     @PUT

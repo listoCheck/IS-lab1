@@ -1,4 +1,4 @@
-export interface ColorDTO{
+export interface Color {
     GREEN,
     BLACK,
     YELLOW,

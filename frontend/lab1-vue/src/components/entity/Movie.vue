@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { reactive, ref, computed, onMounted } from "vue";
+import type {MovieDTO} from "@/ts/dto/MovieDTO.ts";
 
 const baseUrl = "http://localhost:8080/IS-lab1JEE-1.0-SNAPSHOT/api";
 const toast = ref("");
@@ -20,20 +21,16 @@ const sortBy = ref<
     | "genre"
 >("id");
 
-// состояния формы
 const showForm = ref(false);
 const formMode = ref<"create" | "edit">("create");
 const editId = ref<number | null>(null);
 
-// справочники
 const mpaaRatings = ["G", "PG", "PG_13", "R", "NC_17"];
 const genres = ["WESTERN", "COMEDY", "MUSICAL", "ADVENTURE", "FANTASY"];
 
-// списки для селектов
 const coordinates = ref<{ id: number; x: number; y: number }[]>([]);
 const persons = ref<{ id: number; name: string }[]>([]);
 
-// данные формы
 const form = reactive({
     name: "",
     coordinatesId: null as number | null,
@@ -51,8 +48,7 @@ const form = reactive({
     genre: "",
 });
 
-// список фильмов
-const moviesList = ref<any[]>([]);
+const moviesList = ref<MovieDTO[]>([]);
 
 const pagedMovies = computed(() => {
     return [...moviesList.value].sort((a, b) => {
@@ -72,7 +68,7 @@ function toggleSort(field: typeof sortBy.value) {
     }
 }
 
-function openEdit(movie: any) {
+function openEdit(movie: MovieDTO) {
     formMode.value = "edit";
     editId.value = movie.id;
     Object.assign(form, {
@@ -85,7 +81,7 @@ function openEdit(movie: any) {
     showForm.value = true;
 }
 
-async function confirmDelete(movie: any) {
+async function confirmDelete(movie: MovieDTO) {
     try {
         await fetch(`${baseUrl}/movie/${movie.id}`, {
             method: "DELETE",
@@ -304,7 +300,7 @@ onMounted(() => {
             <tr v-for="m in pagedMovies" :key="m.id">
                 <td>{{ m.id }}</td>
                 <td>{{ m.name }}</td>
-                <td>{{ m.coordinates?.id }}</td>
+                <td>{{ m.coordinates.x + " " + m.coordinates.y }}</td>
                 <td>{{ m.oscarsCount }}</td>
                 <td>{{ m.budget }}</td>
                 <td>{{ m.totalBoxOffice }}</td>

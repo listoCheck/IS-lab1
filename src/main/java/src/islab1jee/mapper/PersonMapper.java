@@ -20,15 +20,15 @@ public class PersonMapper {
 
     public static PersonResponseDto toDto(Person entity) {
         return new PersonResponseDto(
-                entity.getId(),
-                entity.getName(),
-                entity.getEyeColor(),
-                entity.getHairColor(),
+                        entity.getId(),
+                        entity.getName(),
+                        entity.getEyeColor(),
+                        entity.getHairColor(),
+                LocationMapper.toDto(entity.getLocation()),
                 entity.getWeight(),
                 entity.getPassportID(),
-                entity.getNationality(),
-                LocationMapper.toDto(entity.getLocation())
-        );
+                entity.getNationality()
+                );
     }
 }
 
