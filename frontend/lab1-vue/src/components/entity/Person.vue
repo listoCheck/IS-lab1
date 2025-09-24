@@ -26,6 +26,9 @@ const form = reactive({
     nationality: "",
 });
 
+const page = ref(0);
+const pageSize = 5;
+
 const personsList = ref<PersonDTO[]>([]);
 const locationsList = ref<LocationDTO[]>([]);
 
@@ -129,6 +132,17 @@ async function savePerson() {
         toast.value = "Ошибка сохранения";
     }
 }
+function nextPage() {
+    page.value++;
+    fetchPersons();
+}
+
+function prevPage() {
+    if (page.value > 0) {
+        page.value--;
+        fetchPersons();
+    }
+}
 
 onMounted(async () => {
     await fetchLocations();
@@ -179,8 +193,8 @@ onMounted(async () => {
                 </select>
 
 
-
                 <button type="submit">Сохранить</button>
+                <button type="button" @click="showForm = false" class="delete-btn">Закрыть</button>
             </form>
         </div>
         <button v-else @click="showForm = true; formMode = 'create'">Добавить</button>
@@ -205,7 +219,7 @@ onMounted(async () => {
                 <td>{{ p.name }}</td>
                 <td>{{ p.eyeColor }}</td>
                 <td>{{ p.hairColor }}</td>
-                <td>{{ p.location.id + " " + p.location.name}}</td>
+                <td>{{ p.location.id + " " + p.location.name }}</td>
                 <td>{{ p.weight }}</td>
                 <td>{{ p.passportID }}</td>
                 <td>{{ p.nationality }}</td>
@@ -220,6 +234,11 @@ onMounted(async () => {
             </tr>
             </tbody>
         </table>
+        <div class="pagination">
+            <button @click="prevPage" :disabled="page===0">Назад</button>
+            <span>Стр: {{ page + 1 }}</span>
+            <button @click="nextPage" :disabled="pagedPersons.length < pageSize">Вперёд</button>
+        </div>
     </div>
 </template>
 

@@ -10,6 +10,7 @@ import jakarta.ws.rs.core.Response;
 
 import java.util.List;
 
+import src.islab1jee.DTO.LocationResponseDto;
 import src.islab1jee.service.PersonService;
 import src.islab1jee.DTO.PersonRequestDto;
 import src.islab1jee.DTO.PersonResponseDto;
@@ -37,8 +38,11 @@ public class PersonController {
 
     @GET
     @Path("/table")
-    public Response getAll() {
-        List<PersonResponseDto> list = service.getAll();
+    public Response getPaged(
+            @QueryParam("page") @DefaultValue("0") int page,
+            @QueryParam("size") @DefaultValue("5") int size
+    ) {
+        List<PersonResponseDto> list = service.getPaged(page, size);
         return Response.ok(list).build();
     }
 

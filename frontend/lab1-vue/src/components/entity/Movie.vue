@@ -270,7 +270,7 @@ onMounted(() => {
                 </label>
 
                 <button type="submit">Сохранить</button>
-                <button type="button" @click="showForm = false">Отмена</button>
+                <button type="button" @click="showForm = false" class="delete-btn">Закрыть</button>
             </form>
         </div>
 

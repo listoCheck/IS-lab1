@@ -4,6 +4,8 @@ import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import jakarta.transaction.Transactional;
+import src.islab1jee.DTO.LocationResponseDto;
+import src.islab1jee.mapper.LocationMapper;
 import src.islab1jee.mapper.PersonMapper;
 import src.islab1jee.entity.Location;
 import src.islab1jee.entity.Person;
@@ -76,4 +78,18 @@ public class PersonService {
     public void delete(Integer id) {
         repository.delete(id);
     }
+
+    public List<PersonResponseDto> getPaged(int page, int size) {
+        List<Person> all = repository.findAll();
+        int fromIndex = page * size;
+        if (fromIndex >= all.size()) {
+            return List.of();
+        }
+        int toIndex = Math.min(fromIndex + size, all.size());
+
+        return all.subList(fromIndex, toIndex).stream()
+                .map(PersonMapper::toDto)
+                .collect(Collectors.toList());
+    }
 }
+
