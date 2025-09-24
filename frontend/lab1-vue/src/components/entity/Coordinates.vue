@@ -1,8 +1,9 @@
 <script setup lang="ts">
+import "../../css/entity.css"
 import {reactive, ref, computed} from "vue";
 import type {CoordinatesDTO} from "@/ts/dto/CoordinatesDTO.ts";
 
-const baseUrl = 'http://localhost:8080/IS-lab1JEE-1.0-SNAPSHOT/api'
+const baseUrl = 'http://localhost:8080/IS-lab1JEE-1.0-SNAPSHOT/api';
 const toast = ref("");
 
 const sortDir = ref<"asc" | "desc">("asc");
@@ -16,8 +17,10 @@ const form = reactive({
     coordinatesX: 0,
     coordinatesY: 0,
 });
-
 const coordinatesList = ref<{ id: number; x: number; y: number }[]>([]);
+
+const page = ref(0);
+const pageSize = 5;
 
 const pagedCoordinates = computed(() => {
     return [...coordinatesList.value].sort((a, b) => {
@@ -46,26 +49,24 @@ function openEdit(coordinates: CoordinatesDTO) {
 }
 
 async function confirmDelete(coordinates: CoordinatesDTO) {
-    coordinatesList.value = coordinatesList.value.filter((c) => c.id !== coordinates.id);
     try {
-        const res = await fetch(`${baseUrl}/coordinates/` + coordinates.id, {
+        const res = await fetch(`${baseUrl}/coordinates/${coordinates.id}`, {
             method: "DELETE",
             headers: {"Content-Type": "application/json"}
         });
         if (!res.ok) throw new Error(res.statusText);
-        coordinatesList.value = await res.json();
+        await fetchCoordinates();
     } catch (e) {
         toast.value = "Ошибка удаления";
     }
-    await fetchCoordinates()
 }
 
 async function fetchCoordinates() {
     try {
-        const res = await fetch(`${baseUrl}/coordinates/table`, {
-            method: "GET",
-            headers: {"Content-Type": "application/json"}
-        });
+        const res = await fetch(
+            `${baseUrl}/coordinates/table?page=${page.value}&size=${pageSize}`,
+            {method: "GET", headers: {"Content-Type": "application/json"}}
+        );
         if (!res.ok) throw new Error(res.statusText);
         coordinatesList.value = await res.json();
     } catch (e) {
@@ -102,7 +103,20 @@ async function saveCoordinates() {
     }
 }
 
+function nextPage() {
+    page.value++;
+    fetchCoordinates();
+}
+
+function prevPage() {
+    if (page.value > 0) {
+        page.value--;
+        fetchCoordinates();
+    }
+}
+
 fetchCoordinates();
+
 </script>
 
 <template>
@@ -124,13 +138,22 @@ fetchCoordinates();
             <thead>
             <tr>
                 <th @click="toggleSort('id')">
-                    ID <small v-if="sortBy==='id'">({{ sortDir }})</small>
+                    ID
+                    <span v-if="sortBy==='id'">
+          {{ sortDir === 'asc' ? '▲' : '▼' }}
+        </span>
                 </th>
                 <th @click="toggleSort('x')">
-                    X <small v-if="sortBy==='x'">({{ sortDir }})</small>
+                    X
+                    <span v-if="sortBy==='x'">
+          {{ sortDir === 'asc' ? '▲' : '▼' }}
+        </span>
                 </th>
                 <th @click="toggleSort('y')">
-                    Y <small v-if="sortBy==='y'">({{ sortDir }})</small>
+                    Y
+                    <span v-if="sortBy==='y'">
+          {{ sortDir === 'asc' ? '▲' : '▼' }}
+        </span>
                 </th>
                 <th>Действия</th>
             </tr>
@@ -152,31 +175,16 @@ fetchCoordinates();
             </tr>
             </tbody>
         </table>
+
+        <div class="pagination">
+            <button @click="prevPage" :disabled="page===0">Назад</button>
+            <span>Стр: {{ page + 1 }}</span>
+            <button @click="nextPage" :disabled="pagedCoordinates.length < pageSize">Вперёд</button>
+        </div>
     </div>
+
 </template>
 
 <style scoped>
-.table-wrapper {
-    padding: 1rem;
-}
 
-.toast {
-    margin-bottom: 1rem;
-    color: red;
-}
-
-table {
-    border-collapse: collapse;
-    width: 100%;
-}
-
-th, td {
-    border: 1px solid black;
-    padding: 8px;
-    text-align: center;
-}
-
-th {
-    background-color: #f2f2f2;
-}
 </style>

@@ -56,4 +56,18 @@ public class CoordinatesService {
                 .collect(Collectors.toList());
     }
 
+    public List<CoordinatesResponseDto> getPaged(int page, int size) {
+        List<Coordinates> all = repository.findAll();
+        int fromIndex = page * size;
+        if (fromIndex >= all.size()) {
+            return List.of();
+        }
+        int toIndex = Math.min(fromIndex + size, all.size());
+
+        return all.subList(fromIndex, toIndex).stream()
+                .map(CoordinatesMapper::toDto)
+                .collect(Collectors.toList());
+    }
+
+
 }

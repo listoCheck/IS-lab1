@@ -29,11 +29,21 @@ public class CoordinatesController {
     public Response getById(@PathParam("id") Integer id) {
         return Response.ok(service.getById(id)).build();
     }
-
+    /**
     @GET
     @Path("/table")
     public Response getAll() {
         List<CoordinatesResponseDto> list = service.getAll();
+        return Response.ok(list).build();
+    }
+     **/
+    @GET
+    @Path("/table")
+    public Response getPaged(
+            @QueryParam("page") @DefaultValue("0") int page,
+            @QueryParam("size") @DefaultValue("5") int size
+    ) {
+        List<CoordinatesResponseDto> list = service.getPaged(page, size);
         return Response.ok(list).build();
     }
 

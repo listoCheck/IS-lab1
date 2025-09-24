@@ -1,4 +1,5 @@
 <script setup lang="ts">
+
 import {reactive, ref, computed} from "vue";
 import type {LocationDTO} from "@/ts/dto/LocationDTO.ts";
 
@@ -133,19 +134,19 @@ fetchLocations();
             <thead>
             <tr>
                 <th @click="toggleSort('id')">
-                    ID <small v-if="sortBy==='id'">({{ sortDir }})</small>
+                    ID <small v-if="sortBy==='id'">{{ sortDir === 'asc' ? '▲' : '▼' }}</small>
                 </th>
                 <th @click="toggleSort('x')">
-                    X <small v-if="sortBy==='x'">({{ sortDir }})</small>
+                    X <small v-if="sortBy==='x'">{{ sortDir === 'asc' ? '▲' : '▼' }}</small>
                 </th>
                 <th @click="toggleSort('y')">
-                    Y <small v-if="sortBy==='y'">({{ sortDir }})</small>
+                    Y <small v-if="sortBy==='y'">{{ sortDir === 'asc' ? '▲' : '▼' }}</small>
                 </th>
                 <th @click="toggleSort('z')">
-                    Z <small v-if="sortBy==='z'">({{ sortDir }})</small>
+                    Z <small v-if="sortBy==='z'">{{ sortDir === 'asc' ? '▲' : '▼' }}</small>
                 </th>
                 <th @click="toggleSort('name')">
-                    Name <small v-if="sortBy==='name'">({{ sortDir }})</small>
+                    Name <small v-if="sortBy==='name'">{{ sortDir === 'asc' ? '▲' : '▼' }}</small>
                 </th>
                 <th>Действия</th>
             </tr>
@@ -172,28 +173,6 @@ fetchLocations();
     </div>
 </template>
 <style scoped>
-.table-wrapper {
-    padding: 1rem;
-}
 
-.toast {
-    margin-bottom: 1rem;
-    color: red;
-}
-
-table {
-    border-collapse: collapse;
-    width: 100%;
-}
-
-th, td {
-    border: 1px solid black;
-    padding: 8px;
-    text-align: center;
-}
-
-th {
-    background-color: #f2f2f2;
-}
 </style>
 
