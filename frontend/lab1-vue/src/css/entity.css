@@ -2,7 +2,7 @@
     padding: 1.5rem;
     max-width: 800px;
     color: #f1f1f1;
-    background: #1e1e1e;
+    background: #101F27;
     border-radius: 12px;
     margin-left: 2px;
 }
@@ -32,14 +32,14 @@ th, td {
 }
 
 th {
-    background-color: #2a2a2a;
+    background-color: #19303d;
     cursor: pointer;
     user-select: none;
     transition: background 0.2s;
 }
 
 th:hover {
-    background-color: #383838;
+    background-color: #0c191f;
 }
 
 tbody tr:nth-child(even) {
@@ -102,4 +102,48 @@ button:disabled {
 
 .pagination span {
     color: #ddd;
+}
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 1rem;
+    margin: 1rem 0;
+    background: #14242c;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+form label {
+    font-weight: 500;
+    color: #ddd;
+    margin-bottom: 4px;
+}
+
+input[type="number"],
+input[type="text"] {
+    padding: 10px 12px;
+    border: 1px solid #333;
+    border-radius: 6px;
+    background: #1c2b33;
+    color: #f1f1f1;
+    font-size: 0.95rem;
+    transition: border 0.2s, background 0.2s;
+}
+
+input[type="number"]:focus,
+input[type="text"]:focus {
+    border-color: #007bff;
+    background: #223944;
+    outline: none;
+}
+
+button[type="submit"] {
+    align-self: flex-start;
+    margin-top: 8px;
+    background-color: #006400;
+}
+
+button[type="submit"]:hover {
+    background-color: #008000;
 }

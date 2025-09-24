@@ -8,6 +8,7 @@ import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import src.islab1jee.DTO.CoordinatesResponseDto;
 import src.islab1jee.DTO.LocationRequestDto;
 import src.islab1jee.DTO.LocationResponseDto;
 import src.islab1jee.service.LocationService;
@@ -34,8 +35,11 @@ public class LocationController {
 
     @GET
     @Path("/table")
-    public Response getAll() {
-        List<LocationResponseDto> list = service.getAll();
+    public Response getPaged(
+            @QueryParam("page") @DefaultValue("0") int page,
+            @QueryParam("size") @DefaultValue("5") int size
+    ) {
+        List<LocationResponseDto> list = service.getPaged(page, size);
         return Response.ok(list).build();
     }
 

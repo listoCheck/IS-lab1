@@ -14,8 +14,8 @@ const formMode = ref<"create" | "edit">("create");
 const editId = ref<number | null>(null);
 
 const form = reactive({
-    coordinatesX: 0,
-    coordinatesY: 0,
+    coordinatesX: null,
+    coordinatesY: null,
 });
 const coordinatesList = ref<{ id: number; x: number; y: number }[]>([]);
 
@@ -130,6 +130,7 @@ fetchCoordinates();
                 Y:
                 <input type="number" v-model.number="form.coordinatesY" required/>
                 <button type="submit">Сохранить</button>
+                <button type="button" @click="showForm = false" class="delete-btn">Закрыть</button>
             </form>
         </div>
         <button v-else @click="showForm = true; formMode = 'create'">Добавить</button>

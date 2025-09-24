@@ -3,8 +3,11 @@ package src.islab1jee.service;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
+import src.islab1jee.DTO.CoordinatesResponseDto;
 import src.islab1jee.DTO.LocationRequestDto;
 import src.islab1jee.DTO.LocationResponseDto;
+import src.islab1jee.entity.Coordinates;
+import src.islab1jee.mapper.CoordinatesMapper;
 import src.islab1jee.mapper.LocationMapper;
 import src.islab1jee.entity.Location;
 import src.islab1jee.repository.LocationRepository;
@@ -56,5 +59,18 @@ public class LocationService {
     @Transactional
     public void delete(Integer id) {
         repository.delete(id);
+    }
+
+    public List<LocationResponseDto> getPaged(int page, int size) {
+        List<Location> all = repository.findAll();
+        int fromIndex = page * size;
+        if (fromIndex >= all.size()) {
+            return List.of();
+        }
+        int toIndex = Math.min(fromIndex + size, all.size());
+
+        return all.subList(fromIndex, toIndex).stream()
+                .map(LocationMapper::toDto)
+                .collect(Collectors.toList());
     }
 }

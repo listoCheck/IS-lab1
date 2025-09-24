@@ -22,6 +22,9 @@ const form = reactive({
 
 const locationsList = ref<{ id: number; x: number; y: number }[]>([]);
 
+const page = ref(0);
+const pageSize = 5;
+
 const pagedLocations = computed(() => {
     return [...locationsList.value].sort((a, b) => {
         const field = sortBy.value as keyof typeof a;
@@ -66,7 +69,7 @@ async function confirmDelete(location: LocationDTO) {
 
 async function fetchLocations() {
     try {
-        const res = await fetch(`${baseUrl}/location/table`, {
+        const res = await fetch(`${baseUrl}/location/table?page=${page.value}&size=${pageSize}`, {
             method: "GET",
             headers: {"Content-Type": "application/json"}
         });
@@ -108,6 +111,18 @@ async function saveLocations() {
     }
 }
 
+function nextPage() {
+    page.value++;
+    fetchLocations();
+}
+
+function prevPage() {
+    if (page.value > 0) {
+        page.value--;
+        fetchLocations();
+    }
+}
+
 fetchLocations();
 </script>
 
@@ -126,6 +141,7 @@ fetchLocations();
                 Name:
                 <input type="text" v-model.number="form.locationName" required/>
                 <button type="submit">Сохранить</button>
+                <button type="button" @click="showForm = false" class="delete-btn">Закрыть</button>
             </form>
         </div>
         <button v-else @click="showForm = true; formMode = 'create'">Добавить</button>
@@ -170,7 +186,13 @@ fetchLocations();
             </tr>
             </tbody>
         </table>
+        <div class="pagination">
+            <button @click="prevPage" :disabled="page===0">Назад</button>
+            <span>Стр: {{ page + 1 }}</span>
+            <button @click="nextPage" :disabled="pagedLocations.length < pageSize">Вперёд</button>
+        </div>
     </div>
+
 </template>
 <style scoped>
 

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import "../../css/entity.css"
 import { reactive, ref, computed, onMounted } from "vue";
 import type {MovieDTO} from "@/ts/dto/MovieDTO.ts";
 
@@ -327,28 +328,13 @@ onMounted(() => {
 </template>
 
 <style scoped>
-.table-wrapper {
-    padding: 1rem;
-}
 
-.toast {
-    margin-bottom: 1rem;
-    color: red;
-}
 
 table {
     border-collapse: collapse;
     width: 100%;
+    color: #f1f1f1;
 }
 
-th, td {
-    border: 1px solid black;
-    padding: 8px;
-    text-align: center;
-}
-
-th {
-    background-color: #f2f2f2;
-}
 </style>
 
