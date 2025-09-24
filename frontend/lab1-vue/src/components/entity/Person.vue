@@ -17,13 +17,13 @@ const formMode = ref<"create" | "edit">("create");
 const editId = ref<number | null>(null);
 
 const form = reactive({
-    name: "",
-    eyeColor: "",
-    hairColor: "",
-    location: "",
-    weight: 0,
-    passportID: "",
-    nationality: "",
+    name: null,
+    eyeColor: null,
+    hairColor: null,
+    location: null,
+    weight: null,
+    passportID: null,
+    nationality: null,
 });
 
 const page = ref(0);

@@ -14,10 +14,10 @@ const formMode = ref<"create" | "edit">("create");
 const editId = ref<number | null>(null);
 
 const form = reactive({
-    locationX: 0,
-    locationY: 0,
-    locationZ: 0,
-    locationName: "",
+    locationX: null,
+    locationY: null,
+    locationZ: null,
+    locationName: null,
 });
 
 const locationsList = ref<{ id: number; x: number; y: number }[]>([]);
