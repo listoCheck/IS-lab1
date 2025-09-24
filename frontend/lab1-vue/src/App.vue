@@ -37,7 +37,7 @@ import Coordinates from "@/components/entity/Coordinates.vue";
 
 .top-row {
     display: flex;
-    gap: 2rem; /* расстояние между блоками */
+    gap: 2rem;
     justify-content: center;
     margin-bottom: 2rem;
 }
@@ -45,5 +45,8 @@ import Coordinates from "@/components/entity/Coordinates.vue";
 .bottom-row {
     display: flex;
     justify-content: center;
+    background: #1c2b33;
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
 }
 </style>

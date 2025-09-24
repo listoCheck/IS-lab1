@@ -9,6 +9,7 @@ import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import src.islab1jee.DTO.CoordinatesResponseDto;
 import src.islab1jee.DTO.PersonResponseDto;
 import src.islab1jee.service.MovieService;
 import src.islab1jee.DTO.MovieRequestDto;
@@ -37,8 +38,11 @@ public class MovieController {
 
     @GET
     @Path("/table")
-    public Response getAll() {
-        List<MovieResponseDto> list = service.getAll();
+    public Response getPaged(
+            @QueryParam("page") @DefaultValue("0") int page,
+            @QueryParam("size") @DefaultValue("5") int size
+    ) {
+        List<MovieResponseDto> list = service.getPaged(page, size);
         return Response.ok(list).build();
     }
 

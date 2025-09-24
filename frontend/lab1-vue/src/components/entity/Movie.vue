@@ -6,7 +6,6 @@ import type {MovieDTO} from "@/ts/dto/MovieDTO.ts";
 const baseUrl = "http://localhost:8080/IS-lab1JEE-1.0-SNAPSHOT/api";
 const toast = ref("");
 
-// сортировка
 const sortDir = ref<"asc" | "desc">("asc");
 const sortBy = ref<
     | "id"
@@ -48,6 +47,9 @@ const form = reactive({
     tagline: "",
     genre: "",
 });
+
+const page = ref(0);
+const pageSize = 5;
 
 const moviesList = ref<MovieDTO[]>([]);
 
@@ -165,6 +167,18 @@ async function saveMovie() {
         toast.value = "Ошибка сохранения Movie";
     }
 }
+function nextPage() {
+    page.value++;
+    fetchMovies();
+}
+
+function prevPage() {
+    if (page.value > 0) {
+        page.value--;
+        fetchMovies();
+    }
+}
+
 
 onMounted(() => {
     fetchCoordinates();
@@ -324,6 +338,11 @@ onMounted(() => {
             </tr>
             </tbody>
         </table>
+        <div class="pagination">
+            <button @click="prevPage" :disabled="page===0">Назад</button>
+            <span>Стр: {{ page + 1 }}</span>
+            <button @click="nextPage" :disabled="pagedMovies.length < pageSize">Вперёд</button>
+        </div>
     </div>
 </template>
 
@@ -334,7 +353,15 @@ table {
     border-collapse: collapse;
     width: 100%;
     color: #f1f1f1;
+    background: #101F27;
 }
-
+.table-wrapper {
+    padding: 1.5rem;
+    max-width: 800px;
+    color: #f1f1f1;
+    background: #101F27;
+    border-radius: 12px;
+    margin-left: 2px;
+}
 </style>
 

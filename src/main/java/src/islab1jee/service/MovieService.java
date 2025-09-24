@@ -4,6 +4,8 @@ import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import jakarta.transaction.Transactional;
+import src.islab1jee.DTO.CoordinatesResponseDto;
+import src.islab1jee.mapper.CoordinatesMapper;
 import src.islab1jee.mapper.MovieMapper;
 import src.islab1jee.entity.Coordinates;
 import src.islab1jee.repository.CoordinatesRepository;
@@ -92,5 +94,18 @@ public class MovieService {
     @Transactional
     public void delete(Integer id) {
         movieRepository.delete(id);
+    }
+
+    public List<MovieResponseDto> getPaged(int page, int size) {
+        List<Movie> all = movieRepository.findAll();
+        int fromIndex = page * size;
+        if (fromIndex >= all.size()) {
+            return List.of();
+        }
+        int toIndex = Math.min(fromIndex + size, all.size());
+
+        return all.subList(fromIndex, toIndex).stream()
+                .map(MovieMapper::toDto)
+                .collect(Collectors.toList());
     }
 }
