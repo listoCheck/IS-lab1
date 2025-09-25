@@ -6,6 +6,7 @@ import Location from "@/components/entity/Location.vue";
 import Movie from "@/components/entity/Movie.vue";
 import Person from "@/components/entity/Person.vue";
 import Coordinates from "@/components/entity/Coordinates.vue";
+import "@/css/app.css"
 
 </script>
 
@@ -28,25 +29,5 @@ import Coordinates from "@/components/entity/Coordinates.vue";
 </template>
 
 <style scoped>
-.content-wrapper {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin: 2rem auto;
-}
 
-.top-row {
-    display: flex;
-    gap: 2rem;
-    justify-content: center;
-    margin-bottom: 2rem;
-}
-
-.bottom-row {
-    display: flex;
-    justify-content: center;
-    background: #1c2b33;
-    border-radius: 8px;
-    padding: 0.75rem 1rem;
-}
 </style>
