@@ -46,6 +46,13 @@ public class MovieController {
         return Response.ok(list).build();
     }
 
+    @GET
+    @Path("/middle")
+    public Response getMiddle(){
+        Double middle = service.getMiddle();
+        return Response.ok(middle).build();
+    }
+
     @PUT
     @Path("/{id}")
     public Response update(@PathParam("id") Integer id, @Valid MovieRequestDto dto) {

@@ -24,6 +24,7 @@ const sortBy = ref<
 const showForm = ref(false);
 const formMode = ref<"create" | "edit">("create");
 const editId = ref<number | null>(null);
+const middleValue = ref<number | null>(null);
 
 const mpaaRatings = ["G", "PG", "PG_13", "R", "NC_17"];
 const genres = ["WESTERN", "COMEDY", "MUSICAL", "ADVENTURE", "FANTASY"];
@@ -123,6 +124,17 @@ async function fetchPersons() {
         persons.value = await res.json();
     } catch {
         toast.value = "Ошибка загрузки Persons";
+    }
+}
+
+async function getMiddleUsaBoxOfficeValue(){
+    try{
+        const res = await fetch(`${baseUrl}/movie/middle`);
+        if (!res.ok) throw new Error(res.statusText);
+        middleValue.value = await res.json();
+        console.log(middleValue)
+    } catch {
+        toast.value = "Ошибка загрузки среднего значения";
     }
 }
 
@@ -289,6 +301,9 @@ onMounted(() => {
         </div>
 
         <button v-else @click="showForm = true; formMode = 'create'">Добавить Movie</button>
+        <button @click="getMiddleUsaBoxOfficeValue">Ср. знач. usaBoxOffice</button>
+        <label v-if="middleValue !== null" class="middle-value">Среднее: {{ middleValue }}</label>
+
 
         <table>
             <thead>

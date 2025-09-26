@@ -104,8 +104,11 @@ public class MovieService {
         }
         int toIndex = Math.min(fromIndex + size, all.size());
 
-        return all.subList(fromIndex, toIndex).stream()
-                .map(MovieMapper::toDto)
-                .collect(Collectors.toList());
+        return all.subList(fromIndex, toIndex).stream().map(MovieMapper::toDto).collect(Collectors.toList());
+    }
+
+    public Double getMiddle() {
+        List<Movie> all = movieRepository.findAll();
+        return all.stream().mapToDouble(Movie::getUsaBoxOffice).average().orElse(0.0);
     }
 }
