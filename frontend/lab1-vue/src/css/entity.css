@@ -153,3 +153,8 @@ button[type="submit"]:hover {
     margin-bottom: 5px;
     margin-left: 5px;
 }
+.genre-value{
+    color: #4CAF50;
+    margin-bottom: 5px;
+    margin-left: -60px;
+}

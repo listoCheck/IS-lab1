@@ -11,6 +11,7 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import src.islab1jee.DTO.CoordinatesResponseDto;
 import src.islab1jee.DTO.PersonResponseDto;
+import src.islab1jee.enums.MovieGenre;
 import src.islab1jee.service.MovieService;
 import src.islab1jee.DTO.MovieRequestDto;
 import src.islab1jee.DTO.MovieResponseDto;
@@ -64,5 +65,16 @@ public class MovieController {
     public Response delete(@PathParam("id") Integer id) {
         service.delete(id);
         return Response.noContent().build();
+    }
+
+    @GET
+    @Path("/countByGenre")
+    public Response countByGenre(@QueryParam("genre") MovieGenre genre) {
+        if (genre == null) {
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity("Genre is required")
+                    .build();
+        }
+        return Response.ok(service.countByGenre(genre)).build();
     }
 }

@@ -5,6 +5,7 @@ import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import jakarta.transaction.Transactional;
 import src.islab1jee.DTO.CoordinatesResponseDto;
+import src.islab1jee.enums.MovieGenre;
 import src.islab1jee.mapper.CoordinatesMapper;
 import src.islab1jee.mapper.MovieMapper;
 import src.islab1jee.entity.Coordinates;
@@ -110,5 +111,12 @@ public class MovieService {
     public Double getMiddle() {
         List<Movie> all = movieRepository.findAll();
         return all.stream().mapToDouble(Movie::getUsaBoxOffice).average().orElse(0.0);
+    }
+
+    public Integer countByGenre(MovieGenre genre) {
+        List<Movie> all = movieRepository.findAll();
+        return (int) all.stream()
+                .filter(movie -> movie.getGenre() == genre)
+                .count();
     }
 }

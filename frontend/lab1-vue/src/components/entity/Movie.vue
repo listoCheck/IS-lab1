@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import "../../css/entity.css"
-import { reactive, ref, computed, onMounted } from "vue";
+import {reactive, ref, computed, onMounted, watch} from "vue";
 import type {MovieDTO} from "@/ts/dto/MovieDTO.ts";
 
 const baseUrl = "http://localhost:8080/IS-lab1JEE-1.0-SNAPSHOT/api";
@@ -89,7 +89,7 @@ async function confirmDelete(movie: MovieDTO) {
     try {
         await fetch(`${baseUrl}/movie/${movie.id}`, {
             method: "DELETE",
-            headers: { "Content-Type": "application/json" },
+            headers: {"Content-Type": "application/json"},
         });
         await fetchMovies();
     } catch {
@@ -127,8 +127,8 @@ async function fetchPersons() {
     }
 }
 
-async function getMiddleUsaBoxOfficeValue(){
-    try{
+async function getMiddleUsaBoxOfficeValue() {
+    try {
         const res = await fetch(`${baseUrl}/movie/middle`);
         if (!res.ok) throw new Error(res.statusText);
         middleValue.value = await res.json();
@@ -161,13 +161,13 @@ async function saveMovie() {
         if (formMode.value === "create") {
             res = await fetch(`${baseUrl}/movie`, {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
+                headers: {"Content-Type": "application/json"},
                 body: JSON.stringify(movieDTO),
             });
         } else if (formMode.value === "edit" && editId.value !== null) {
             res = await fetch(`${baseUrl}/movie/${editId.value}`, {
                 method: "PUT",
-                headers: { "Content-Type": "application/json" },
+                headers: {"Content-Type": "application/json"},
                 body: JSON.stringify(movieDTO),
             });
         }
@@ -179,6 +179,7 @@ async function saveMovie() {
         toast.value = "Ошибка сохранения Movie";
     }
 }
+
 function nextPage() {
     page.value++;
     fetchMovies();
@@ -190,6 +191,28 @@ function prevPage() {
         fetchMovies();
     }
 }
+
+const selectedGenre = ref("");
+const genreCount = ref<number | null>(null);
+
+
+async function getCountByGenre() {
+    try {
+        const res = await fetch(`${baseUrl}/movie/countByGenre?genre=${selectedGenre.value}`);
+        if (!res.ok) throw new Error(res.statusText);
+        genreCount.value = await res.json();
+    } catch {
+        toast.value = "Ошибка загрузки количества фильмов определенного жанра";
+    }
+}
+
+watch(selectedGenre, (newGenre) => {
+    if (newGenre) {
+        getCountByGenre(newGenre);
+    } else {
+        genreCount.value = null;
+    }
+});
 
 
 onMounted(() => {
@@ -207,7 +230,7 @@ onMounted(() => {
             <form @submit.prevent="saveMovie">
                 <label>
                     Name:
-                    <input type="text" v-model="form.name" required />
+                    <input type="text" v-model="form.name" required/>
                 </label>
 
                 <label>
@@ -222,17 +245,17 @@ onMounted(() => {
 
                 <label>
                     Oscars Count:
-                    <input type="number" v-model.number="form.oscarsCount" min="1" required />
+                    <input type="number" v-model.number="form.oscarsCount" min="1" required/>
                 </label>
 
                 <label>
                     Budget:
-                    <input type="number" v-model.number="form.budget" min="1" />
+                    <input type="number" v-model.number="form.budget" min="1"/>
                 </label>
 
                 <label>
                     Total Box Office:
-                    <input type="number" v-model.number="form.totalBoxOffice" min="1" required />
+                    <input type="number" v-model.number="form.totalBoxOffice" min="1" required/>
                 </label>
 
                 <label>
@@ -269,22 +292,22 @@ onMounted(() => {
 
                 <label>
                     Length:
-                    <input type="number" v-model.number="form.length" min="1" />
+                    <input type="number" v-model.number="form.length" min="1"/>
                 </label>
 
                 <label>
                     Golden Palm Count:
-                    <input type="number" v-model.number="form.goldenPalmCount" min="1" required />
+                    <input type="number" v-model.number="form.goldenPalmCount" min="1" required/>
                 </label>
 
                 <label>
                     USA Box Office:
-                    <input type="number" v-model.number="form.usaBoxOffice" min="1" step="0.01" required />
+                    <input type="number" v-model.number="form.usaBoxOffice" min="1" step="0.01" required/>
                 </label>
 
                 <label>
                     Tagline:
-                    <input type="text" v-model="form.tagline" required />
+                    <input type="text" v-model="form.tagline" required/>
                 </label>
 
                 <label>
@@ -304,6 +327,11 @@ onMounted(() => {
         <button @click="getMiddleUsaBoxOfficeValue">Ср. знач. usaBoxOffice</button>
         <label v-if="middleValue !== null" class="middle-value">Среднее: {{ middleValue }}</label>
 
+        <select v-model="selectedGenre">
+            <option disabled value="">-- select genre --</option>
+            <option v-for="g in genres" :key="g" :value="g">{{ g }}</option>
+        </select>
+        <label  class="genre-value">Количество фильмов жанра {{ selectedGenre }}: <b>{{ genreCount }}</b></label>
 
         <table>
             <thead>
@@ -370,13 +398,6 @@ table {
     color: #f1f1f1;
     background: #101F27;
 }
-.table-wrapper {
-    padding: 1.5rem;
-    max-width: 800px;
-    color: #f1f1f1;
-    background: #101F27;
-    border-radius: 12px;
-    margin-left: 2px;
-}
+
 </style>
 
