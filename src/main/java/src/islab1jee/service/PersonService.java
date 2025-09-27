@@ -45,11 +45,6 @@ public class PersonService {
         return PersonMapper.toDto(entity);
     }
 
-    public List<PersonResponseDto> getAll() {
-        return repository.findAll().stream()
-                .map(PersonMapper::toDto)
-                .collect(Collectors.toList());
-    }
 
     @Transactional
     public PersonResponseDto update(Integer id, PersonRequestDto dto) {

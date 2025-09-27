@@ -20,7 +20,7 @@ const form = reactive({
     name: null,
     eyeColor: null,
     hairColor: null,
-    location: null,
+    locationId: null,
     weight: null,
     passportID: null,
     nationality: null,
@@ -60,7 +60,7 @@ function openEdit(person: PersonDTO) {
 async function confirmDelete(person: PersonDTO) {
     personsList.value = personsList.value.filter((c) => c.id !== person.id);
     try {
-        const res = await fetch(`${baseUrl}/person/` + person.id, {
+        const res = await fetch(`${baseUrl}/person/${person.id}`, {
             method: "DELETE",
             headers: {"Content-Type": "application/json"},
         });
@@ -104,7 +104,7 @@ async function savePerson() {
         name: form.name,
         eyeColor: form.eyeColor,
         hairColor: form.hairColor,
-        location: form.location,
+        locationId: form.locationId.id,
         weight: form.weight,
         passportID: form.passportID,
         nationality: form.nationality,
@@ -175,7 +175,7 @@ onMounted(async () => {
                 </select>
 
                 Location:
-                <select v-model="form.location" required>
+                <select v-model="form.locationId" required>
                     <option disabled value="">-- select location --</option>
                     <option v-for="loc in locationsList" :key="loc" :value="loc">
                         {{ loc.id }} ({{ loc.x }}, {{ loc.y }}, {{ loc.z }})
