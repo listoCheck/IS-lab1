@@ -88,4 +88,14 @@ public class MovieController {
         List<MovieResponseDto> list = service.getByTagline(page, size, tagline);
         return Response.ok(list).build();
     }
+
+    @GET
+    @Path("/oscars")
+    public Response findByOscars(
+            @QueryParam("page") @DefaultValue("0") int page,
+            @QueryParam("size") @DefaultValue("5") int size
+    ) {
+        List<MovieResponseDto> list = service.getByOscars(page, size);
+        return Response.ok(list).build();
+    }
 }

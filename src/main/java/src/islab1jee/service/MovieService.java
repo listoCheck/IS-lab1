@@ -133,4 +133,17 @@ public class MovieService {
 
         return filtered.subList(fromIndex, toIndex).stream().map(MovieMapper::toDto).collect(Collectors.toList());
     }
+    public List<MovieResponseDto> getByOscars(int page, int size){
+        List<Movie> all = movieRepository.findAll();
+        List<Movie> filtered = all.stream()
+                .filter(m -> m.getTagline() != null && m.getOscarsCount() == 0)
+                .toList();
+        int fromIndex = page * size;
+        if (fromIndex >= filtered.size()) {
+            return List.of();
+        }
+        int toIndex = Math.min(fromIndex + size, filtered.size());
+
+        return filtered.subList(fromIndex, toIndex).stream().map(MovieMapper::toDto).collect(Collectors.toList());
+    }
 }

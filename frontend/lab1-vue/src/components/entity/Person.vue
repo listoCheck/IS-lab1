@@ -102,12 +102,12 @@ async function fetchLocations() {
 async function savePerson() {
     const personDTO = {
         name: form.name,
-        eyeColor: form.eyeColor || null,
+        eyeColor: form.eyeColor,
         hairColor: form.hairColor,
-        location: form.locationId,
+        location: form.location,
         weight: form.weight,
         passportID: form.passportID,
-        nationality: form.nationality || null,
+        nationality: form.nationality,
     };
     try {
         let res;
@@ -131,6 +131,9 @@ async function savePerson() {
     } catch (e) {
         toast.value = "Ошибка сохранения";
     }
+}
+function updateAll(){
+    fetchLocations();
 }
 function nextPage() {
     page.value++;
@@ -161,7 +164,7 @@ onMounted(async () => {
 
                 Eye Color:
                 <select v-model="form.eyeColor">
-                    <option value="">-- none --</option>
+                    <option value="">-- select --</option>
                     <option v-for="c in colors" :key="c" :value="c">{{ c }}</option>
                 </select>
 
@@ -172,7 +175,7 @@ onMounted(async () => {
                 </select>
 
                 Location:
-                <select v-model="form.locationId" required>
+                <select v-model="form.location" required>
                     <option disabled value="">-- select location --</option>
                     <option v-for="loc in locationsList" :key="loc" :value="loc">
                         {{ loc.id }} ({{ loc.x }}, {{ loc.y }}, {{ loc.z }})
@@ -197,7 +200,7 @@ onMounted(async () => {
                 <button type="button" @click="showForm = false" class="delete-btn">Закрыть</button>
             </form>
         </div>
-        <button v-else @click="showForm = true; formMode = 'create'">Добавить</button>
+        <button v-else @click="showForm = true; updateAll(); formMode = 'create'">Добавить</button>
 
         <table>
             <thead>
@@ -206,7 +209,7 @@ onMounted(async () => {
                 <th @click="toggleSort('name')">Имя <small v-if="sortBy==='name'">({{ sortDir }})</small></th>
                 <th @click="toggleSort('eyeColor')">Глаза</th>
                 <th @click="toggleSort('hairColor')">Волосы</th>
-                <th @click="toggleSort('locationId')">Локация</th>
+                <th @click="toggleSort('location')">Локация</th>
                 <th @click="toggleSort('weight')">Вес</th>
                 <th @click="toggleSort('passportID')">Паспорт</th>
                 <th @click="toggleSort('nationality')">Национальность</th>

@@ -214,6 +214,10 @@ watch(selectedGenre, (newGenre) => {
     }
 });
 
+function updateAll(){
+    fetchCoordinates();
+    fetchPersons();
+}
 const taglineFilter = ref("");
 
 async function fetchMoviesByTagline() {
@@ -230,6 +234,15 @@ async function fetchMoviesByTagline() {
     }
 }
 
+async function fetchMoviesByOscars() {
+    try {
+        const res = await fetch(`${baseUrl}/movie/oscars`);
+        if (!res.ok) throw new Error(res.statusText);
+        moviesList.value = await res.json();
+    } catch {
+        toast.value = "Ошибка загрузки фильмов без оскаров";
+    }
+}
 
 
 onMounted(() => {
@@ -340,7 +353,7 @@ onMounted(() => {
             </form>
         </div>
 
-        <button v-else @click="showForm = true; formMode = 'create'">Добавить Movie</button>
+        <button v-else @click="showForm = true; updateAll(); formMode = 'create'">Добавить Movie</button>
         <button @click="getMiddleUsaBoxOfficeValue">Ср. знач. usaBoxOffice</button>
         <label v-if="middleValue !== null" class="middle-value">Среднее: {{ middleValue }}</label>
 
@@ -349,8 +362,8 @@ onMounted(() => {
             <option v-for="g in genres" :key="g" :value="g">{{ g }}</option>
         </select>
         <label  class="genre-value">Количество фильмов жанра {{ selectedGenre }}: <b>{{ genreCount }}</b></label>
-        <input type="text" class="tagline" v-model="taglineFilter" @keyup.enter="fetchMoviesByTagline"
-        />
+        <input type="text" class="tagline" v-model="taglineFilter" @keyup.enter="fetchMoviesByTagline"/>
+        <button @click="fetchMoviesByOscars">Список фильмов у которых нету оскаров</button>
         <table>
             <thead>
             <tr>
