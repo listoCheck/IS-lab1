@@ -77,4 +77,15 @@ public class MovieController {
         }
         return Response.ok(service.countByGenre(genre)).build();
     }
+
+    @GET
+    @Path("/tagline")
+    public Response findByTagline(
+            @QueryParam("tagline") int tagline,
+            @QueryParam("page") @DefaultValue("0") int page,
+            @QueryParam("size") @DefaultValue("5") int size
+    ) {
+        List<MovieResponseDto> list = service.getByTagline(page, size, tagline);
+        return Response.ok(list).build();
+    }
 }

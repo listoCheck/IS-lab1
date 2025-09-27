@@ -119,4 +119,18 @@ public class MovieService {
                 .filter(movie -> movie.getGenre() == genre)
                 .count();
     }
+
+    public List<MovieResponseDto> getByTagline(int page, int size, int tagline){
+        List<Movie> all = movieRepository.findAll();
+        List<Movie> filtered = all.stream()
+                .filter(m -> m.getTagline() != null && m.getTagline().length() > tagline)
+                .toList();
+        int fromIndex = page * size;
+        if (fromIndex >= filtered.size()) {
+            return List.of();
+        }
+        int toIndex = Math.min(fromIndex + size, filtered.size());
+
+        return filtered.subList(fromIndex, toIndex).stream().map(MovieMapper::toDto).collect(Collectors.toList());
+    }
 }

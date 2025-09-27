@@ -217,8 +217,12 @@ watch(selectedGenre, (newGenre) => {
 const taglineFilter = ref("");
 
 async function fetchMoviesByTagline() {
+    let tagline = taglineFilter.value;
+    if (!tagline){
+        tagline = 0;
+    }
     try {
-        const res = await fetch(`${baseUrl}/movie/filterByTagline?tagline=${encodeURIComponent(taglineFilter.value)}`);
+        const res = await fetch(`${baseUrl}/movie/tagline?tagline=${encodeURIComponent(tagline)}`);
         if (!res.ok) throw new Error(res.statusText);
         moviesList.value = await res.json();
     } catch {
@@ -413,9 +417,9 @@ table {
     background: #101F27;
 }
 .tagline {
-    width: 150px;   /* ширина поля */
-    height: 28px;   /* высота поля */
-    font-size: 14px; /* размер текста */
+    width: 150px;
+    height: 28px;
+    font-size: 14px;
     padding: 4px 6px;
     border: 1px solid #ccc;
     border-radius: 4px;
