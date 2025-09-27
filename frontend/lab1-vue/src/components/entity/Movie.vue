@@ -214,6 +214,19 @@ watch(selectedGenre, (newGenre) => {
     }
 });
 
+const taglineFilter = ref("");
+
+async function fetchMoviesByTagline() {
+    try {
+        const res = await fetch(`${baseUrl}/movie/filterByTagline?tagline=${encodeURIComponent(taglineFilter.value)}`);
+        if (!res.ok) throw new Error(res.statusText);
+        moviesList.value = await res.json();
+    } catch {
+        toast.value = "Ошибка загрузки фильмов по tagline";
+    }
+}
+
+
 
 onMounted(() => {
     fetchCoordinates();
@@ -332,7 +345,8 @@ onMounted(() => {
             <option v-for="g in genres" :key="g" :value="g">{{ g }}</option>
         </select>
         <label  class="genre-value">Количество фильмов жанра {{ selectedGenre }}: <b>{{ genreCount }}</b></label>
-
+        <input type="text" class="tagline" v-model="taglineFilter" @keyup.enter="fetchMoviesByTagline"
+        />
         <table>
             <thead>
             <tr>
@@ -398,6 +412,13 @@ table {
     color: #f1f1f1;
     background: #101F27;
 }
-
+.tagline {
+    width: 150px;   /* ширина поля */
+    height: 28px;   /* высота поля */
+    font-size: 14px; /* размер текста */
+    padding: 4px 6px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
 </style>
 
