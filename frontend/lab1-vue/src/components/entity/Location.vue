@@ -143,6 +143,7 @@ fetchLocations();
 
 <template>
     <div class="table-wrapper">
+        Location
         <div v-if="toast" class="toast">{{ toast }}</div>
 
         <div v-if="showForm">

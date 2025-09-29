@@ -145,6 +145,7 @@ fetchCoordinates();
 
 <template>
     <div class="table-wrapper">
+        Coordinates
         <div v-if="toast" class="toast">{{ toast }}</div>
 
         <div v-if="showForm">

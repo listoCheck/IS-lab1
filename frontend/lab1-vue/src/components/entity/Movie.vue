@@ -290,7 +290,9 @@ defineExpose({ refresh });
 
 <template>
     <div class="movie-wrapper">
+        Movie
         <div v-if="toast" class="toast">{{ toast }}</div>
+
 
         <div v-if="showForm">
             <form @submit.prevent="saveMovie">
@@ -390,22 +392,30 @@ defineExpose({ refresh });
         </div>
 
         <button v-else @click="showForm = true; updateAll(); formMode = 'create'">Добавить Movie</button>
-        <button @click="getMiddleUsaBoxOfficeValue">Ср. знач. usaBoxOffice</button>
+        <div class="buttons">
+        <button @click="fetchMoviesByOscars" class="input-button">Список фильмов у которых нету оскаров</button>
+        <button @click="getMiddleUsaBoxOfficeValue" class="input-button">Ср. знач. usaBoxOffice</button>
         <label v-if="middleValue !== null" class="middle-value">Среднее: {{ middleValue }}</label>
+        </div>
 
-        <select v-model="selectedGenre">
-            <option disabled value="">-- select genre --</option>
-            <option v-for="g in genres" :key="g" :value="g">{{ g }}</option>
-        </select>
-        <label  class="genre-value">Количество фильмов жанра {{ selectedGenre }}: <b>{{ genreCount }}</b></label>
-        <input type="text" class="tagline" v-model="taglineFilter" @keyup.enter="fetchMoviesByTagline"/>
-        <button @click="fetchMoviesByOscars">Список фильмов у которых нету оскаров</button>
+        <div>
+        <input type="text" class="tagline" v-model="taglineFilter" @keyup.enter="fetchMoviesByTagline" placeholder="объекты, значение поля tagline которых больше заданного"/>
+        </div>
+
+        <div>
+            <select v-model="selectedGenre" class="select-genre">
+                <option disabled value="">-- select genre --</option>
+                <option v-for="g in genres" :key="g" :value="g">{{ g }}</option>
+            </select>
+            <label class="genre-value">Количество фильмов жанра {{ selectedGenre }}: <b>{{ genreCount }}</b></label>
+        </div>
 
         <select v-model="selectedGenreToDelete">
             <option disabled value="">-- select genre --</option>
             <option v-for="g in genres" :key="g" :value="g">{{ g }}</option>
         </select>
-        <button @click="deleteOscars">Удалить оскары у всех режиссеров снявших фильм в этом жанре: {{selectedGenreToDelete}}</button>
+        <button @click="deleteOscars" class="genre-value2">Удалить оскары у всех режиссеров снявших фильм в этом жанре: {{selectedGenreToDelete}}</button>
+
         <table>
             <thead>
             <tr>
@@ -472,12 +482,33 @@ table {
     background: #101F27;
 }
 .tagline {
-    width: 150px;
+    width: 400px;
     height: 28px;
     font-size: 14px;
     padding: 4px 6px;
     border: 1px solid #ccc;
-    border-radius: 4px;
+    border-radius: 8px;
+    margin-top: 6px;
+    margin-bottom: 6px;
+}
+.movie-wrapper{
+    color: #ccc;
+}
+.genre-value {
+    color: #4CAF50;
+    margin-bottom: 4px;
+    margin-left: -50px;
+}
+.genre-value2 {
+    color: #cccccc;
+    margin-bottom: 4px;
+    margin-left: -50px;
+}
+.buttons{
+    margin-left: -1px;
+}
+.input-button{
+    margin-right: 6px;
 }
 </style>
 
