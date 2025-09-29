@@ -219,14 +219,14 @@ defineExpose({ refresh });
         <table>
             <thead>
             <tr>
-                <th @click="toggleSort('id')">ID <small v-if="sortBy==='id'">({{ sortDir }})</small></th>
-                <th @click="toggleSort('name')">Имя <small v-if="sortBy==='name'">({{ sortDir }})</small></th>
-                <th @click="toggleSort('eyeColor')">Глаза</th>
-                <th @click="toggleSort('hairColor')">Волосы</th>
-                <th @click="toggleSort('location')">Локация</th>
-                <th @click="toggleSort('weight')">Вес</th>
-                <th @click="toggleSort('passportID')">Паспорт</th>
-                <th @click="toggleSort('nationality')">Национальность</th>
+                <th @click="toggleSort('id')">ID <small v-if="sortBy==='id'">{{ sortDir === 'asc' ? '▲' : '▼' }}</small></th>
+                <th @click="toggleSort('name')">Имя <small v-if="sortBy==='name'">{{ sortDir === 'asc' ? '▲' : '▼' }}</small></th>
+                <th @click="toggleSort('eyeColor')">Глаза <small v-if="sortBy==='eyeColor'">{{ sortDir === 'asc' ? '▲' : '▼' }}</small></th>
+                <th @click="toggleSort('hairColor')">Волосы <small v-if="sortBy==='hairColor'">{{ sortDir === 'asc' ? '▲' : '▼' }}</small></th>
+                <th @click="toggleSort('location')">Локация <small v-if="sortBy==='location'">{{ sortDir === 'asc' ? '▲' : '▼' }}</small></th>
+                <th @click="toggleSort('weight')">Вес <small v-if="sortBy==='weight'">{{ sortDir === 'asc' ? '▲' : '▼' }}</small></th>
+                <th @click="toggleSort('passportID')">Паспорт <small v-if="sortBy==='passportID'">{{ sortDir === 'asc' ? '▲' : '▼' }}</small></th>
+                <th @click="toggleSort('nationality')">Национальность <small v-if="sortBy==='nationality'">{{ sortDir === 'asc' ? '▲' : '▼' }}</small></th>
                 <th>Действия</th>
             </tr>
             </thead>

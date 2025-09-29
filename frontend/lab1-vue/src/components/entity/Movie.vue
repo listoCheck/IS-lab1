@@ -409,21 +409,21 @@ defineExpose({ refresh });
         <table>
             <thead>
             <tr>
-                <th @click="toggleSort('id')">ID</th>
-                <th @click="toggleSort('name')">Название</th>
+                <th @click="toggleSort('id')">ID <small v-if="sortBy==='id'">{{ sortDir === 'asc' ? '▲' : '▼' }}</small></th>
+                <th @click="toggleSort('name')">Название <small v-if="sortBy==='name'">{{ sortDir === 'asc' ? '▲' : '▼' }}</small></th>
                 <th>Координаты</th>
-                <th @click="toggleSort('oscarsCount')">Oscars</th>
-                <th @click="toggleSort('budget')">Бюджет</th>
-                <th @click="toggleSort('totalBoxOffice')">Box Office</th>
-                <th @click="toggleSort('mpaaRating')">MPAA</th>
+                <th @click="toggleSort('oscarsCount')">Oscars <small v-if="sortBy==='oscarsCount'">{{ sortDir === 'asc' ? '▲' : '▼' }}</small></th>
+                <th @click="toggleSort('budget')">Бюджет <small v-if="sortBy==='budget'">{{ sortDir === 'asc' ? '▲' : '▼' }}</small></th>
+                <th @click="toggleSort('totalBoxOffice')">Box Office <small v-if="sortBy==='totalBoxOffice'">{{ sortDir === 'asc' ? '▲' : '▼' }}</small></th>
+                <th @click="toggleSort('mpaaRating')">MPAA <small v-if="sortBy==='mpaaRating'">{{ sortDir === 'asc' ? '▲' : '▼' }}</small></th>
                 <th>Режиссёр</th>
                 <th>Сценарист</th>
                 <th>Оператор</th>
-                <th @click="toggleSort('length')">Длина</th>
-                <th @click="toggleSort('goldenPalmCount')">Golden Palm</th>
-                <th @click="toggleSort('usaBoxOffice')">USA Box Office</th>
-                <th @click="toggleSort('tagline')">Слоган</th>
-                <th @click="toggleSort('genre')">Жанр</th>
+                <th @click="toggleSort('length')">Длина <small v-if="sortBy==='length'">{{ sortDir === 'asc' ? '▲' : '▼' }}</small></th>
+                <th @click="toggleSort('goldenPalmCount')">Golden Palm <small v-if="sortBy==='goldenPalmCount'">{{ sortDir === 'asc' ? '▲' : '▼' }}</small></th>
+                <th @click="toggleSort('usaBoxOffice')">USA Box Office <small v-if="sortBy==='usaBoxOffice'">{{ sortDir === 'asc' ? '▲' : '▼' }}</small></th>
+                <th @click="toggleSort('tagline')">Слоган <small v-if="sortBy==='tagline'">{{ sortDir === 'asc' ? '▲' : '▼' }}</small></th>
+                <th @click="toggleSort('genre')">Жанр <small v-if="sortBy==='genre'">{{ sortDir === 'asc' ? '▲' : '▼' }}</small></th>
                 <th>Действия</th>
             </tr>
             </thead>
