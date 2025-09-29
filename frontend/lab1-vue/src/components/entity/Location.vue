@@ -19,6 +19,7 @@ const form = reactive({
     locationZ: null,
     locationName: null,
 });
+const emit = defineEmits(['updated']);
 
 const locationsList = ref<{ id: number; x: number; y: number }[]>([]);
 
@@ -70,6 +71,7 @@ async function confirmDelete(location: LocationDTO) {
     } catch (e) {
         showToast("Ошибка удаления");
     }
+
     await fetchLocations();
 
 }
@@ -108,6 +110,7 @@ async function saveLocations() {
                 headers: {"Content-Type": "application/json"},
                 body: JSON.stringify(locationDTO),
             });
+            emit('updated');
         }
         if (!res || !res.ok) throw new Error(res?.statusText);
         await fetchLocations();
@@ -129,6 +132,11 @@ function prevPage() {
         fetchLocations();
     }
 }
+function refresh() {
+    fetchLocations();
+}
+
+defineExpose({ refresh });
 
 fetchLocations();
 </script>

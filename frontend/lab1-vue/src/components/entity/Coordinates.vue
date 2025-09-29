@@ -2,6 +2,9 @@
 import "../../css/entity.css"
 import {reactive, ref, computed} from "vue";
 import type {CoordinatesDTO} from "@/ts/dto/CoordinatesDTO.ts";
+import Movie from "@/components/entity/Movie.vue";
+
+const movieRef = ref<InstanceType<typeof Movie> | null>(null);
 
 const baseUrl = 'http://localhost:8080/IS-lab1JEE-1.0-SNAPSHOT/api';
 const toast = ref("");
@@ -56,6 +59,9 @@ function openEdit(coordinates: CoordinatesDTO) {
     showForm.value = true;
 }
 
+const emit = defineEmits(['updated']);
+
+
 async function confirmDelete(coordinates: CoordinatesDTO) {
     try {
         const res = await fetch(`${baseUrl}/coordinates/${coordinates.id}`, {
@@ -64,6 +70,8 @@ async function confirmDelete(coordinates: CoordinatesDTO) {
         });
         if (!res.ok) throw new Error(res.statusText);
         await fetchCoordinates();
+        emit('updated');
+
     } catch (e) {
         showToast("Ошибка удаления");
     }
@@ -101,13 +109,15 @@ async function saveCoordinates() {
                 headers: {"Content-Type": "application/json"},
                 body: JSON.stringify(coordinatesDTO),
             });
+            emit('updated');
         }
         if (!res || !res.ok) throw new Error(res?.statusText);
+        movieRef.value?.refresh();
         await fetchCoordinates();
         showForm.value = false;
         showToast("Сохранено!");
     } catch (e) {
-        showToast("Ошибка сохранения");
+        showToast("Ошибка сохранения" + e);
     }
 }
 
@@ -123,6 +133,11 @@ function prevPage() {
         fetchCoordinates();
     }
 }
+function refresh() {
+    fetchCoordinates();
+}
+
+defineExpose({ refresh });
 
 fetchCoordinates();
 

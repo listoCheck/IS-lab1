@@ -159,6 +159,12 @@ onMounted(async () => {
     await fetchLocations();
     await fetchPersons();
 });
+function refresh() {
+    fetchLocations();
+    fetchPersons();
+}
+
+defineExpose({ refresh });
 </script>
 
 <template>

@@ -277,6 +277,13 @@ onMounted(() => {
     fetchPersons();
     fetchMovies();
 });
+function refresh() {
+    fetchCoordinates();
+    fetchPersons();
+    fetchMovies();
+}
+
+defineExpose({ refresh });
 
 
 </script>
@@ -424,7 +431,7 @@ onMounted(() => {
             <tr v-for="m in pagedMovies" :key="m.id">
                 <td>{{ m.id }}</td>
                 <td>{{ m.name }}</td>
-                <td>{{ m.coordinates.x + " " + m.coordinates.y }}</td>
+                <td>{{ m.coordinates.id + " " + m.coordinates.x + " " + m.coordinates.y }}</td>
                 <td>{{ m.oscarsCount }}</td>
                 <td>{{ m.budget }}</td>
                 <td>{{ m.totalBoxOffice }}</td>
