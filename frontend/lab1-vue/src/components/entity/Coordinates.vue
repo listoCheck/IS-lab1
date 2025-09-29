@@ -31,6 +31,14 @@ const pagedCoordinates = computed(() => {
     });
 });
 
+function showToast(message: string) {
+    toast.value = message;
+    setTimeout(() => {
+        toast.value = "";
+    }, 5000);
+}
+
+
 function toggleSort(field: "id" | "x" | "y") {
     if (sortBy.value === field) {
         sortDir.value = sortDir.value === "asc" ? "desc" : "asc";
@@ -57,7 +65,7 @@ async function confirmDelete(coordinates: CoordinatesDTO) {
         if (!res.ok) throw new Error(res.statusText);
         await fetchCoordinates();
     } catch (e) {
-        toast.value = "Ошибка удаления";
+        showToast("Ошибка удаления");
     }
 }
 
@@ -70,7 +78,7 @@ async function fetchCoordinates() {
         if (!res.ok) throw new Error(res.statusText);
         coordinatesList.value = await res.json();
     } catch (e) {
-        toast.value = "Ошибка загрузки координат";
+        showToast("Ошибка загрузки координат");
     }
 }
 
@@ -97,11 +105,12 @@ async function saveCoordinates() {
         if (!res || !res.ok) throw new Error(res?.statusText);
         await fetchCoordinates();
         showForm.value = false;
-        toast.value = "Сохранено!";
+        showToast("Сохранено!");
     } catch (e) {
-        toast.value = "Ошибка сохранения";
+        showToast("Ошибка сохранения");
     }
 }
+
 
 function nextPage() {
     page.value++;

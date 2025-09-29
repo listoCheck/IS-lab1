@@ -146,4 +146,8 @@ public class MovieService {
 
         return filtered.subList(fromIndex, toIndex).stream().map(MovieMapper::toDto).collect(Collectors.toList());
     }
+
+    public void deleteOscarsByGenre(String genre) {
+        movieRepository.deleteOscarsByGenre(genre);
+    }
 }

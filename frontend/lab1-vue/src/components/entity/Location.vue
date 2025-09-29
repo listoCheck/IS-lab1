@@ -25,6 +25,13 @@ const locationsList = ref<{ id: number; x: number; y: number }[]>([]);
 const page = ref(0);
 const pageSize = 5;
 
+function showToast(message: string) {
+    toast.value = message;
+    setTimeout(() => {
+        toast.value = "";
+    }, 5000);
+}
+
 const pagedLocations = computed(() => {
     return [...locationsList.value].sort((a, b) => {
         const field = sortBy.value as keyof typeof a;
@@ -61,7 +68,7 @@ async function confirmDelete(location: LocationDTO) {
         if (!res.ok) throw new Error(res.statusText);
         locationsList.value = await res.json();
     } catch (e) {
-        toast.value = "Ошибка удаления";
+        showToast("Ошибка удаления");
     }
     await fetchLocations();
 
@@ -76,7 +83,7 @@ async function fetchLocations() {
         if (!res.ok) throw new Error(res.statusText);
         locationsList.value = await res.json();
     } catch (e) {
-        toast.value = "Ошибка загрузки координат";
+        showToast("Ошибка загрузки координат");
     }
 }
 
@@ -105,9 +112,9 @@ async function saveLocations() {
         if (!res || !res.ok) throw new Error(res?.statusText);
         await fetchLocations();
         showForm.value = false;
-        toast.value = "Сохранено!";
+        showToast("Сохранено!");
     } catch (e) {
-        toast.value = "Ошибка сохранения";
+        showToast("Ошибка сохранения");
     }
 }
 

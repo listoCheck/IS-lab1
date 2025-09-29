@@ -98,4 +98,13 @@ public class MovieController {
         List<MovieResponseDto> list = service.getByOscars(page, size);
         return Response.ok(list).build();
     }
+
+    @PUT
+    @Path("/oscars/deleteByGenre")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response deleteOscarsByGenre(@QueryParam("genre") String genre) {
+        service.deleteOscarsByGenre(genre);
+        return Response.ok().build();
+    }
+
 }

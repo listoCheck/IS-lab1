@@ -63,6 +63,13 @@ const pagedMovies = computed(() => {
     });
 });
 
+function showToast(message: string) {
+    toast.value = message;
+    setTimeout(() => {
+        toast.value = "";
+    }, 5000);
+}
+
 function toggleSort(field: typeof sortBy.value) {
     if (sortBy.value === field) {
         sortDir.value = sortDir.value === "asc" ? "desc" : "asc";
@@ -93,7 +100,7 @@ async function confirmDelete(movie: MovieDTO) {
         });
         await fetchMovies();
     } catch {
-        toast.value = "Ошибка удаления Movie";
+        showToast("Ошибка удаления Movie");
     }
 }
 
@@ -103,7 +110,7 @@ async function fetchMovies() {
         if (!res.ok) throw new Error(res.statusText);
         moviesList.value = await res.json();
     } catch {
-        toast.value = "Ошибка загрузки Movie";
+        showToast("Ошибка загрузки Movie");
     }
 }
 
@@ -113,7 +120,7 @@ async function fetchCoordinates() {
         if (!res.ok) throw new Error(res.statusText);
         coordinates.value = await res.json();
     } catch {
-        toast.value = "Ошибка загрузки Coordinates";
+        showToast("Ошибка загрузки Coordinates");
     }
 }
 
@@ -123,7 +130,7 @@ async function fetchPersons() {
         if (!res.ok) throw new Error(res.statusText);
         persons.value = await res.json();
     } catch {
-        toast.value = "Ошибка загрузки Persons";
+        showToast("Ошибка загрузки Persons");
     }
 }
 
@@ -134,7 +141,7 @@ async function getMiddleUsaBoxOfficeValue() {
         middleValue.value = await res.json();
         console.log(middleValue)
     } catch {
-        toast.value = "Ошибка загрузки среднего значения";
+        showToast("Ошибка загрузки среднего значения");
     }
 }
 
@@ -174,9 +181,9 @@ async function saveMovie() {
         if (!res || !res.ok) throw new Error(res?.statusText);
         await fetchMovies();
         showForm.value = false;
-        toast.value = "Movie сохранён!";
+        showToast("Movie сохранён!");
     } catch {
-        toast.value = "Ошибка сохранения Movie";
+        showToast("Ошибка сохранения Movie");
     }
 }
 
@@ -193,6 +200,7 @@ function prevPage() {
 }
 
 const selectedGenre = ref("");
+const selectedGenreToDelete = ref("");
 const genreCount = ref<number | null>(null);
 
 
@@ -202,7 +210,7 @@ async function getCountByGenre() {
         if (!res.ok) throw new Error(res.statusText);
         genreCount.value = await res.json();
     } catch {
-        toast.value = "Ошибка загрузки количества фильмов определенного жанра";
+        showToast("Ошибка загрузки количества фильмов определенного жанра");
     }
 }
 
@@ -230,7 +238,7 @@ async function fetchMoviesByTagline() {
         if (!res.ok) throw new Error(res.statusText);
         moviesList.value = await res.json();
     } catch {
-        toast.value = "Ошибка загрузки фильмов по tagline";
+        showToast("Ошибка загрузки фильмов по tagline");
     }
 }
 
@@ -240,9 +248,28 @@ async function fetchMoviesByOscars() {
         if (!res.ok) throw new Error(res.statusText);
         moviesList.value = await res.json();
     } catch {
-        toast.value = "Ошибка загрузки фильмов без оскаров";
+        showToast("Ошибка загрузки фильмов без оскаров");
     }
 }
+
+async function deleteOscars() {
+    if (selectedGenreToDelete.value == "") {
+        toast.value = "Выберите жанр!";
+        return;
+    }
+    try {
+        const res = await fetch(`${baseUrl}/movie/oscars/deleteByGenre?genre=${selectedGenreToDelete.value}`, {
+            method: "PUT",
+            headers: {"Content-Type": "application/json"},
+        });
+        if (!res.ok) throw new Error(res.statusText);
+        toast.value = `Оскары удалены у всех фильмов режиссёров с жанром ${selectedGenreToDelete.value}`;
+        await fetchMovies();
+    } catch {
+        showToast("Ошибка удаления оскаров");
+    }
+}
+
 
 
 onMounted(() => {
@@ -250,6 +277,8 @@ onMounted(() => {
     fetchPersons();
     fetchMovies();
 });
+
+
 </script>
 
 <template>
@@ -364,6 +393,12 @@ onMounted(() => {
         <label  class="genre-value">Количество фильмов жанра {{ selectedGenre }}: <b>{{ genreCount }}</b></label>
         <input type="text" class="tagline" v-model="taglineFilter" @keyup.enter="fetchMoviesByTagline"/>
         <button @click="fetchMoviesByOscars">Список фильмов у которых нету оскаров</button>
+
+        <select v-model="selectedGenreToDelete">
+            <option disabled value="">-- select genre --</option>
+            <option v-for="g in genres" :key="g" :value="g">{{ g }}</option>
+        </select>
+        <button @click="deleteOscars">Удалить оскары у всех режиссеров снявших фильм в этом жанре: {{selectedGenreToDelete}}</button>
         <table>
             <thead>
             <tr>

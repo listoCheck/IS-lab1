@@ -41,6 +41,13 @@ const pagedPersons = computed(() => {
     });
 });
 
+function showToast(message: string) {
+    toast.value = message;
+    setTimeout(() => {
+        toast.value = "";
+    }, 5000);
+}
+
 function toggleSort(field: typeof sortBy.value) {
     if (sortBy.value === field) {
         sortDir.value = sortDir.value === "asc" ? "desc" : "asc";
@@ -51,6 +58,7 @@ function toggleSort(field: typeof sortBy.value) {
 }
 
 function openEdit(person: PersonDTO) {
+    onMounted();
     formMode.value = "edit";
     editId.value = person.id;
     Object.assign(form, person);
@@ -67,7 +75,7 @@ async function confirmDelete(person: PersonDTO) {
         if (!res.ok) throw new Error(res.statusText);
         personsList.value = await res.json();
     } catch (e) {
-        toast.value = "Ошибка удаления";
+        showToast("Ошибка удаления");
     }
     await fetchPersons();
 }
@@ -82,7 +90,7 @@ async function fetchPersons() {
         personsList.value = await res.json();
         console.log(personsList);
     } catch (e) {
-        toast.value = "Ошибка загрузки персоналий";
+        showToast("Ошибка загрузки персоналий");
     }
 }
 
@@ -95,7 +103,7 @@ async function fetchLocations() {
         if (!res.ok) throw new Error(res.statusText);
         locationsList.value = await res.json();
     } catch (e) {
-        toast.value = "Ошибка загрузки локаций";
+        showToast("Ошибка загрузки локаций");
     }
 }
 
@@ -127,9 +135,9 @@ async function savePerson() {
         if (!res || !res.ok) throw new Error(res?.statusText);
         await fetchPersons();
         showForm.value = false;
-        toast.value = "Сохранено!";
+        showToast("Сохранено!");
     } catch (e) {
-        toast.value = "Ошибка сохранения";
+        showToast("Ошибка сохранения");
     }
 }
 function updateAll(){
@@ -228,7 +236,7 @@ onMounted(async () => {
                 <td>{{ p.nationality }}</td>
 
                 <td>
-                    <button @click="openEdit(p)">Редактировать</button>
+                    <button @click="openEdit(p); onMounted">Редактировать</button>
                     <button @click="confirmDelete(p)" class="delete-btn">Удалить</button>
                 </td>
             </tr>

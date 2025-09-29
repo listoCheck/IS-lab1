@@ -3,8 +3,11 @@ package src.islab1jee.service;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import src.islab1jee.DTO.LocationResponseDto;
+import src.islab1jee.enums.MovieGenre;
 import src.islab1jee.mapper.LocationMapper;
 import src.islab1jee.mapper.PersonMapper;
 import src.islab1jee.entity.Location;
@@ -26,6 +29,9 @@ public class PersonService {
 
     @Inject
     private LocationRepository locationRepository;
+
+    @PersistenceContext
+    private EntityManager em;
 
     @Transactional
     public PersonResponseDto create(PersonRequestDto dto) {
@@ -86,5 +92,6 @@ public class PersonService {
                 .map(PersonMapper::toDto)
                 .collect(Collectors.toList());
     }
+
 }
 
