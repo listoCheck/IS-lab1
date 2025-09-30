@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import "../../css/entity.css"
-import {reactive, ref, computed} from "vue";
+import {reactive, ref, computed, onUnmounted, onMounted} from "vue";
 import type {CoordinatesDTO} from "../../ts/dto/CoordinatesDTO.ts";
 import Movie from "./Movie.vue";
 
@@ -15,7 +15,7 @@ const sortBy = ref<"id" | "x" | "y">("id");
 const showForm = ref(false);
 const formMode = ref<"create" | "edit">("create");
 const editId = ref<number | null>(null);
-
+let refreshInterval: number | undefined;
 const form = reactive({
     coordinatesX: null as number | null,
     coordinatesY: null as number | null,
@@ -140,8 +140,16 @@ function refresh() {
 
 defineExpose({ refresh });
 
-fetchCoordinates();
+onMounted(() => {
+    fetchCoordinates();
+    refreshInterval = window.setInterval(() => {
+        fetchCoordinates();
+    }, 5000);
+});
 
+onUnmounted(() => {
+    clearInterval(refreshInterval);
+});
 </script>
 
 <template>

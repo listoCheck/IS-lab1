@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {reactive, ref, computed, onMounted} from "vue";
+import {reactive, ref, computed, onMounted, onUnmounted} from "vue";
 import type {LocationDTO} from "../../ts/dto/LocationDTO.ts";
 import type {PersonDTO} from "../../ts/dto/PersonDTO.ts";
 
@@ -159,9 +159,19 @@ function prevPage() {
     }
 }
 
-onMounted(async () => {
-    await fetchLocations();
-    await fetchPersons();
+let refreshInterval: number | undefined;
+onMounted(() => {
+    fetchLocations();
+    fetchPersons();
+    refreshInterval = window.setInterval(() => {
+        fetchLocations();
+        fetchPersons();
+    }, 5000);
+});
+
+
+onUnmounted(() => {
+    clearInterval(refreshInterval);
 });
 function refresh() {
     fetchLocations();

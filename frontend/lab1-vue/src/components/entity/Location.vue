@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-import {reactive, ref, computed} from "vue";
+import {reactive, ref, computed, onMounted, onUnmounted} from "vue";
 import type {LocationDTO} from "../../ts/dto/LocationDTO.ts";
 
 const baseUrl = 'http://localhost:8080/IS-lab1JEE-1.0-SNAPSHOT/api'
@@ -139,8 +139,18 @@ function refresh() {
 }
 
 defineExpose({ refresh });
+let refreshInterval: number | undefined;
+onMounted(() => {
+    fetchLocations();
+    refreshInterval = window.setInterval(() => {
+        fetchLocations();
+    }, 5000);
+});
 
-fetchLocations();
+
+onUnmounted(() => {
+    clearInterval(refreshInterval);
+});
 </script>
 
 <template>

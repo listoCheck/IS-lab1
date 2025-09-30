@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import "../../css/entity.css"
-import {reactive, ref, computed, onMounted, watch} from "vue";
+import {reactive, ref, computed, onMounted, watch, onUnmounted} from "vue";
 import type {MovieDTO} from "../../ts/dto/MovieDTO.ts";
 import type {CoordinatesDTO} from "../../ts/dto/CoordinatesDTO.ts";
 import type {PersonDTO} from "../../ts/dto/PersonDTO.ts";
@@ -273,11 +273,21 @@ async function deleteOscars() {
 }
 
 
-
+let refreshInterval: number | undefined;
 onMounted(() => {
     fetchCoordinates();
     fetchPersons();
     fetchMovies();
+    refreshInterval = window.setInterval(() => {
+        fetchCoordinates();
+        fetchPersons();
+        fetchMovies();
+    }, 5000);
+});
+
+
+onUnmounted(() => {
+    clearInterval(refreshInterval);
 });
 function refresh() {
     fetchCoordinates();
