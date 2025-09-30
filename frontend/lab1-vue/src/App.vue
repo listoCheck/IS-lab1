@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import { ref } from "vue";
 
-import Header from "@/components/Header.vue";
-import Footer from "@/components/Footer.vue";
-import "@/css/page.css";
-import Location from "@/components/entity/Location.vue";
-import Movie from "@/components/entity/Movie.vue";
-import Person from "@/components/entity/Person.vue";
-import Coordinates from "@/components/entity/Coordinates.vue";
-import "@/css/app.css";
+import Header from "./components/Header.vue";
+import Footer from "./components/Footer.vue";
+import "./css/page.css";
+import Location from "./components/entity/Location.vue";
+import Movie from "./components/entity/Movie.vue";
+import Person from "./components/entity/Person.vue";
+import Coordinates from "./components/entity/Coordinates.vue";
+import "./css/app.css";
 
 const coordsRef = ref<InstanceType<typeof Coordinates> | null>(null);
 const locationRef = ref<InstanceType<typeof Location> | null>(null);

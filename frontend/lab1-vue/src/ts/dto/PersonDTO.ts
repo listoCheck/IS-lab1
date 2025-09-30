@@ -1,7 +1,8 @@
-import type {Color} from "@/ts/interface/Color.ts";
-import type {LocationDTO} from "@/ts/dto/LocationDTO.ts";
+import type {Color} from "../enum/Color.ts";
+import type {LocationDTO} from "./LocationDTO.ts";
 
 export interface PersonDTO {
+    id: number;
     name: string,
     eyeColor: Color,
     hairColor: Color,

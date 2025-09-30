@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import "../../css/entity.css"
 import {reactive, ref, computed} from "vue";
-import type {CoordinatesDTO} from "@/ts/dto/CoordinatesDTO.ts";
-import Movie from "@/components/entity/Movie.vue";
+import type {CoordinatesDTO} from "../../ts/dto/CoordinatesDTO.ts";
+import Movie from "./Movie.vue";
 
 const movieRef = ref<InstanceType<typeof Movie> | null>(null);
 
@@ -17,9 +17,10 @@ const formMode = ref<"create" | "edit">("create");
 const editId = ref<number | null>(null);
 
 const form = reactive({
-    coordinatesX: null,
-    coordinatesY: null,
+    coordinatesX: null as number | null,
+    coordinatesY: null as number | null,
 });
+
 const coordinatesList = ref<{ id: number; x: number; y: number }[]>([]);
 
 const page = ref(0);

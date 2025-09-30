@@ -9,7 +9,7 @@
         <jta-data-source>java:jboss/PostgresDS</jta-data-source>
 
         <class>src.islab1jee.entity.Location</class>
-        <class>src.islab1jee.entity.CoordinatesDTO</class>
+        <class>src.islab1jee.entity.Coordinates</class>
         <class>src.islab1jee.entity.Person</class>
         <class>src.islab1jee.entity.Movie</class>
 

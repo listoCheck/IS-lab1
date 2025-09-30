@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import logoVT from '@/assets/logo.png'
+import logoVT from '..//assets/logo.png'
 </script>
 
 <template>

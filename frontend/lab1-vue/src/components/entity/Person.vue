@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {reactive, ref, computed, onMounted} from "vue";
-import type {LocationDTO} from "@/ts/dto/LocationDTO.ts";
-import type {PersonDTO} from "@/ts/dto/PersonDTO.ts";
+import type {LocationDTO} from "../../ts/dto/LocationDTO.ts";
+import type {PersonDTO} from "../../ts/dto/PersonDTO.ts";
 
 const baseUrl = "http://localhost:8080/IS-lab1JEE-1.0-SNAPSHOT/api";
 const toast = ref("");
@@ -10,20 +10,20 @@ const colors = ["GREEN", "BLACK", "YELLOW", "BROWN"];
 const countries = ["RUSSIA", "UNITED_KINGDOM", "VATICAN", "ITALY"];
 
 const sortDir = ref<"asc" | "desc">("asc");
-const sortBy = ref<"id" | "name" | "eyeColor" | "hairColor" | "weight" | "passportID" | "nationality" | "locationId">("id");
+const sortBy = ref<"id" | "name" | "eyeColor" | "hairColor" | "location" | "weight" | "passportID" | "nationality" | "locationId">("id");
 
 const showForm = ref(false);
 const formMode = ref<"create" | "edit">("create");
 const editId = ref<number | null>(null);
 
 const form = reactive({
-    name: null,
-    eyeColor: null,
-    hairColor: null,
-    locationId: null,
-    weight: null,
-    passportID: null,
-    nationality: null,
+    name: null as string | null,
+    eyeColor: null as string | null,
+    hairColor: null as string | null,
+    locationId: null as number | null,
+    weight: null as number | null,
+    passportID: null as number | null,
+    nationality: null as string | null,
 });
 
 const page = ref(0);
@@ -58,7 +58,11 @@ function toggleSort(field: typeof sortBy.value) {
 }
 
 function openEdit(person: PersonDTO) {
-    onMounted();
+    onMounted(() => {
+        fetchLocations();
+        fetchPersons();
+    });
+
     formMode.value = "edit";
     editId.value = person.id;
     Object.assign(form, person);
@@ -112,7 +116,7 @@ async function savePerson() {
         name: form.name,
         eyeColor: form.eyeColor,
         hairColor: form.hairColor,
-        locationId: form.locationId.id,
+        locationId: form.locationId,
         weight: form.weight,
         passportID: form.passportID,
         nationality: form.nationality,
@@ -192,10 +196,13 @@ defineExpose({ refresh });
                 Location:
                 <select v-model="form.locationId" required>
                     <option disabled value="">-- select location --</option>
-                    <option v-for="loc in locationsList" :key="loc" :value="loc">
-                        {{ loc.id }} ({{ loc.x }}, {{ loc.y }}, {{ loc.z }})
-                        {{ loc.name ? " - " + loc.name : "" }}
+                    <option
+                        v-for="loc in locationsList"
+                        :key="loc.id"
+                        :value="loc.id">
+                        {{ loc.id }} ({{ loc.x }}, {{ loc.y }}, {{ loc.z }}) {{ loc.name ? " - " + loc.name : "" }}
                     </option>
+
                 </select>
 
                 Weight:

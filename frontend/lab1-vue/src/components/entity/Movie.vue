@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import "../../css/entity.css"
 import {reactive, ref, computed, onMounted, watch} from "vue";
-import type {MovieDTO} from "@/ts/dto/MovieDTO.ts";
+import type {MovieDTO} from "../../ts/dto/MovieDTO.ts";
+import type {CoordinatesDTO} from "../../ts/dto/CoordinatesDTO.ts";
+import type {PersonDTO} from "../../ts/dto/PersonDTO.ts";
 
 const baseUrl = "http://localhost:8080/IS-lab1JEE-1.0-SNAPSHOT/api";
 const toast = ref("");
@@ -29,8 +31,8 @@ const middleValue = ref<number | null>(null);
 const mpaaRatings = ["G", "PG", "PG_13", "R", "NC_17"];
 const genres = ["WESTERN", "COMEDY", "MUSICAL", "ADVENTURE", "FANTASY"];
 
-const coordinates = ref<{ id: number; x: number; y: number }[]>([]);
-const persons = ref<{ id: number; name: string }[]>([]);
+const coordinates = ref<CoordinatesDTO[]>([]);
+const persons = ref<PersonDTO[]>([]);
 
 const form = reactive({
     name: "",
@@ -216,7 +218,7 @@ async function getCountByGenre() {
 
 watch(selectedGenre, (newGenre) => {
     if (newGenre) {
-        getCountByGenre(newGenre);
+        getCountByGenre();
     } else {
         genreCount.value = null;
     }
@@ -231,7 +233,7 @@ const taglineFilter = ref("");
 async function fetchMoviesByTagline() {
     let tagline = taglineFilter.value;
     if (!tagline){
-        tagline = 0;
+        tagline = "0";
     }
     try {
         const res = await fetch(`${baseUrl}/movie/tagline?tagline=${encodeURIComponent(tagline)}`);

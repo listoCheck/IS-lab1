@@ -1,7 +1,7 @@
 <script setup lang="ts">
 
 import {reactive, ref, computed} from "vue";
-import type {LocationDTO} from "@/ts/dto/LocationDTO.ts";
+import type {LocationDTO} from "../../ts/dto/LocationDTO.ts";
 
 const baseUrl = 'http://localhost:8080/IS-lab1JEE-1.0-SNAPSHOT/api'
 const toast = ref("");
@@ -14,14 +14,14 @@ const formMode = ref<"create" | "edit">("create");
 const editId = ref<number | null>(null);
 
 const form = reactive({
-    locationX: null,
-    locationY: null,
-    locationZ: null,
-    locationName: null,
+    locationX: null as number | null,
+    locationY: null as number | null,
+    locationZ: null as number | null,
+    locationName: null as string | null,
 });
 const emit = defineEmits(['updated']);
 
-const locationsList = ref<{ id: number; x: number; y: number }[]>([]);
+const locationsList = ref<LocationDTO[]>([]);
 
 const page = ref(0);
 const pageSize = 5;

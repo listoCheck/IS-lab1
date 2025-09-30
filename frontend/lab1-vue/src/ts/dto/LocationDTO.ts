@@ -1,6 +1,7 @@
 export interface LocationDTO {
-    locationX: number,
-    locationY: number,
-    locationZ: number,
-    locationName: string,
+    id: number;
+    x: number;
+    y: number;
+    z: number;
+    name: string;
 }

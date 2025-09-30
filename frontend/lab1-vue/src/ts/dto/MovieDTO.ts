@@ -1,15 +1,16 @@
-import type {CoordinatesDTO} from "@/ts/dto/CoordinatesDTO.ts";
-import type {MpaaRating} from "@/ts/interface/MpaaRaating.ts";
-import type {PersonDTO} from "@/ts/dto/PersonDTO.ts";
-import type {Genre} from "@/ts/interface/Genre.ts";
+import type {CoordinatesDTO} from "./CoordinatesDTO.ts";
+import type {MpaRating} from "../enum/MpaRating.ts";
+import type {PersonDTO} from "./PersonDTO.ts";
+import type {Genre} from "../enum/Genre.ts";
 
 export interface MovieDTO {
+    id: number;
     name: string;
     coordinates: CoordinatesDTO;
     oscarsCount: number;
     budget: number;
     totalBoxOffice: number;
-    mpaaRating: MpaaRating;
+    mpaaRating: MpaRating;
     director: PersonDTO;
     screenwriter: PersonDTO;
     operator: PersonDTO;
