@@ -56,6 +56,8 @@ function openEdit(location: LocationDTO) {
     editId.value = location.id;
     form.locationX = location.x;
     form.locationY = location.y;
+    form.locationZ = location.z;
+    form.locationName = location.name;
     showForm.value = true;
 }
 

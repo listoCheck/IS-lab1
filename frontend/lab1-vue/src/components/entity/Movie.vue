@@ -35,18 +35,18 @@ const persons = ref<{ id: number; name: string }[]>([]);
 const form = reactive({
     name: "",
     coordinatesId: null as number | null,
-    oscarsCount: 0,
+    oscarsCount: null,
     budget: null as number | null,
-    totalBoxOffice: 0,
-    mpaaRating: "",
+    totalBoxOffice: null,
+    mpaaRating: null,
     directorId: null as number | null,
     screenwriterId: null as number | null,
     operatorId: null as number | null,
     length: null as number | null,
-    goldenPalmCount: 0,
-    usaBoxOffice: 0,
-    tagline: "",
-    genre: "",
+    goldenPalmCount: null,
+    usaBoxOffice: null,
+    tagline: null,
+    genre: null,
 });
 
 const page = ref(0);
