@@ -70,6 +70,7 @@ async function confirmDelete(location: LocationDTO) {
         });
         if (!res.ok) throw new Error(res.statusText);
         locationsList.value = await res.json();
+        emit('updated');
     } catch (e) {
         showToast("Ошибка удаления");
     }

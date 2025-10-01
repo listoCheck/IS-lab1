@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import src.islab1jee.enums.MovieGenre;
 import src.islab1jee.enums.MpaaRating;
 
@@ -27,6 +29,7 @@ public class Movie {
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Coordinates coordinates;
 
     @Column(nullable = false, updatable = false)

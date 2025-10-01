@@ -2,6 +2,8 @@ package src.islab1jee.entity;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import src.islab1jee.enums.Color;
 import src.islab1jee.enums.Country;
 
@@ -34,8 +36,8 @@ public class Person {
     @NotNull(message = "Поле location не может быть null")
     @ManyToOne
     @JoinColumn(name = "location_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Location location;
-
     @Positive(message = "Значение weight должно быть больше 0")
     @Column(name = "weight")
     private double weight;
