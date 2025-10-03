@@ -1,4 +1,4 @@
-package src.islab1jee.entity;
+package src.islab1jee.model.person;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -9,6 +9,7 @@ import src.islab1jee.enums.Country;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
+import src.islab1jee.model.location.Location;
 
 @Setter
 @Getter
@@ -34,7 +35,7 @@ public class Person {
     private Color hairColor;
 
     @NotNull(message = "Поле location не может быть null")
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "location_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Location location;

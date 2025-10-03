@@ -1,4 +1,4 @@
-package src.islab1jee.DTO;
+package src.islab1jee.model.location.DTO;
 
 
 import jakarta.validation.constraints.*;

@@ -1,8 +1,8 @@
 package src.islab1jee.mapper;
-import src.islab1jee.entity.Location;
-import src.islab1jee.entity.Person;
-import src.islab1jee.DTO.PersonRequestDto;
-import src.islab1jee.DTO.PersonResponseDto;
+import src.islab1jee.model.location.Location;
+import src.islab1jee.model.person.Person;
+import src.islab1jee.model.person.DTO.PersonRequestDto;
+import src.islab1jee.model.person.DTO.PersonResponseDto;
 
 public class PersonMapper {
 

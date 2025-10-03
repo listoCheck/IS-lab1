@@ -10,10 +10,9 @@ import jakarta.ws.rs.core.Response;
 
 import java.util.List;
 
-import src.islab1jee.DTO.LocationResponseDto;
 import src.islab1jee.service.PersonService;
-import src.islab1jee.DTO.PersonRequestDto;
-import src.islab1jee.DTO.PersonResponseDto;
+import src.islab1jee.model.person.DTO.PersonRequestDto;
+import src.islab1jee.model.person.DTO.PersonResponseDto;
 
 @Named
 @RequestScoped

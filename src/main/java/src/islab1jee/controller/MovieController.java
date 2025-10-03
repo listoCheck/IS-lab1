@@ -1,6 +1,5 @@
 package src.islab1jee.controller;
 
-import java.util.Collections;
 import java.util.List;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
@@ -9,12 +8,10 @@ import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import src.islab1jee.DTO.CoordinatesResponseDto;
-import src.islab1jee.DTO.PersonResponseDto;
 import src.islab1jee.enums.MovieGenre;
 import src.islab1jee.service.MovieService;
-import src.islab1jee.DTO.MovieRequestDto;
-import src.islab1jee.DTO.MovieResponseDto;
+import src.islab1jee.model.movie.DTO.MovieRequestDto;
+import src.islab1jee.model.movie.DTO.MovieResponseDto;
 
 @Named
 @RequestScoped

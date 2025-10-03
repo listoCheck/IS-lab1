@@ -6,15 +6,13 @@ import jakarta.inject.Named;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
-import src.islab1jee.DTO.LocationResponseDto;
-import src.islab1jee.enums.MovieGenre;
-import src.islab1jee.mapper.LocationMapper;
+import src.islab1jee.mapper.CoordinatesMapper;
 import src.islab1jee.mapper.PersonMapper;
-import src.islab1jee.entity.Location;
-import src.islab1jee.entity.Person;
+import src.islab1jee.model.location.Location;
+import src.islab1jee.model.person.Person;
 import src.islab1jee.repository.LocationRepository;
-import src.islab1jee.DTO.PersonRequestDto;
-import src.islab1jee.DTO.PersonResponseDto;
+import src.islab1jee.model.person.DTO.PersonRequestDto;
+import src.islab1jee.model.person.DTO.PersonResponseDto;
 import src.islab1jee.repository.PersonRepository;
 
 import java.util.List;
@@ -81,14 +79,8 @@ public class PersonService {
     }
 
     public List<PersonResponseDto> getPaged(int page, int size) {
-        List<Person> all = repository.findAll();
-        int fromIndex = page * size;
-        if (fromIndex >= all.size()) {
-            return List.of();
-        }
-        int toIndex = Math.min(fromIndex + size, all.size());
-
-        return all.subList(fromIndex, toIndex).stream()
+        return repository.findPaged(page, size)
+                .stream()
                 .map(PersonMapper::toDto)
                 .collect(Collectors.toList());
     }

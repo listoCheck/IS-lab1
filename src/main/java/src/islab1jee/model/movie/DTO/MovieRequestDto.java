@@ -1,4 +1,4 @@
-package src.islab1jee.DTO;
+package src.islab1jee.model.movie.DTO;
 
 import jakarta.validation.constraints.*;
 import lombok.Getter;

@@ -2,11 +2,11 @@ package src.islab1jee.service;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import src.islab1jee.DTO.CoordinatesRequestDto;
-import src.islab1jee.DTO.CoordinatesResponseDto;
+import src.islab1jee.model.coordinates.DTO.CoordinatesRequestDto;
+import src.islab1jee.model.coordinates.DTO.CoordinatesResponseDto;
 import jakarta.transaction.Transactional;
 import src.islab1jee.mapper.CoordinatesMapper;
-import src.islab1jee.entity.Coordinates;
+import src.islab1jee.model.coordinates.Coordinates;
 import src.islab1jee.repository.CoordinatesRepository;
 
 import java.util.List;
@@ -57,14 +57,9 @@ public class CoordinatesService {
     }
 
     public List<CoordinatesResponseDto> getPaged(int page, int size) {
-        List<Coordinates> all = repository.findAll();
-        int fromIndex = page * size;
-        if (fromIndex >= all.size()) {
-            return List.of();
-        }
-        int toIndex = Math.min(fromIndex + size, all.size());
 
-        return all.subList(fromIndex, toIndex).stream()
+        return repository.findPaged(page, size)
+                .stream()
                 .map(CoordinatesMapper::toDto)
                 .collect(Collectors.toList());
     }

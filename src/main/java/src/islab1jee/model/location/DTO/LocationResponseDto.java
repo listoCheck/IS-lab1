@@ -1,16 +1,20 @@
-package src.islab1jee.DTO;
+package src.islab1jee.model.location.DTO;
+
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Getter
 @Setter
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class CoordinatesResponseDto {
+public class LocationResponseDto {
     private Integer id;
     private Float x;
-    private long y;
+    private double y;
+    private long z;
+    private String name;
+
 }

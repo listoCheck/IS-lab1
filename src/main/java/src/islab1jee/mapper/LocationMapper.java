@@ -1,8 +1,8 @@
 package src.islab1jee.mapper;
 
-import src.islab1jee.DTO.LocationRequestDto;
-import src.islab1jee.DTO.LocationResponseDto;
-import src.islab1jee.entity.Location;
+import src.islab1jee.model.location.DTO.LocationRequestDto;
+import src.islab1jee.model.location.DTO.LocationResponseDto;
+import src.islab1jee.model.location.Location;
 
 public class LocationMapper {
     public static Location toEntity(LocationRequestDto dto) {

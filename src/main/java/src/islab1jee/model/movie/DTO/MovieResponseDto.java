@@ -1,12 +1,14 @@
-package src.islab1jee.DTO;
+package src.islab1jee.model.movie.DTO;
 
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import src.islab1jee.model.person.DTO.PersonResponseDto;
 import src.islab1jee.enums.MovieGenre;
 import src.islab1jee.enums.MpaaRating;
+import src.islab1jee.model.coordinates.DTO.CoordinatesResponseDto;
 
 import java.time.LocalDate;
 

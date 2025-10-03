@@ -4,16 +4,15 @@ import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import jakarta.transaction.Transactional;
-import src.islab1jee.DTO.CoordinatesResponseDto;
 import src.islab1jee.enums.MovieGenre;
 import src.islab1jee.mapper.CoordinatesMapper;
 import src.islab1jee.mapper.MovieMapper;
-import src.islab1jee.entity.Coordinates;
+import src.islab1jee.model.coordinates.Coordinates;
 import src.islab1jee.repository.CoordinatesRepository;
-import src.islab1jee.entity.Movie;
-import src.islab1jee.DTO.MovieRequestDto;
-import src.islab1jee.DTO.MovieResponseDto;
-import src.islab1jee.entity.Person;
+import src.islab1jee.model.movie.Movie;
+import src.islab1jee.model.movie.DTO.MovieRequestDto;
+import src.islab1jee.model.movie.DTO.MovieResponseDto;
+import src.islab1jee.model.person.Person;
 import src.islab1jee.repository.MovieRepository;
 import src.islab1jee.repository.PersonRepository;
 
@@ -98,14 +97,10 @@ public class MovieService {
     }
 
     public List<MovieResponseDto> getPaged(int page, int size) {
-        List<Movie> all = movieRepository.findAll();
-        int fromIndex = page * size;
-        if (fromIndex >= all.size()) {
-            return List.of();
-        }
-        int toIndex = Math.min(fromIndex + size, all.size());
-
-        return all.subList(fromIndex, toIndex).stream().map(MovieMapper::toDto).collect(Collectors.toList());
+        return movieRepository.findPaged(page, size)
+                .stream()
+                .map(MovieMapper::toDto)
+                .collect(Collectors.toList());
     }
 
     public Double getMiddle() {

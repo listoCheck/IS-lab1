@@ -4,7 +4,8 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
-import src.islab1jee.entity.Movie;
+import src.islab1jee.model.coordinates.Coordinates;
+import src.islab1jee.model.movie.Movie;
 import src.islab1jee.enums.MovieGenre;
 
 import java.util.List;
@@ -51,5 +52,11 @@ public class MovieRepository {
                     .setParameter("dirs", directors)
                     .executeUpdate();
         }
+    }
+    public List<Movie> findPaged(int page, int size) {
+        return em.createQuery("SELECT m FROM Movie m", Movie.class)
+                .setFirstResult(page * size)
+                .setMaxResults(size)
+                .getResultList();
     }
 }

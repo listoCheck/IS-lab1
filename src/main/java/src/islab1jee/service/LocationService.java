@@ -3,13 +3,11 @@ package src.islab1jee.service;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
-import src.islab1jee.DTO.CoordinatesResponseDto;
-import src.islab1jee.DTO.LocationRequestDto;
-import src.islab1jee.DTO.LocationResponseDto;
-import src.islab1jee.entity.Coordinates;
 import src.islab1jee.mapper.CoordinatesMapper;
+import src.islab1jee.model.location.DTO.LocationRequestDto;
+import src.islab1jee.model.location.DTO.LocationResponseDto;
 import src.islab1jee.mapper.LocationMapper;
-import src.islab1jee.entity.Location;
+import src.islab1jee.model.location.Location;
 import src.islab1jee.repository.LocationRepository;
 
 import java.util.List;
@@ -62,14 +60,8 @@ public class LocationService {
     }
 
     public List<LocationResponseDto> getPaged(int page, int size) {
-        List<Location> all = repository.findAll();
-        int fromIndex = page * size;
-        if (fromIndex >= all.size()) {
-            return List.of();
-        }
-        int toIndex = Math.min(fromIndex + size, all.size());
-
-        return all.subList(fromIndex, toIndex).stream()
+        return repository.findPaged(page, size)
+                .stream()
                 .map(LocationMapper::toDto)
                 .collect(Collectors.toList());
     }

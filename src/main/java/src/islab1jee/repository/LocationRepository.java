@@ -3,7 +3,8 @@ package src.islab1jee.repository;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import src.islab1jee.entity.Location;
+import src.islab1jee.model.coordinates.Coordinates;
+import src.islab1jee.model.location.Location;
 
 import java.util.List;
 
@@ -35,5 +36,11 @@ public class LocationRepository {
         if (l != null) {
             em.remove(l);
         }
+    }
+    public List<Location> findPaged(int page, int size) {
+        return em.createQuery("SELECT l FROM Location l", Location.class)
+                .setFirstResult(page * size)
+                .setMaxResults(size)
+                .getResultList();
     }
 }

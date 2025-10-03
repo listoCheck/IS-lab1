@@ -8,9 +8,8 @@ import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import src.islab1jee.DTO.CoordinatesResponseDto;
-import src.islab1jee.DTO.LocationRequestDto;
-import src.islab1jee.DTO.LocationResponseDto;
+import src.islab1jee.model.location.DTO.LocationRequestDto;
+import src.islab1jee.model.location.DTO.LocationResponseDto;
 import src.islab1jee.service.LocationService;
 
 @Path("/location")

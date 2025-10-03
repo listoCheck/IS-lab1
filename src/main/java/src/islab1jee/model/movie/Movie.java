@@ -1,4 +1,4 @@
-package src.islab1jee.entity;
+package src.islab1jee.model.movie;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.*;
@@ -9,6 +9,8 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import src.islab1jee.enums.MovieGenre;
 import src.islab1jee.enums.MpaaRating;
+import src.islab1jee.model.person.Person;
+import src.islab1jee.model.coordinates.Coordinates;
 
 import java.time.LocalDate;
 
@@ -51,15 +53,15 @@ public class Movie {
     @Column
     private MpaaRating mpaaRating;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(nullable = false)
     private Person director;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn
     private Person screenwriter;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(nullable = false)
     private Person operator;
 

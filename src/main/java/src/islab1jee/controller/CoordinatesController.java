@@ -6,8 +6,8 @@ import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.*;
 import jakarta.validation.Valid;
-import src.islab1jee.DTO.CoordinatesRequestDto;
-import src.islab1jee.DTO.CoordinatesResponseDto;
+import src.islab1jee.model.coordinates.DTO.CoordinatesRequestDto;
+import src.islab1jee.model.coordinates.DTO.CoordinatesResponseDto;
 import src.islab1jee.service.CoordinatesService;
 
 @Path("/coordinates")
@@ -59,5 +59,10 @@ public class CoordinatesController {
     public Response delete(@PathParam("id") Integer id) {
         service.delete(id);
         return Response.noContent().build();
+    }
+    @OPTIONS
+    @Path("{path: .*}")
+    public Response options() {
+        return Response.ok().build();
     }
 }

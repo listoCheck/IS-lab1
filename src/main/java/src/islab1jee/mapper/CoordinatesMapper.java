@@ -1,9 +1,9 @@
 package src.islab1jee.mapper;
 
 
-import src.islab1jee.DTO.CoordinatesRequestDto;
-import src.islab1jee.DTO.CoordinatesResponseDto;
-import src.islab1jee.entity.Coordinates;
+import src.islab1jee.model.coordinates.DTO.CoordinatesRequestDto;
+import src.islab1jee.model.coordinates.DTO.CoordinatesResponseDto;
+import src.islab1jee.model.coordinates.Coordinates;
 
 public class CoordinatesMapper {
     public static Coordinates toEntity(CoordinatesRequestDto dto) {
