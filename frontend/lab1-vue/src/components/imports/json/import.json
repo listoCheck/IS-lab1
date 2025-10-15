@@ -1,0 +1,78 @@
+[
+  {
+    "name": "Inception",
+    "coordinates": {
+      "x": 42.5,
+      "y": 17.0
+    },
+    "oscarsCount": 4,
+    "budget": 160000000,
+    "totalBoxOffice": 829895144,
+    "mpaaRating": "PG_13",
+    "genre": "SCIENCE_FICTION",
+    "director": {
+      "name": "Christopher Nolan",
+      "passportID": "AB123456",
+      "eyeColor": "BROWN",
+      "hairColor": "BLACK",
+      "nationality": "BRITISH",
+      "location": {
+        "x": 10.5,
+        "y": 22.0,
+        "z": 5.0,
+        "name": "London"
+      }
+    },
+    "screenwriter": {
+      "name": "Jonathan Nolan",
+      "passportID": "CD654321",
+      "eyeColor": "GREEN",
+      "hairColor": "BROWN",
+      "nationality": "BRITISH",
+      "location": {
+        "x": 13.5,
+        "y": 9.8,
+        "z": 0.0,
+        "name": "Los Angeles"
+      }
+    }
+  },
+  {
+    "name": "Interstellar",
+    "coordinates": {
+      "x": 12.0,
+      "y": 33.2
+    },
+    "oscarsCount": 5,
+    "budget": 165000000,
+    "totalBoxOffice": 677471339,
+    "mpaaRating": "PG_13",
+    "genre": "SCIENCE_FICTION",
+    "director": {
+      "name": "Christopher Nolan",
+      "passportID": "AB123456",
+      "eyeColor": "BROWN",
+      "hairColor": "BLACK",
+      "nationality": "BRITISH",
+      "location": {
+        "x": 10.5,
+        "y": 22.0,
+        "z": 5.0,
+        "name": "London"
+      }
+    },
+    "screenwriter": {
+      "name": "Jonathan Nolan",
+      "passportID": "CD654321",
+      "eyeColor": "GREEN",
+      "hairColor": "BROWN",
+      "nationality": "BRITISH",
+      "location": {
+        "x": 13.5,
+        "y": 9.8,
+        "z": 0.0,
+        "name": "Los Angeles"
+      }
+    }
+  }
+]

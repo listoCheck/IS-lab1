@@ -9,6 +9,8 @@ import Movie from "./components/entity/Movie.vue";
 import Person from "./components/entity/Person.vue";
 import Coordinates from "./components/entity/Coordinates.vue";
 import "./css/app.css";
+import ImportUpload from "@/components/imports/Upload.vue";
+import ImportHistory from "@/components/imports/History.vue";
 
 const coordsRef = ref<InstanceType<typeof Coordinates> | null>(null);
 const locationRef = ref<InstanceType<typeof Location> | null>(null);
@@ -27,6 +29,8 @@ function updateAll() {
     <Header />
 
     <div class="content-wrapper">
+        <ImportUpload/>
+        <ImportHistory/>
         <div class="top-row">
             <Coordinates ref="coordsRef" @updated="updateAll" />
             <Location ref="locationRef" @updated="updateAll" />
