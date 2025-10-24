@@ -1,0 +1,57 @@
+package src.islab1jee.controller;
+
+import jakarta.inject.Inject;
+import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.*;
+import org.glassfish.jersey.media.multipart.FormDataParam;
+import src.islab1jee.model.importobjects.ImportOperation;
+import src.islab1jee.service.ImportService;
+import src.islab1jee.repository.ImportRepository;
+
+import java.io.InputStream;
+import java.security.Principal;
+import java.util.List;
+import java.util.Map;
+
+@Path("/import")
+@Produces(MediaType.APPLICATION_JSON)
+public class ImportController {
+
+    @Inject
+    ImportService importService;
+
+    @Inject
+    ImportRepository importRepository;
+
+    @Context
+    SecurityContext securityContext;
+
+    @POST
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    public Response uploadFile(@FormDataParam("file") InputStream fileStream) {
+        Principal user = securityContext.getUserPrincipal();
+        String username = (user != null) ? user.getName() : "anonymous";
+
+        ImportOperation op = importService.processImport(username, fileStream);
+        if (op.getStatus().equals(src.islab1jee.enums.ImportStatus.SUCCESS)) {
+            return Response.ok(Map.of("addedCount", op.getAddedCount())).build();
+        } else {
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity(Map.of("message", op.getErrorMessage()))
+                    .build();
+        }
+    }
+
+    @GET
+    @Path("/history")
+    public List<ImportOperation> getHistory() {
+        Principal user = securityContext.getUserPrincipal();
+        boolean isAdmin = securityContext.isUserInRole("ADMIN");
+
+        if (isAdmin) {
+            return importRepository.findAll();
+        } else {
+            return importRepository.findByUser(user.getName());
+        }
+    }
+}
