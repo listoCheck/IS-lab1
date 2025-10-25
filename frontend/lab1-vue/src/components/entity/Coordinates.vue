@@ -142,9 +142,7 @@ defineExpose({ refresh });
 
 onMounted(() => {
     fetchCoordinates();
-    refreshInterval = window.setInterval(() => {
-        fetchCoordinates();
-    }, 5000);
+    //refreshInterval = window.setInterval(() => {fetchCoordinates();}, 5000);
 });
 
 onUnmounted(() => {

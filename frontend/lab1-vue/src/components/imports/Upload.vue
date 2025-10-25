@@ -2,41 +2,51 @@
 import { ref, computed } from 'vue'
 import axios from 'axios'
 
-const fileInput = ref(null)
-const selectedFile = ref(null)
-const preview = ref([])
+const fileInput = ref<HTMLInputElement | null>(null)
+const selectedFile = ref<File | null>(null)
+const preview = ref<any[]>([])
 const message = ref('')
 const isLoading = ref(false)
+const baseUrl = 'http://localhost:8080/IS-lab1JEE-1.0-SNAPSHOT/api'
 
-const handleFileSelect = (event) => {
-    const file = event.target.files[0]
+const handleFileSelect = (event: Event) => {
+    const file = (event.target as HTMLInputElement).files?.[0]
     if (!file) return
     selectedFile.value = file
     readFile(file)
 }
 
-const readFile = (file) => {
+const readFile = (file: File) => {
     const reader = new FileReader()
     reader.onload = (e) => {
         try {
-            const text = e.target.result.trim()
-            if (text.startsWith('[')) {
-                preview.value = JSON.parse(text).slice(0, 3)
+            const rawText = (e.target?.result as string).trim()
+            const text = rawText.replace(/^\uFEFF/, '')
+            let objects: any[] = []
+
+            if (text.startsWith('{')) {
+                const parsed = JSON.parse(text)
+                objects = [parsed]
+                message.value = parsed.type ? `Тип объектов: ${parsed.type}` : ''
+            } else if (text.startsWith('[')) {
+                objects = JSON.parse(text)
+                message.value = ''
             } else {
-                // JSONL формат
-                preview.value = text
-                    .split('\n')
-                    .filter(line => line.trim().length > 0)
-                    .slice(0, 3)
-                    .map(line => JSON.parse(line))
+                const lines = text.split(/\r?\n/).filter(line => line.trim().length > 0)
+                objects = lines.map(line => JSON.parse(line.replace(/^\uFEFF/, '').trim()))
+                message.value = ''
             }
-            message.value = ''
-        } catch (err) {
-            message.value = 'Ошибка: неверный формат JSON-файла.'
+
+            preview.value = objects.slice(0, 3)
+        } catch (err: any) {
+            console.error(err)
+            message.value = `❌ Ошибка: неверный формат JSON-файла. ${err.message}`
+            preview.value = []
         }
     }
     reader.readAsText(file)
 }
+
 
 const formattedPreview = computed(() => JSON.stringify(preview.value, null, 2))
 
@@ -47,42 +57,59 @@ const uploadFile = async () => {
     try {
         const formData = new FormData()
         formData.append('file', selectedFile.value)
-        const response = await axios.post('/api/import', formData, {
-            headers: { 'Content-Type': 'multipart/form-data' },
+
+        const response = await fetch(`${baseUrl}/import`, {
+            method: 'POST',
+            body: formData,
         })
-        message.value = `Импорт успешно выполнен. Добавлено ${response.data.addedCount} объектов.`
-    } catch (err) {
-        message.value = err.response?.data?.message || 'Ошибка при импорте объектов.'
+
+        if (!response.ok) {
+            const errorData = await response.json()
+            message.value = errorData.message || 'Ошибка при импорте объектов.'
+        } else {
+            const data = await response.json()
+            message.value = `Импорт успешно выполнен. Добавлено ${data.addedCount} объектов.`
+        }
+    } catch (err: any) {
+        console.error(err)
+        message.value = 'Ошибка при импорте объектов.'
     } finally {
         isLoading.value = false
     }
 }
 
+
 const reset = () => {
     selectedFile.value = null
     preview.value = []
     message.value = ''
-    fileInput.value.value = ''
+    if (fileInput.value) fileInput.value.value = ''
 }
 
 const messageClass = computed(() =>
-    message.value.includes('Ошибка')
-        ? 'bg-red-100 text-red-700'
-        : 'bg-green-100 text-green-700'
+    message.value.includes('Ошибка') ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'
 )
 </script>
+
 <template>
     <div class="p-6 max-w-2xl mx-auto space-y-6">
         <h1 class="text-2xl font-bold">Импорт объектов</h1>
 
         <div class="border-2 border-dashed p-6 rounded-2xl text-center bg-gray-50">
+            <input
+                ref="fileInput"
+                type="file"
+                accept=".json,.jsonl"
+                class="hidden"
+                @change="handleFileSelect"
+            />
             <button
                 class="px-4 py-2 bg-blue-600 text-white rounded-xl shadow hover:bg-blue-700"
-                @click="fileInput.click()"
+                @click="fileInput.value?.click()"
             >
-                Выбрать файл
+                {{ selectedFile ? selectedFile.name : 'Выбрать файл' }}
             </button>
-            <p class="text-gray-600 mt-2">Поддерживаются форматы: JSON, JSONL</p>
+            <p class="text-gray-600 mt-2">Поддерживаются форматы: JSON, JSONL, {"type": "...", "objects": [...]}</p>
         </div>
 
         <div v-if="preview.length" class="bg-white rounded-xl shadow p-4">
@@ -112,5 +139,3 @@ const messageClass = computed(() =>
         </div>
     </div>
 </template>
-
-

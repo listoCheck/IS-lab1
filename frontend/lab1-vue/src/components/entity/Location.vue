@@ -143,9 +143,7 @@ defineExpose({ refresh });
 let refreshInterval: number | undefined;
 onMounted(() => {
     fetchLocations();
-    refreshInterval = window.setInterval(() => {
-        fetchLocations();
-    }, 5000);
+    //refreshInterval = window.setInterval(() => {fetchLocations();}, 5000);
 });
 
 

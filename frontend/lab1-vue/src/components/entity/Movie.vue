@@ -278,11 +278,7 @@ onMounted(() => {
     fetchCoordinates();
     fetchPersons();
     fetchMovies();
-    refreshInterval = window.setInterval(() => {
-        fetchCoordinates();
-        fetchPersons();
-        fetchMovies();
-    }, 5000);
+    //refreshInterval = window.setInterval(() => {fetchCoordinates();fetchPersons();fetchMovies();}, 5000);
 });
 
 

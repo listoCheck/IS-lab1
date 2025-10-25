@@ -163,10 +163,7 @@ let refreshInterval: number | undefined;
 onMounted(() => {
     fetchLocations();
     fetchPersons();
-    refreshInterval = window.setInterval(() => {
-        fetchLocations();
-        fetchPersons();
-    }, 5000);
+    //refreshInterval = window.setInterval(() => {fetchLocations();fetchPersons();}, 5000);
 });
 
 
