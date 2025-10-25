@@ -4,8 +4,7 @@ import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.*;
-import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
-import org.jboss.resteasy.plugins.providers.multipart.InputPart;
+import org.glassfish.jersey.media.multipart.FormDataParam;
 
 import src.islab1jee.enums.ImportStatus;
 import src.islab1jee.model.importobjects.ImportOperation;
@@ -33,10 +32,13 @@ public class ImportController {
 
     @POST
     @Consumes(MediaType.MULTIPART_FORM_DATA)
-    public Response uploadFile(MultipartFormDataInput input) {
+    public Response uploadFile(@FormDataParam("file") InputStream fileStream) {
         try {
-            InputPart filePart = input.getFormDataMap().get("file").get(0);
-            InputStream fileStream = filePart.getBody(InputStream.class, null);
+            if (fileStream == null) {
+                return Response.status(Response.Status.BAD_REQUEST)
+                        .entity(Map.of("message", "Файл не предоставлен"))
+                        .build();
+            }
 
             ImportOperation op = importService.processImport(fileStream);
 
@@ -53,7 +55,6 @@ public class ImportController {
                     .build();
         }
     }
-
 
     @GET
     @Path("/history")
