@@ -1,49 +1,71 @@
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
-import axios from 'axios'
+import { ref, computed, onMounted, defineExpose } from 'vue'
 
-const history = ref([])
+const baseUrl = 'http://localhost:8080/IS-lab1JEE-1.0-SNAPSHOT/api'
+
+const history = ref<any[]>([])
+const loading = ref(false)
+const error = ref<string | null>(null)
+
 const filterUser = ref('')
 const filterStatus = ref('')
-
-const loadHistory = async () => {
-    try {
-        const response = await axios.get('/api/import/history')
-        history.value = response.data
-    } catch (err) {
-        console.error('Ошибка при загрузке истории:', err)
-    }
-}
 
 const filteredHistory = computed(() =>
     history.value.filter((r) => {
         return (
-            (!filterUser.value || r.user.includes(filterUser.value)) &&
+            (!filterUser.value || r.user?.toLowerCase().includes(filterUser.value.toLowerCase())) &&
             (!filterStatus.value || r.status === filterStatus.value)
         )
     })
 )
 
-const formatDate = (iso) =>
-    new Date(iso).toLocaleString('ru-RU', {
+const loadHistory = async () => {
+    loading.value = true
+    error.value = null
+    try {
+        const response = await fetch(`${baseUrl}/import/history`)
+        if (!response.ok) throw new Error(`Ошибка: ${response.status}`)
+        const data = await response.json()
+
+        history.value = (Array.isArray(data) ? data : []).map((r) => {
+            if (Array.isArray(r.timestamp)) {
+                const [y, mo, d, h, mi, s, ns] = r.timestamp
+                r.timestamp = new Date(y, mo - 1, d, h, mi, s, Math.floor(ns / 1_000_000))
+            }
+            return r
+        })
+    } catch (err: any) {
+        error.value = err.message
+    } finally {
+        loading.value = false
+    }
+}
+
+const formatDate = (ts: Date | null) => {
+    if (!ts) return '-'
+    return ts.toLocaleString('ru-RU', {
         day: '2-digit',
         month: '2-digit',
         year: 'numeric',
         hour: '2-digit',
         minute: '2-digit',
+        second: '2-digit'
     })
+}
 
 onMounted(loadHistory)
+defineExpose({ loadHistory })
 </script>
-<template>
-    <div class="p-6 max-w-4xl mx-auto space-y-6">
-        <h1 class="text-2xl font-bold">История импортов</h1>
 
-        <div class="flex items-center gap-4">
+<template>
+    <div class="p-6 max-w-5xl mx-auto space-y-6">
+        <h1 class="text-2xl font-bold text-gray-800">История импортов</h1>
+
+        <div class="flex flex-wrap items-center gap-3">
             <input
                 v-model="filterUser"
                 placeholder="Фильтр по пользователю"
-                class="border rounded-lg px-3 py-2"
+                class="border rounded-lg px-3 py-2 flex-1 min-w-[180px]"
             />
             <select v-model="filterStatus" class="border rounded-lg px-3 py-2">
                 <option value="">Все статусы</option>
@@ -51,45 +73,70 @@ onMounted(loadHistory)
                 <option value="FAILED">Ошибка</option>
             </select>
             <button
-                class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-60"
                 @click="loadHistory"
+                :disabled="loading"
             >
-                Обновить
+                {{ loading ? 'Загрузка...' : 'Обновить' }}
             </button>
         </div>
 
-        <table class="w-full text-left border-collapse">
-            <thead class="bg-gray-100">
-            <tr>
-                <th class="p-2 border">ID</th>
-                <th class="p-2 border">Пользователь</th>
-                <th class="p-2 border">Статус</th>
-                <th class="p-2 border">Добавлено</th>
-                <th class="p-2 border">Дата</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr v-for="record in filteredHistory" :key="record.id">
-                <td class="p-2 border">{{ record.id }}</td>
-                <td class="p-2 border">{{ record.user }}</td>
-                <td
-                    class="p-2 border font-semibold"
-                    :class="{
-              'text-green-600': record.status === 'SUCCESS',
-              'text-red-600': record.status === 'FAILED'
-            }"
-                >
-                    {{ record.status }}
-                </td>
-                <td class="p-2 border">{{ record.status === 'SUCCESS' ? record.addedCount : '-' }}</td>
-                <td class="p-2 border">{{ formatDate(record.timestamp) }}</td>
-            </tr>
-            </tbody>
-        </table>
+        <div v-if="error" class="text-red-600 font-semibold">
+            {{ error }}
+        </div>
 
-        <div v-if="!history.length" class="text-gray-500 text-center mt-4">
+        <div v-if="!loading && filteredHistory.length" class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+                <thead class="bg-gray-100">
+                <tr>
+                    <th class="p-2 border">ID</th>
+                    <th class="p-2 border">Статус</th>
+                    <th class="p-2 border">Добавлено</th>
+                    <th class="p-2 border">Дата</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr
+                    v-for="record in filteredHistory"
+                    :key="record.id"
+                    class="hover:bg-gray-50 transition-colors"
+                >
+                    <td class="p-2 border">{{ record.id }}</td>
+                    <td
+                        class="p-2 border font-semibold"
+                        :class="{
+                'text-green-600': record.status === 'SUCCESS',
+                'text-red-600': record.status === 'FAILED'
+              }"
+                    >
+                        {{ record.status }}
+                    </td>
+                    <td class="p-2 border">
+                        {{ record.status === 'SUCCESS' ? record.addedCount : '-' }}
+                    </td>
+                    <td class="p-2 border">{{ formatDate(record.timestamp) }}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div v-else-if="loading" class="text-gray-500 text-center mt-6">
+            Загрузка истории...
+        </div>
+        <div v-else class="text-gray-500 text-center mt-6">
             История импортов пуста
         </div>
     </div>
 </template>
 
+<style scoped>
+
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+    color: #f1f1f1;
+    background: #101F27;
+}
+
+</style>

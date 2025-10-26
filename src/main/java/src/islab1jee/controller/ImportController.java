@@ -11,7 +11,6 @@ import src.islab1jee.repository.ImportRepository;
 import src.islab1jee.service.ImportService;
 
 import java.io.InputStream;
-import java.security.Principal;
 import java.util.List;
 import java.util.Map;
 
@@ -25,9 +24,6 @@ public class ImportController {
 
     @Inject
     ImportRepository importRepository;
-
-    @Context
-    SecurityContext securityContext;
 
     @POST
     @Consumes(MediaType.MULTIPART_FORM_DATA)
@@ -58,13 +54,6 @@ public class ImportController {
     @GET
     @Path("/history")
     public List<ImportOperation> getHistory() {
-        Principal user = securityContext.getUserPrincipal();
-        boolean isAdmin = securityContext.isUserInRole("ADMIN");
-
-        if (isAdmin) {
-            return importRepository.findAll();
-        } else {
-            return importRepository.findByUser(user.getName());
-        }
+        return importRepository.findAll();
     }
 }

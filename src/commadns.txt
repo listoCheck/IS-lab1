@@ -14,7 +14,3 @@ http://127.0.0.1:25102/Web_2/
 
 5)check data base
 psql -h pg -d studs
-
-front - дергается
-bean factory + application context
-аоп

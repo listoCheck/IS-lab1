@@ -1,0 +1,65 @@
+[
+  {
+    "type": "Movie",
+    "objects": [
+      {
+        "name": "Avatar",
+        "coordinates": {
+          "x": 100.5,
+          "y": 200
+        },
+        "oscarsCount": 3,
+        "budget": 237000000,
+        "totalBoxOffice": 2847246203,
+        "mpaaRating": "PG-13",
+        "director": {
+          "name": "James Cameron",
+          "hairColor": "BLACK",
+          "eyeColor": "GREEN",
+          "passportID": "1488",
+          "weight": 80.5,
+          "location": {
+            "x": 10,
+            "y": 20,
+            "z": 5,
+            "name": "Vancouver"
+          },
+          "nationality": "RUSSIA"
+        },
+        "screenwriter": {
+          "name": "John Doe",
+          "hairColor": "BROWN",
+          "eyeColor": "BLACK",
+          "passportID": "5678",
+          "weight": 75.0,
+          "location": {
+            "x": 12,
+            "y": 22,
+            "z": 6,
+            "name": "Toronto"
+          },
+          "nationality": "RUSSIA"
+        },
+        "operator": {
+          "name": "Jane Smith",
+          "hairColor": "BLACK",
+          "eyeColor": "BROWN",
+          "passportID": "91011",
+          "weight": 68.0,
+          "location": {
+            "x": 15,
+            "y": 25,
+            "z": 7,
+            "name": "Los Angeles"
+          },
+          "nationality": "RUSSIA"
+        },
+        "length": 162,
+        "goldenPalmCount": 1,
+        "usaBoxOffice": 760507625.0,
+        "tagline": "Enter the world of Pandora",
+        "genre": "SCI_FI"
+      }
+    ]
+  }
+]

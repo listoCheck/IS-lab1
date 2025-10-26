@@ -1,0 +1,25 @@
+{
+  "type": "Person",
+  "objects": [
+    {
+      "name": "James Cameron",
+      "hairColor": "BLACK",
+      "eyeColor": "GREEN",
+      "passportID": "1488",
+      "weight": 80.5,
+      "location": {
+        "type": "Location",
+        "objects": [
+          {
+            "x": 10,
+            "y": 20,
+            "z": 5,
+            "name": "Vancouver"
+          }
+        ]
+      },
+      "nationality": "RUSSIA"
+    }
+  ]
+}
+

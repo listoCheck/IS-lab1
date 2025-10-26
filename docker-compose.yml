@@ -7,7 +7,7 @@ services:
     environment:
       POSTGRES_DB: studs
       POSTGRES_USER: s408145
-      POSTGRES_PASSWORD: JLzD%6772
+      POSTGRES_PASSWORD: "JLzD%6772"
     ports:
       - "5432:5432"
     volumes:
@@ -20,8 +20,26 @@ services:
       timeout: 10s
       retries: 5
 
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "v.amuz@gmail.com"
+      PGADMIN_DEFAULT_PASSWORD: "1488"
+      PGADMIN_CONFIG_SERVER_MODE: "False"
+    ports:
+      - "6980:80"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    networks:
+      - IS-labs
+
 volumes:
   postgres_data:
+  pgadmin_data:
 
 networks:
   IS-labs:

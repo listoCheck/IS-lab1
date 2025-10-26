@@ -16,12 +16,14 @@ const coordsRef = ref<InstanceType<typeof Coordinates> | null>(null);
 const locationRef = ref<InstanceType<typeof Location> | null>(null);
 const personRef = ref<InstanceType<typeof Person> | null>(null);
 const movieRef = ref<InstanceType<typeof Movie> | null>(null);
+const historyRef = ref<InstanceType<typeof ImportHistory> | null>(null);
 
 function updateAll() {
     coordsRef.value?.refresh();
     locationRef.value?.refresh();
     personRef.value?.refresh();
     movieRef.value?.refresh();
+    historyRef.value?.loadHistory();
 }
 </script>
 
@@ -30,7 +32,7 @@ function updateAll() {
 
     <div class="content-wrapper">
         <ImportUpload @imported="updateAll"/>
-        <ImportHistory/>
+        <ImportHistory ref="historyRef"/>
         <div class="top-row">
             <Coordinates ref="coordsRef" @updated="updateAll" />
             <Location ref="locationRef" @updated="updateAll" />

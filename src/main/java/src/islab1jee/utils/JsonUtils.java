@@ -18,9 +18,6 @@ public class JsonUtils {
     @Inject
     ObjectMapper mapper;
 
-    /**
-     * Универсальный парсер JSON-файлов.
-     */
     public List<JsonNode> parseJsonArray(InputStream input) throws Exception {
         List<JsonNode> result = new ArrayList<>();
 

@@ -23,12 +23,4 @@ public class ImportRepository {
                 ImportOperation.class
         ).getResultList();
     }
-
-    public List<ImportOperation> findByUser(String username) {
-        return em.createQuery(
-                        "SELECT i FROM ImportOperation i WHERE i.username = :u ORDER BY i.timestamp DESC",
-                        ImportOperation.class
-                ).setParameter("u", username)
-                .getResultList();
-    }
 }

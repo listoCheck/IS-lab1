@@ -42,14 +42,13 @@ const readFile = (file: File) => {
             preview.value = objects.slice(0, 3)
         } catch (err: any) {
             console.error(err)
-            message.value = `❌ Ошибка: неверный формат JSON-файла. ${err.message}`
+            message.value = `Ошибка: неверный формат JSON-файла. ${err.message}`
             preview.value = []
         }
     }
     reader.readAsText(file)
 }
 
-// функция для очистки multipart-заголовков и границ
 const cleanMultipart = (rawText: string) => {
     const lines = rawText.split(/\r?\n/)
     let insideJson = false
@@ -83,8 +82,8 @@ const uploadFile = async () => {
             message.value = response.data?.message || 'Ошибка при импорте объектов.'
         } else {
             message.value = `Импорт успешно выполнен. Добавлено ${response.data.addedCount} объектов.`
-            emit('imported') // проброс события в родителя для обновления всех сущностей
         }
+        emit('imported')
     } catch (err: any) {
         console.error(err)
         message.value = err.response?.data?.message

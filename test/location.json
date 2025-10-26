@@ -1,0 +1,7 @@
+{
+  "type": "Location",
+  "objects": [
+    { "name": "Moscow", "x": 55.75, "y": 37.62, "z": 120 },
+    { "name": "London", "x": 51.507, "y": -0.127, "z": 15 }
+  ]
+}

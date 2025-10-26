@@ -7,26 +7,25 @@ import src.islab1jee.enums.ImportStatus;
 
 import java.time.LocalDateTime;
 
-@Setter
 @Getter
+@Setter
 @Entity
-@Table
 public class ImportOperation {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String username;
-
     @Enumerated(EnumType.STRING)
     private ImportStatus status;
 
+    @Column
     private int addedCount;
 
+    @Column
     private LocalDateTime timestamp;
 
-    @Lob
+    @Column(length = 2048)
     private String errorMessage;
 
 }
