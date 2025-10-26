@@ -1,6 +1,8 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, defineEmits } from 'vue'
 import axios from 'axios'
+
+const emit = defineEmits(['imported'])
 
 const fileInput = ref<HTMLInputElement | null>(null)
 const selectedFile = ref<File | null>(null)
@@ -21,7 +23,7 @@ const readFile = (file: File) => {
     reader.onload = (e) => {
         try {
             const rawText = (e.target?.result as string).trim()
-            const text = rawText.replace(/^\uFEFF/, '')
+            const text = cleanMultipart(rawText)
             let objects: any[] = []
 
             if (text.startsWith('{')) {
@@ -47,6 +49,20 @@ const readFile = (file: File) => {
     reader.readAsText(file)
 }
 
+// функция для очистки multipart-заголовков и границ
+const cleanMultipart = (rawText: string) => {
+    const lines = rawText.split(/\r?\n/)
+    let insideJson = false
+    const result: string[] = []
+
+    for (let line of lines) {
+        line = line.trim()
+        if (!insideJson && (line.startsWith('{') || line.startsWith('['))) insideJson = true
+        if (insideJson) result.push(line)
+    }
+
+    return result.join('\n')
+}
 
 const formattedPreview = computed(() => JSON.stringify(preview.value, null, 2))
 
@@ -54,30 +70,30 @@ const uploadFile = async () => {
     if (!selectedFile.value) return
     isLoading.value = true
     message.value = ''
+
     try {
         const formData = new FormData()
         formData.append('file', selectedFile.value)
 
-        const response = await fetch(`${baseUrl}/import`, {
-            method: 'POST',
-            body: formData,
+        const response = await axios.post(`${baseUrl}/import`, formData, {
+            headers: { 'Content-Type': 'multipart/form-data' }
         })
 
-        if (!response.ok) {
-            const errorData = await response.json()
-            message.value = errorData.message || 'Ошибка при импорте объектов.'
+        if (response.status >= 400) {
+            message.value = response.data?.message || 'Ошибка при импорте объектов.'
         } else {
-            const data = await response.json()
-            message.value = `Импорт успешно выполнен. Добавлено ${data.addedCount} объектов.`
+            message.value = `Импорт успешно выполнен. Добавлено ${response.data.addedCount} объектов.`
+            emit('imported') // проброс события в родителя для обновления всех сущностей
         }
     } catch (err: any) {
         console.error(err)
-        message.value = 'Ошибка при импорте объектов.'
+        message.value = err.response?.data?.message
+            ? `Ошибка при импорте объектов: ${err.response.data.message}`
+            : `Ошибка при импорте объектов: ${err.message}`
     } finally {
         isLoading.value = false
     }
 }
-
 
 const reset = () => {
     selectedFile.value = null

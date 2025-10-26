@@ -29,7 +29,7 @@ function updateAll() {
     <Header />
 
     <div class="content-wrapper">
-        <ImportUpload/>
+        <ImportUpload @imported="updateAll"/>
         <ImportHistory/>
         <div class="top-row">
             <Coordinates ref="coordsRef" @updated="updateAll" />
