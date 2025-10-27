@@ -110,21 +110,18 @@ const messageClass = computed(() =>
     <div class="p-6 max-w-2xl mx-auto space-y-6">
         <h1 class="text-2xl font-bold">Импорт объектов</h1>
 
-        <div class="border-2 border-dashed p-6 rounded-2xl text-center bg-gray-50">
+        <div class="file-upload">
             <input
                 ref="fileInput"
                 type="file"
                 accept=".json,.jsonl"
-                class="hidden"
+                id="file"
                 @change="handleFileSelect"
             />
-            <button
-                class="px-4 py-2 bg-blue-600 text-white rounded-xl shadow hover:bg-blue-700"
-                @click="fileInput.value?.click()"
-            >
-                {{ selectedFile ? selectedFile.name : 'Выбрать файл' }}
-            </button>
-            <p class="text-gray-600 mt-2">Поддерживаются форматы: JSON, JSONL, {"type": "...", "objects": [...]}</p>
+            <label for="file" class="file-label">
+                {{ selectedFile ? selectedFile.name : 'Выберите файл' }}
+            </label>
+            <p class="file-info">Поддерживаются форматы: JSON, JSONL, {"type": "...", "objects": [...]}</p>
         </div>
 
         <div v-if="preview.length" class="bg-white rounded-xl shadow p-4">
@@ -154,3 +151,46 @@ const messageClass = computed(() =>
         </div>
     </div>
 </template>
+
+<style scoped>
+.file-upload {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding: 20px;
+    border: 2px dashed #ccc;
+    border-radius: 12px;
+    background-color: #f9f9f9;
+    text-align: center;
+    cursor: pointer;
+}
+
+.file-upload input[type="file"] {
+    display: none;
+}
+
+.file-label {
+    display: inline-block;
+    padding: 10px 25px;
+    background-color: #1e3a8a;
+    color: white;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.1s;
+}
+
+.file-label:hover {
+    background-color: #2563eb;
+}
+
+.file-label:active {
+    transform: scale(0.95);
+}
+
+.file-info {
+    font-size: 0.85rem;
+    color: #555;
+}
+</style>

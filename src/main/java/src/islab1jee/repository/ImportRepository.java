@@ -17,10 +17,18 @@ public class ImportRepository {
         em.persist(op);
     }
 
-    public List<ImportOperation> findAll() {
+    public List<ImportOperation> findAllPaged(int page, int size) {
         return em.createQuery(
-                "SELECT i FROM ImportOperation i ORDER BY i.timestamp DESC",
-                ImportOperation.class
-        ).getResultList();
+                        "SELECT i FROM ImportOperation i ORDER BY i.timestamp DESC",
+                        ImportOperation.class
+                )
+                .setFirstResult((page - 1) * size)
+                .setMaxResults(size)
+                .getResultList();
+    }
+
+    public long countAll() {
+        return em.createQuery("SELECT COUNT(i) FROM ImportOperation i", Long.class)
+                .getSingleResult();
     }
 }

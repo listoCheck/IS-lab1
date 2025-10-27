@@ -1,11 +1,10 @@
 <script setup lang="ts">
-import "../../css/entity.css"
-import {reactive, ref, computed, onUnmounted, onMounted} from "vue";
+import "../../css/entity.css";
+import {reactive, ref, computed, onMounted, onUnmounted} from "vue";
 import type {CoordinatesDTO} from "../../ts/dto/CoordinatesDTO.ts";
 import Movie from "./Movie.vue";
 
 const movieRef = ref<InstanceType<typeof Movie> | null>(null);
-
 const baseUrl = 'http://localhost:8080/IS-lab1JEE-1.0-SNAPSHOT/api';
 const toast = ref("");
 
@@ -15,14 +14,9 @@ const sortBy = ref<"id" | "x" | "y">("id");
 const showForm = ref(false);
 const formMode = ref<"create" | "edit">("create");
 const editId = ref<number | null>(null);
-let refreshInterval: number | undefined;
-const form = reactive({
-    coordinatesX: null as number | null,
-    coordinatesY: null as number | null,
-});
+const form = reactive({coordinatesX: null as number | null, coordinatesY: null as number | null});
 
 const coordinatesList = ref<{ id: number; x: number; y: number }[]>([]);
-
 const page = ref(0);
 const pageSize = 5;
 
@@ -35,13 +29,12 @@ const pagedCoordinates = computed(() => {
     });
 });
 
+const emit = defineEmits(['updated']);
+
 function showToast(message: string) {
     toast.value = message;
-    setTimeout(() => {
-        toast.value = "";
-    }, 5000);
+    setTimeout(() => toast.value = "", 5000);
 }
-
 
 function toggleSort(field: "id" | "x" | "y") {
     if (sortBy.value === field) {
@@ -60,9 +53,6 @@ function openEdit(coordinates: CoordinatesDTO) {
     showForm.value = true;
 }
 
-const emit = defineEmits(['updated']);
-
-
 async function confirmDelete(coordinates: CoordinatesDTO) {
     try {
         const res = await fetch(`${baseUrl}/coordinates/${coordinates.id}`, {
@@ -72,7 +62,6 @@ async function confirmDelete(coordinates: CoordinatesDTO) {
         if (!res.ok) throw new Error(res.statusText);
         await fetchCoordinates();
         emit('updated');
-
     } catch (e) {
         showToast("Ошибка удаления");
     }
@@ -80,10 +69,7 @@ async function confirmDelete(coordinates: CoordinatesDTO) {
 
 async function fetchCoordinates() {
     try {
-        const res = await fetch(
-            `${baseUrl}/coordinates/table?page=${page.value}&size=${pageSize}`,
-            {method: "GET", headers: {"Content-Type": "application/json"}}
-        );
+        const res = await fetch(`${baseUrl}/coordinates/table?page=${page.value}&size=${pageSize}`);
         if (!res.ok) throw new Error(res.statusText);
         coordinatesList.value = await res.json();
     } catch (e) {
@@ -92,23 +78,20 @@ async function fetchCoordinates() {
 }
 
 async function saveCoordinates() {
-    const coordinatesDTO = {
-        x: form.coordinatesX,
-        y: form.coordinatesY,
-    };
+    const dto = {x: form.coordinatesX, y: form.coordinatesY};
     try {
         let res;
         if (formMode.value === "create") {
             res = await fetch(`${baseUrl}/coordinates`, {
                 method: "POST",
                 headers: {"Content-Type": "application/json"},
-                body: JSON.stringify(coordinatesDTO),
+                body: JSON.stringify(dto),
             });
         } else if (formMode.value === "edit" && editId.value !== null) {
             res = await fetch(`${baseUrl}/coordinates/${editId.value}`, {
                 method: "PUT",
                 headers: {"Content-Type": "application/json"},
-                body: JSON.stringify(coordinatesDTO),
+                body: JSON.stringify(dto),
             });
             emit('updated');
         }
@@ -118,10 +101,9 @@ async function saveCoordinates() {
         showForm.value = false;
         showToast("Сохранено!");
     } catch (e) {
-        showToast("Ошибка сохранения" + e);
+        showToast("Ошибка сохранения: " + e);
     }
 }
-
 
 function nextPage() {
     page.value++;
@@ -134,76 +116,57 @@ function prevPage() {
         fetchCoordinates();
     }
 }
+
 function refresh() {
     fetchCoordinates();
 }
 
-defineExpose({ refresh });
+defineExpose({refresh});
+function handleKeydown(event: KeyboardEvent) {
+    if (event.key === "Escape") {
+        showModal.value = false;
+    }
+}
 
 onMounted(() => {
+    window.addEventListener("keydown", handleKeydown);
     fetchCoordinates();
     //refreshInterval = window.setInterval(() => {fetchCoordinates();}, 5000);
 });
 
 onUnmounted(() => {
-    clearInterval(refreshInterval);
+    window.removeEventListener("keydown", handleKeydown);
 });
+
 </script>
 
 <template>
-    <div class="table-wrapper">
-        Coordinates
+    <div class="table-wrapper">Coordinates
         <div v-if="toast" class="toast">{{ toast }}</div>
 
-        <div v-if="showForm">
-            <form @submit.prevent="saveCoordinates">
-                X:
-                <input type="number" v-model.number="form.coordinatesX" required/>
-                Y:
-                <input type="number" v-model.number="form.coordinatesY" required/>
-                <button type="submit">Сохранить</button>
-                <button type="button" @click="showForm = false" class="delete-btn">Закрыть</button>
-            </form>
-        </div>
-        <button v-else @click="showForm = true; formMode = 'create'">Добавить</button>
+        <button @click="showForm=true; formMode='create'" class="add-btn">Добавить</button>
 
         <table>
             <thead>
             <tr>
-                <th @click="toggleSort('id')">
-                    ID
-                    <span v-if="sortBy==='id'">
-          {{ sortDir === 'asc' ? '▲' : '▼' }}
-        </span>
+                <th @click="toggleSort('id')">ID <span v-if="sortBy==='id'">{{ sortDir === 'asc' ? '▲' : '▼' }}</span>
                 </th>
-                <th @click="toggleSort('x')">
-                    X
-                    <span v-if="sortBy==='x'">
-          {{ sortDir === 'asc' ? '▲' : '▼' }}
-        </span>
-                </th>
-                <th @click="toggleSort('y')">
-                    Y
-                    <span v-if="sortBy==='y'">
-          {{ sortDir === 'asc' ? '▲' : '▼' }}
-        </span>
-                </th>
+                <th @click="toggleSort('x')">X <span v-if="sortBy==='x'">{{ sortDir === 'asc' ? '▲' : '▼' }}</span></th>
+                <th @click="toggleSort('y')">Y <span v-if="sortBy==='y'">{{ sortDir === 'asc' ? '▲' : '▼' }}</span></th>
                 <th>Действия</th>
             </tr>
             </thead>
             <tbody>
-            <tr v-for="coordinates in pagedCoordinates" :key="coordinates.id">
-                <td>{{ coordinates.id }}</td>
-                <td>{{ coordinates.x }}</td>
-                <td>{{ coordinates.y }}</td>
+            <tr v-for="c in pagedCoordinates" :key="c.id">
+                <td>{{ c.id }}</td>
+                <td>{{ c.x }}</td>
+                <td>{{ c.y }}</td>
                 <td>
-                    <button @click="openEdit(coordinates)">Редактировать</button>
-                    <button @click="confirmDelete(coordinates)" class="delete-btn">
-                        Удалить
-                    </button>
+                    <button @click="openEdit(c)">Редактировать</button>
+                    <button @click="confirmDelete(c)" class="delete-btn">Удалить</button>
                 </td>
             </tr>
-            <tr v-if="pagedCoordinates.length === 0">
+            <tr v-if="pagedCoordinates.length===0">
                 <td colspan="4" class="no-data">Нет данных</td>
             </tr>
             </tbody>
@@ -212,10 +175,25 @@ onUnmounted(() => {
         <div class="pagination">
             <button @click="prevPage" :disabled="page===0">Назад</button>
             <span>Стр: {{ page + 1 }}</span>
-            <button @click="nextPage" :disabled="pagedCoordinates.length < pageSize">Вперёд</button>
+            <button @click="nextPage" :disabled="pagedCoordinates.length<pageSize">Вперёд</button>
         </div>
-    </div>
 
+        <transition name="fade">
+            <div v-if="showForm" class="overlay" @click.self="showForm=false">
+                <div class="modal">
+                    <h3>{{ formMode === 'create' ? 'Создать координаты' : 'Редактировать координаты' }}</h3>
+                    <form @submit.prevent="saveCoordinates">
+                        <label>X: <input type="number" v-model.number="form.coordinatesX" required/></label>
+                        <label>Y: <input type="number" v-model.number="form.coordinatesY" required/></label>
+                        <div class="modal-actions">
+                            <button type="submit">Сохранить</button>
+                            <button type="button" @click="showForm=false" class="delete-btn">Закрыть</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </transition>
+    </div>
 </template>
 
 <style scoped>

@@ -53,7 +53,19 @@ public class ImportController {
 
     @GET
     @Path("/history")
-    public List<ImportOperation> getHistory() {
-        return importRepository.findAll();
+    public Response getHistory(
+            @QueryParam("page") @DefaultValue("1") int page,
+            @QueryParam("size") @DefaultValue("10") int size
+    ) {
+        List<ImportOperation> items = importRepository.findAllPaged(page, size);
+        long total = importRepository.countAll();
+
+        return Response.ok(Map.of(
+                "content", items,
+                "page", page,
+                "size", size,
+                "total", total
+        )).build();
     }
+
 }

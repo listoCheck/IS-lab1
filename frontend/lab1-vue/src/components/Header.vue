@@ -1,5 +1,8 @@
 <script setup lang="ts">
-import logoVT from '..//assets/logo.png'
+import { defineEmits } from 'vue'
+import logoVT from '../assets/logo.png'
+
+const emit = defineEmits(['toggleImport'])
 </script>
 
 <template>
@@ -7,10 +10,14 @@ import logoVT from '..//assets/logo.png'
         <div class="header-content">
             <img id="pic" :src="logoVT" alt="pic" />
             <div class="header-text">
-                <h1>Лабораторная работа по ИС №1</h1>
+                <h1>Лабораторная работа по ИС №2</h1>
                 <h2>ААА</h2>
-                <h2>Группа P3306, Вариант №145</h2>
+                <h2>Группа P3306, Вариант №33</h2>
             </div>
+
+            <button class="import-btn" @click="emit('toggleImport')">
+                Импорт / История
+            </button>
         </div>
     </header>
 </template>
@@ -26,6 +33,7 @@ header {
     font-family: monospace;
     color: #BBBBBB;
     margin: 0;
+    font-size: 80%;
 }
 
 .header-content {
@@ -38,7 +46,7 @@ header {
 .header-text {
     flex: 1;
     text-align: center;
-    padding-right: 13%;
+    padding-right: 2%;
 }
 
 img {
@@ -47,45 +55,26 @@ img {
     margin-left: 1%;
 }
 
-@media (min-width: 1200px) {
-    body {
-        font-size: 14px;
-    }
-
-    h2 {
-        font-size: 20px;
-    }
-
-    h1 {
-        font-size: 26px;
-    }
+.import-btn {
+    margin-right: 2%;
+    background-color: #1E3A8A;
+    color: white;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s;
 }
 
-@media (max-width: 1063px) and (min-width: 813px) {
-    body {
-        font-size: 18px;
-    }
-
-    h2 {
-        font-size: 14px;
-    }
-
-    h1 {
-        font-size: 18px;
-    }
+.import-btn:hover {
+    background-color: #2563EB;
 }
 
 @media (max-width: 813px) {
-    body {
-        font-size: 9px;
-    }
-
-    h2 {
-        font-size: 9px;
-    }
-
-    h1 {
-        font-size: 9px;
+    .import-btn {
+        padding: 6px 10px;
+        font-size: 12px;
     }
 }
 </style>

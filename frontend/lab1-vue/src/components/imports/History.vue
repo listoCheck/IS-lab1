@@ -10,6 +10,12 @@ const error = ref<string | null>(null)
 const filterUser = ref('')
 const filterStatus = ref('')
 
+const page = ref(1)
+const pageSize = ref(10)
+const total = ref(0)
+
+const totalPages = computed(() => Math.ceil(total.value / pageSize.value))
+
 const filteredHistory = computed(() =>
     history.value.filter((r) => {
         return (
@@ -23,11 +29,12 @@ const loadHistory = async () => {
     loading.value = true
     error.value = null
     try {
-        const response = await fetch(`${baseUrl}/import/history`)
+        const response = await fetch(`${baseUrl}/import/history?page=${page.value}&size=${pageSize.value}`)
         if (!response.ok) throw new Error(`Ошибка: ${response.status}`)
         const data = await response.json()
 
-        history.value = (Array.isArray(data) ? data : []).map((r) => {
+        total.value = data.total || 0
+        history.value = (Array.isArray(data.content) ? data.content : []).map((r) => {
             if (Array.isArray(r.timestamp)) {
                 const [y, mo, d, h, mi, s, ns] = r.timestamp
                 r.timestamp = new Date(y, mo - 1, d, h, mi, s, Math.floor(ns / 1_000_000))
@@ -53,6 +60,20 @@ const formatDate = (ts: Date | null) => {
     })
 }
 
+const nextPage = () => {
+    if (page.value < totalPages.value) {
+        page.value++
+        loadHistory()
+    }
+}
+
+const prevPage = () => {
+    if (page.value > 1) {
+        page.value--
+        loadHistory()
+    }
+}
+
 onMounted(loadHistory)
 defineExpose({ loadHistory })
 </script>
@@ -62,11 +83,6 @@ defineExpose({ loadHistory })
         <h1 class="text-2xl font-bold text-gray-800">История импортов</h1>
 
         <div class="flex flex-wrap items-center gap-3">
-            <input
-                v-model="filterUser"
-                placeholder="Фильтр по пользователю"
-                class="border rounded-lg px-3 py-2 flex-1 min-w-[180px]"
-            />
             <select v-model="filterStatus" class="border rounded-lg px-3 py-2">
                 <option value="">Все статусы</option>
                 <option value="SUCCESS">Успешно</option>
@@ -118,6 +134,20 @@ defineExpose({ loadHistory })
                 </tr>
                 </tbody>
             </table>
+
+            <div class="flex justify-between items-center mt-4">
+                <button
+                    @click="prevPage"
+                    :disabled="page === 1"
+                    class="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-60"
+                >Назад</button>
+                <span>Страница {{ page }} из {{ totalPages }}</span>
+                <button
+                    @click="nextPage"
+                    :disabled="page === totalPages"
+                    class="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-60"
+                >Вперед</button>
+            </div>
         </div>
 
         <div v-else-if="loading" class="text-gray-500 text-center mt-6">
@@ -130,13 +160,10 @@ defineExpose({ loadHistory })
 </template>
 
 <style scoped>
-
-
 table {
     border-collapse: collapse;
     width: 100%;
+    background: #101f27;
     color: #f1f1f1;
-    background: #101F27;
 }
-
 </style>

@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import {reactive, ref, computed, onMounted, onUnmounted} from "vue";
-import type {LocationDTO} from "../../ts/dto/LocationDTO.ts";
-import type {PersonDTO} from "../../ts/dto/PersonDTO.ts";
+import { reactive, ref, computed, onMounted, onUnmounted } from "vue";
+import "../../css/entity.css";
+import type { LocationDTO } from "../../ts/dto/LocationDTO.ts";
+import type { PersonDTO } from "../../ts/dto/PersonDTO.ts";
 
 const baseUrl = "http://localhost:8080/IS-lab1JEE-1.0-SNAPSHOT/api";
 const toast = ref("");
@@ -10,9 +11,9 @@ const colors = ["GREEN", "BLACK", "YELLOW", "BROWN"];
 const countries = ["RUSSIA", "UNITED_KINGDOM", "VATICAN", "ITALY"];
 
 const sortDir = ref<"asc" | "desc">("asc");
-const sortBy = ref<"id" | "name" | "eyeColor" | "hairColor" | "location" | "weight" | "passportID" | "nationality" | "locationId">("id");
+const sortBy = ref<keyof PersonDTO | "locationId">("id");
 
-const showForm = ref(false);
+const showModal = ref(false);
 const formMode = ref<"create" | "edit">("create");
 const editId = ref<number | null>(null);
 
@@ -43,205 +44,120 @@ const pagedPersons = computed(() => {
 
 function showToast(message: string) {
     toast.value = message;
-    setTimeout(() => {
-        toast.value = "";
-    }, 5000);
+    setTimeout(() => { toast.value = ""; }, 5000);
 }
 
-function toggleSort(field: typeof sortBy.value) {
-    if (sortBy.value === field) {
-        sortDir.value = sortDir.value === "asc" ? "desc" : "asc";
+function toggleSort(field: keyof PersonDTO | "locationId") {
+    if (sortBy.value === field) sortDir.value = sortDir.value === "asc" ? "desc" : "asc";
+    else { sortBy.value = field; sortDir.value = "asc"; }
+}
+
+function openForm(mode: "create" | "edit", person?: PersonDTO) {
+    formMode.value = mode;
+    if (mode === "edit" && person) {
+        editId.value = person.id;
+        Object.assign(form, person);
     } else {
-        sortBy.value = field;
-        sortDir.value = "asc";
+        editId.value = null;
+        Object.assign(form, {
+            name: null,
+            eyeColor: null,
+            hairColor: null,
+            locationId: null,
+            weight: null,
+            passportID: null,
+            nationality: null,
+        });
     }
-}
-
-function openEdit(person: PersonDTO) {
-    onMounted(() => {
-        fetchLocations();
-        fetchPersons();
-    });
-
-    formMode.value = "edit";
-    editId.value = person.id;
-    Object.assign(form, person);
-    showForm.value = true;
+    showModal.value = true;
 }
 
 async function confirmDelete(person: PersonDTO) {
-    personsList.value = personsList.value.filter((c) => c.id !== person.id);
     try {
-        const res = await fetch(`${baseUrl}/person/${person.id}`, {
-            method: "DELETE",
-            headers: {"Content-Type": "application/json"},
-        });
+        const res = await fetch(`${baseUrl}/person/${person.id}`, { method: "DELETE", headers: { "Content-Type": "application/json" } });
         if (!res.ok) throw new Error(res.statusText);
-        personsList.value = await res.json();
-    } catch (e) {
+        await fetchPersons();
+    } catch {
         showToast("Ошибка удаления");
     }
-    await fetchPersons();
 }
 
 async function fetchPersons() {
     try {
-        const res = await fetch(`${baseUrl}/person/table`, {
-            method: "GET",
-            headers: {"Content-Type": "application/json"},
-        });
+        const res = await fetch(`${baseUrl}/person/table?page=${page.value}&size=${pageSize}`);
         if (!res.ok) throw new Error(res.statusText);
         personsList.value = await res.json();
-        console.log(personsList);
-    } catch (e) {
+    } catch {
         showToast("Ошибка загрузки персоналий");
     }
 }
 
 async function fetchLocations() {
     try {
-        const res = await fetch(`${baseUrl}/location/table`, {
-            method: "GET",
-            headers: {"Content-Type": "application/json"},
-        });
+        const res = await fetch(`${baseUrl}/location/table`);
         if (!res.ok) throw new Error(res.statusText);
         locationsList.value = await res.json();
-    } catch (e) {
+    } catch {
         showToast("Ошибка загрузки локаций");
     }
 }
 
 async function savePerson() {
-    const personDTO = {
-        name: form.name,
-        eyeColor: form.eyeColor,
-        hairColor: form.hairColor,
-        locationId: form.locationId,
-        weight: form.weight,
-        passportID: form.passportID,
-        nationality: form.nationality,
-    };
+    const payload = { ...form };
     try {
         let res;
         if (formMode.value === "create") {
-            res = await fetch(`${baseUrl}/person`, {
-                method: "POST",
-                headers: {"Content-Type": "application/json"},
-                body: JSON.stringify(personDTO),
-            });
+            res = await fetch(`${baseUrl}/person`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
         } else if (formMode.value === "edit" && editId.value !== null) {
-            res = await fetch(`${baseUrl}/person/${editId.value}`, {
-                method: "PUT",
-                headers: {"Content-Type": "application/json"},
-                body: JSON.stringify(personDTO),
-            });
+            res = await fetch(`${baseUrl}/person/${editId.value}`, { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
         }
         if (!res || !res.ok) throw new Error(res?.statusText);
         await fetchPersons();
-        showForm.value = false;
+        showModal.value = false;
         showToast("Сохранено!");
-    } catch (e) {
+    } catch {
         showToast("Ошибка сохранения");
     }
 }
-function updateAll(){
-    fetchLocations();
-}
-function nextPage() {
-    page.value++;
-    fetchPersons();
-}
 
-function prevPage() {
-    if (page.value > 0) {
-        page.value--;
-        fetchPersons();
+function nextPage() { page.value++; fetchPersons(); }
+function prevPage() { if (page.value > 0) { page.value--; fetchPersons(); } }
+function handleKeydown(event: KeyboardEvent) {
+    if (event.key === "Escape") {
+        showModal.value = false;
     }
 }
 
-let refreshInterval: number | undefined;
 onMounted(() => {
-    fetchLocations();
-    fetchPersons();
+    window.addEventListener("keydown", handleKeydown);
+    fetchLocations(); fetchPersons();
     //refreshInterval = window.setInterval(() => {fetchLocations();fetchPersons();}, 5000);
 });
 
-
 onUnmounted(() => {
-    clearInterval(refreshInterval);
+    window.removeEventListener("keydown", handleKeydown);
 });
-function refresh() {
-    fetchLocations();
-    fetchPersons();
-}
 
-defineExpose({ refresh });
 </script>
 
 <template>
     <div class="table-wrapper">
         Person
-        <div v-if="toast" class="toast">{{ toast }}</div>
+        <div v-if="toast">{{ toast }}</div>
 
-        <div v-if="showForm">
-            <form @submit.prevent="savePerson">
-                Name:
-                <input type="text" v-model="form.name" required/>
-
-                Eye Color:
-                <select v-model="form.eyeColor">
-                    <option value="">-- select --</option>
-                    <option v-for="c in colors" :key="c" :value="c">{{ c }}</option>
-                </select>
-
-                Hair Color:
-                <select v-model="form.hairColor" required>
-                    <option disabled value="">-- select --</option>
-                    <option v-for="c in colors" :key="c" :value="c">{{ c }}</option>
-                </select>
-
-                Location:
-                <select v-model="form.locationId" required>
-                    <option disabled value="">-- select location --</option>
-                    <option
-                        v-for="loc in locationsList"
-                        :key="loc.id"
-                        :value="loc.id">
-                        {{ loc.id }} ({{ loc.x }}, {{ loc.y }}, {{ loc.z }}) {{ loc.name ? " - " + loc.name : "" }}
-                    </option>
-
-                </select>
-
-                Weight:
-                <input type="number" step="0.01" v-model.number="form.weight" required/>
-
-                Passport ID:
-                <input type="text" v-model="form.passportID" required/>
-
-                Nationality:
-                <select v-model="form.nationality">
-                    <option value="">-- none --</option>
-                    <option v-for="c in countries" :key="c" :value="c">{{ c }}</option>
-                </select>
-
-
-                <button type="submit">Сохранить</button>
-                <button type="button" @click="showForm = false" class="delete-btn">Закрыть</button>
-            </form>
-        </div>
-        <button v-else @click="showForm = true; updateAll(); formMode = 'create'">Добавить</button>
+        <button class="add-btn" @click="openForm('create')">Добавить</button>
 
         <table>
             <thead>
             <tr>
-                <th @click="toggleSort('id')">ID <small v-if="sortBy==='id'">{{ sortDir === 'asc' ? '▲' : '▼' }}</small></th>
-                <th @click="toggleSort('name')">Имя <small v-if="sortBy==='name'">{{ sortDir === 'asc' ? '▲' : '▼' }}</small></th>
-                <th @click="toggleSort('eyeColor')">Глаза <small v-if="sortBy==='eyeColor'">{{ sortDir === 'asc' ? '▲' : '▼' }}</small></th>
-                <th @click="toggleSort('hairColor')">Волосы <small v-if="sortBy==='hairColor'">{{ sortDir === 'asc' ? '▲' : '▼' }}</small></th>
-                <th @click="toggleSort('location')">Локация <small v-if="sortBy==='location'">{{ sortDir === 'asc' ? '▲' : '▼' }}</small></th>
-                <th @click="toggleSort('weight')">Вес <small v-if="sortBy==='weight'">{{ sortDir === 'asc' ? '▲' : '▼' }}</small></th>
-                <th @click="toggleSort('passportID')">Паспорт <small v-if="sortBy==='passportID'">{{ sortDir === 'asc' ? '▲' : '▼' }}</small></th>
-                <th @click="toggleSort('nationality')">Национальность <small v-if="sortBy==='nationality'">{{ sortDir === 'asc' ? '▲' : '▼' }}</small></th>
+                <th @click="toggleSort('id')">ID</th>
+                <th @click="toggleSort('name')">Имя</th>
+                <th @click="toggleSort('eyeColor')">Глаза</th>
+                <th @click="toggleSort('hairColor')">Волосы</th>
+                <th @click="toggleSort('locationId')">Локация</th>
+                <th @click="toggleSort('weight')">Вес</th>
+                <th @click="toggleSort('passportID')">Паспорт</th>
+                <th @click="toggleSort('nationality')">Национальность</th>
                 <th>Действия</th>
             </tr>
             </thead>
@@ -251,29 +167,63 @@ defineExpose({ refresh });
                 <td>{{ p.name }}</td>
                 <td>{{ p.eyeColor }}</td>
                 <td>{{ p.hairColor }}</td>
-                <td>{{ p.location.id + " " + p.location.name }}</td>
+                <td>{{ p.location?.name }}</td>
                 <td>{{ p.weight }}</td>
                 <td>{{ p.passportID }}</td>
                 <td>{{ p.nationality }}</td>
-
                 <td>
-                    <button @click="openEdit(p); onMounted">Редактировать</button>
-                    <button @click="confirmDelete(p)" class="delete-btn">Удалить</button>
+                    <button @click="openForm('edit', p)">Редактировать</button>
+                    <button @click="confirmDelete(p)">Удалить</button>
                 </td>
             </tr>
             <tr v-if="pagedPersons.length === 0">
-                <td colspan="9" class="no-data">Нет данных</td>
+                <td colspan="9">Нет данных</td>
             </tr>
             </tbody>
         </table>
+
         <div class="pagination">
             <button @click="prevPage" :disabled="page===0">Назад</button>
             <span>Стр: {{ page + 1 }}</span>
             <button @click="nextPage" :disabled="pagedPersons.length < pageSize">Вперёд</button>
         </div>
     </div>
+
+    <div v-if="showModal" class="overlay" @click.self="showModal = false">
+        <div class="modal">
+            <h3>{{ formMode === 'create' ? 'Создать' : 'Редактировать' }} Person</h3>
+            <form @submit.prevent="savePerson">
+                <input type="text" v-model="form.name" placeholder="Name" required />
+                <select v-model="form.eyeColor">
+                    <option value="">-- select eye color --</option>
+                    <option v-for="c in colors" :key="c" :value="c">{{ c }}</option>
+                </select>
+                <select v-model="form.hairColor">
+                    <option value="">-- select hair color --</option>
+                    <option v-for="c in colors" :key="c" :value="c">{{ c }}</option>
+                </select>
+                <select v-model="form.locationId" required>
+                    <option value="">-- select location --</option>
+                    <option v-for="loc in locationsList" :key="loc.id" :value="loc.id">{{ loc.name }}</option>
+                </select>
+                <input type="number" step="0.01" v-model.number="form.weight" placeholder="Weight" required />
+                <input type="text" v-model="form.passportID" placeholder="Passport ID" required />
+                <select v-model="form.nationality">
+                    <option value="">-- select nationality --</option>
+                    <option v-for="c in countries" :key="c" :value="c">{{ c }}</option>
+                </select>
+                <div class="modal-actions">
+                    <button type="submit">Сохранить</button>
+                    <button type="button" @click="showModal=false" class="delete-btn">Закрыть</button>
+                </div>
+            </form>
+        </div>
+    </div>
 </template>
 
-<style scoped>
 
+<style scoped>
+.overlay{
+    color: #cccccc;
+}
 </style>
