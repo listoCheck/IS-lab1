@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { reactive, ref, computed, onMounted, onUnmounted } from "vue";
 import type { LocationDTO } from "../../ts/dto/LocationDTO.ts";
-
-const baseUrl = 'http://localhost:8080/IS-lab1JEE-1.0-SNAPSHOT/api';
+//const baseUrl = "http://localhost:8080/IS-lab1JEE-1.0-SNAPSHOT/api";
+const baseUrl = "http://localhost:25102/IS-lab1JEE-1.0-SNAPSHOT/api";
 const toast = ref("");
 
 const sortDir = ref<"asc" | "desc">("asc");
@@ -101,7 +101,7 @@ async function saveLocations() {
             });
         } else if (formMode.value === "edit" && editId.value !== null) {
             res = await fetch(`${baseUrl}/location/${editId.value}`, {
-                method: "PUT",
+                method: "PATCH",
                 headers: {"Content-Type": "application/json"},
                 body: JSON.stringify(locationDTO),
             });
@@ -124,20 +124,16 @@ defineExpose({ refresh });
 
 let refreshInterval: number | undefined;
 
-function handleKeydown(event: KeyboardEvent) {
-    if (event.key === "Escape") {
-        showModal.value = false;
-    }
-}
+
 
 onMounted(() => {
-    window.addEventListener("keydown", handleKeydown);
+    //window.addEventListener("keydown", handleKeydown);
     fetchLocations();
-    //refreshInterval = window.setInterval(() => {fetchLocations();}, 5000);
+    refreshInterval = window.setInterval(() => {fetchLocations();}, 5000);
 });
 
 onUnmounted(() => {
-    window.removeEventListener("keydown", handleKeydown);
+    //window.removeEventListener("keydown", handleKeydown);
     clearInterval(refreshInterval);
 });
 </script>

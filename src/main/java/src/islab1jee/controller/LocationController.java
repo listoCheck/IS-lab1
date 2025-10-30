@@ -42,7 +42,7 @@ public class LocationController {
         return Response.ok(list).build();
     }
 
-    @PUT
+    @PATCH
     @Path("/{id}")
     public Response update(@PathParam("id") Integer id, @Valid LocationRequestDto dto) {
         return Response.ok(service.update(id, dto)).build();

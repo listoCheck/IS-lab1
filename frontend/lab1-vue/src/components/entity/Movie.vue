@@ -5,7 +5,8 @@ import type {MovieDTO} from "../../ts/dto/MovieDTO.ts";
 import type {CoordinatesDTO} from "../../ts/dto/CoordinatesDTO.ts";
 import type {PersonDTO} from "../../ts/dto/PersonDTO.ts";
 
-const baseUrl = "http://localhost:8080/IS-lab1JEE-1.0-SNAPSHOT/api";
+//const baseUrl = "http://localhost:8080/IS-lab1JEE-1.0-SNAPSHOT/api";
+const baseUrl = "http://localhost:25102/IS-lab1JEE-1.0-SNAPSHOT/api";
 const toast = ref("");
 
 const sortDir = ref<"asc" | "desc">("asc");
@@ -175,7 +176,7 @@ async function saveMovie() {
             });
         } else if (formMode.value === "edit" && editId.value !== null) {
             res = await fetch(`${baseUrl}/movie/${editId.value}`, {
-                method: "PUT",
+                method: "PATCH",
                 headers: {"Content-Type": "application/json"},
                 body: JSON.stringify(movieDTO),
             });
@@ -274,12 +275,7 @@ async function deleteOscars() {
 
 
 let refreshInterval: number | undefined;
-onMounted(() => {
-    fetchCoordinates();
-    fetchPersons();
-    fetchMovies();
-    //refreshInterval = window.setInterval(() => {fetchCoordinates();fetchPersons();fetchMovies();}, 5000);
-});
+
 
 
 onUnmounted(() => {
@@ -293,7 +289,12 @@ function refresh() {
 
 defineExpose({ refresh });
 
-
+onMounted(() => {
+    fetchCoordinates();
+    fetchPersons();
+    fetchMovies();
+    refreshInterval = window.setInterval(() => {fetchCoordinates();fetchPersons();fetchMovies();}, 5000);
+});
 </script>
 
 <template>

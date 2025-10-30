@@ -29,14 +29,7 @@ public class CoordinatesController {
     public Response getById(@PathParam("id") Integer id) {
         return Response.ok(service.getById(id)).build();
     }
-    /**
-    @GET
-    @Path("/table")
-    public Response getAll() {
-        List<CoordinatesResponseDto> list = service.getAll();
-        return Response.ok(list).build();
-    }
-     **/
+
     @GET
     @Path("/table")
     public Response getPaged(
@@ -48,7 +41,7 @@ public class CoordinatesController {
     }
 
 
-    @PUT
+    @PATCH
     @Path("/{id}")
     public Response update(@PathParam("id") Integer id, @Valid CoordinatesRequestDto dto) {
         return Response.ok(service.update(id, dto)).build();

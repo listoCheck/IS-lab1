@@ -51,7 +51,7 @@ public class MovieController {
         return Response.ok(middle).build();
     }
 
-    @PUT
+    @PATCH
     @Path("/{id}")
     public Response update(@PathParam("id") Integer id, @Valid MovieRequestDto dto) {
         return Response.ok(service.update(id, dto)).build();

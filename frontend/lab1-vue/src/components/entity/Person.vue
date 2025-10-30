@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { reactive, ref, computed, onMounted, onUnmounted } from "vue";
+import {reactive, ref, computed, onMounted, onUnmounted} from "vue";
 import "../../css/entity.css";
-import type { LocationDTO } from "../../ts/dto/LocationDTO.ts";
-import type { PersonDTO } from "../../ts/dto/PersonDTO.ts";
+import type {LocationDTO} from "../../ts/dto/LocationDTO.ts";
+import type {PersonDTO} from "../../ts/dto/PersonDTO.ts";
 
-const baseUrl = "http://localhost:8080/IS-lab1JEE-1.0-SNAPSHOT/api";
+//const baseUrl = "http://localhost:8080/IS-lab1JEE-1.0-SNAPSHOT/api";
+const baseUrl = "http://localhost:25102/IS-lab1JEE-1.0-SNAPSHOT/api";
 const toast = ref("");
 
 const colors = ["GREEN", "BLACK", "YELLOW", "BROWN"];
@@ -44,12 +45,17 @@ const pagedPersons = computed(() => {
 
 function showToast(message: string) {
     toast.value = message;
-    setTimeout(() => { toast.value = ""; }, 5000);
+    setTimeout(() => {
+        toast.value = "";
+    }, 5000);
 }
 
 function toggleSort(field: keyof PersonDTO | "locationId") {
     if (sortBy.value === field) sortDir.value = sortDir.value === "asc" ? "desc" : "asc";
-    else { sortBy.value = field; sortDir.value = "asc"; }
+    else {
+        sortBy.value = field;
+        sortDir.value = "asc";
+    }
 }
 
 function openForm(mode: "create" | "edit", person?: PersonDTO) {
@@ -74,7 +80,10 @@ function openForm(mode: "create" | "edit", person?: PersonDTO) {
 
 async function confirmDelete(person: PersonDTO) {
     try {
-        const res = await fetch(`${baseUrl}/person/${person.id}`, { method: "DELETE", headers: { "Content-Type": "application/json" } });
+        const res = await fetch(`${baseUrl}/person/${person.id}`, {
+            method: "DELETE",
+            headers: {"Content-Type": "application/json"}
+        });
         if (!res.ok) throw new Error(res.statusText);
         await fetchPersons();
     } catch {
@@ -103,13 +112,21 @@ async function fetchLocations() {
 }
 
 async function savePerson() {
-    const payload = { ...form };
+    const payload = {...form};
     try {
         let res;
         if (formMode.value === "create") {
-            res = await fetch(`${baseUrl}/person`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
+            res = await fetch(`${baseUrl}/person`, {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify(payload)
+            });
         } else if (formMode.value === "edit" && editId.value !== null) {
-            res = await fetch(`${baseUrl}/person/${editId.value}`, { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
+            res = await fetch(`${baseUrl}/person/${editId.value}`, {
+                method: "PATCH",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify(payload)
+            });
         }
         if (!res || !res.ok) throw new Error(res?.statusText);
         await fetchPersons();
@@ -120,24 +137,44 @@ async function savePerson() {
     }
 }
 
-function nextPage() { page.value++; fetchPersons(); }
-function prevPage() { if (page.value > 0) { page.value--; fetchPersons(); } }
+function nextPage() {
+    page.value++;
+    fetchPersons();
+}
+
+function prevPage() {
+    if (page.value > 0) {
+        page.value--;
+        fetchPersons();
+    }
+}
+
 function handleKeydown(event: KeyboardEvent) {
     if (event.key === "Escape") {
         showModal.value = false;
     }
 }
 
-onMounted(() => {
-    window.addEventListener("keydown", handleKeydown);
-    fetchLocations(); fetchPersons();
-    //refreshInterval = window.setInterval(() => {fetchLocations();fetchPersons();}, 5000);
-});
+let refreshInterval: number | undefined;
 
 onUnmounted(() => {
-    window.removeEventListener("keydown", handleKeydown);
+    clearInterval(refreshInterval);
 });
 
+onMounted(() => {
+    window.addEventListener("keydown", handleKeydown);
+    fetchLocations();
+    fetchPersons();
+    refreshInterval = window.setInterval(() => {fetchLocations();fetchPersons();}, 5000);
+});
+
+
+function refresh() {
+    fetchLocations();
+    fetchPersons();
+}
+
+defineExpose({refresh});
 </script>
 
 <template>
@@ -193,7 +230,7 @@ onUnmounted(() => {
         <div class="modal">
             <h3>{{ formMode === 'create' ? 'Создать' : 'Редактировать' }} Person</h3>
             <form @submit.prevent="savePerson">
-                <input type="text" v-model="form.name" placeholder="Name" required />
+                <input type="text" v-model="form.name" placeholder="Name" required/>
                 <select v-model="form.eyeColor">
                     <option value="">-- select eye color --</option>
                     <option v-for="c in colors" :key="c" :value="c">{{ c }}</option>
@@ -206,8 +243,8 @@ onUnmounted(() => {
                     <option value="">-- select location --</option>
                     <option v-for="loc in locationsList" :key="loc.id" :value="loc.id">{{ loc.name }}</option>
                 </select>
-                <input type="number" step="0.01" v-model.number="form.weight" placeholder="Weight" required />
-                <input type="text" v-model="form.passportID" placeholder="Passport ID" required />
+                <input type="number" step="0.01" v-model.number="form.weight" placeholder="Weight" required/>
+                <input type="text" v-model="form.passportID" placeholder="Passport ID" required/>
                 <select v-model="form.nationality">
                     <option value="">-- select nationality --</option>
                     <option v-for="c in countries" :key="c" :value="c">{{ c }}</option>
@@ -223,7 +260,7 @@ onUnmounted(() => {
 
 
 <style scoped>
-.overlay{
+.overlay {
     color: #cccccc;
 }
 </style>

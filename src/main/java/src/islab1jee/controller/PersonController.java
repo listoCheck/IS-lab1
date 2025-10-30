@@ -45,7 +45,7 @@ public class PersonController {
         return Response.ok(list).build();
     }
 
-    @PUT
+    @PATCH
     @Path("/{id}")
     public Response update(@PathParam("id") Integer id, @Valid PersonRequestDto dto) {
         return Response.ok(service.update(id, dto)).build();

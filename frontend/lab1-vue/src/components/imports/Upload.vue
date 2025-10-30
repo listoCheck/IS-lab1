@@ -9,7 +9,8 @@ const selectedFile = ref<File | null>(null)
 const preview = ref<any[]>([])
 const message = ref('')
 const isLoading = ref(false)
-const baseUrl = 'http://localhost:8080/IS-lab1JEE-1.0-SNAPSHOT/api'
+//const baseUrl = "http://localhost:8080/IS-lab1JEE-1.0-SNAPSHOT/api";
+const baseUrl = "http://localhost:25102/IS-lab1JEE-1.0-SNAPSHOT/api";
 
 const handleFileSelect = (event: Event) => {
     const file = (event.target as HTMLInputElement).files?.[0]
@@ -74,6 +75,8 @@ const uploadFile = async () => {
         const formData = new FormData()
         formData.append('file', selectedFile.value)
 
+        console.log(formData);
+
         const response = await axios.post(`${baseUrl}/import`, formData, {
             headers: { 'Content-Type': 'multipart/form-data' }
         })
@@ -83,7 +86,7 @@ const uploadFile = async () => {
         } else {
             message.value = `Импорт успешно выполнен. Добавлено ${response.data.addedCount} объектов.`
         }
-        emit('imported')
+
     } catch (err: any) {
         console.error(err)
         message.value = err.response?.data?.message
@@ -92,6 +95,7 @@ const uploadFile = async () => {
     } finally {
         isLoading.value = false
     }
+    emit('imported');
 }
 
 const reset = () => {

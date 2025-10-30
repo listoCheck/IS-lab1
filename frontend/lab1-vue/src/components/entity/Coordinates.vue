@@ -5,7 +5,8 @@ import type {CoordinatesDTO} from "../../ts/dto/CoordinatesDTO.ts";
 import Movie from "./Movie.vue";
 
 const movieRef = ref<InstanceType<typeof Movie> | null>(null);
-const baseUrl = 'http://localhost:8080/IS-lab1JEE-1.0-SNAPSHOT/api';
+//const baseUrl = "http://localhost:8080/IS-lab1JEE-1.0-SNAPSHOT/api";
+const baseUrl = "http://localhost:25102/IS-lab1JEE-1.0-SNAPSHOT/api";
 const toast = ref("");
 
 const sortDir = ref<"asc" | "desc">("asc");
@@ -89,7 +90,7 @@ async function saveCoordinates() {
             });
         } else if (formMode.value === "edit" && editId.value !== null) {
             res = await fetch(`${baseUrl}/coordinates/${editId.value}`, {
-                method: "PUT",
+                method: "PATCH",
                 headers: {"Content-Type": "application/json"},
                 body: JSON.stringify(dto),
             });
@@ -122,21 +123,14 @@ function refresh() {
 }
 
 defineExpose({refresh});
-function handleKeydown(event: KeyboardEvent) {
-    if (event.key === "Escape") {
-        showModal.value = false;
-    }
-}
 
 onMounted(() => {
-    window.addEventListener("keydown", handleKeydown);
+    //window.addEventListener("keydown", handleKeydown);
     fetchCoordinates();
-    //refreshInterval = window.setInterval(() => {fetchCoordinates();}, 5000);
+    refreshInterval = window.setInterval(() => {fetchCoordinates();}, 5000);
 });
 
-onUnmounted(() => {
-    window.removeEventListener("keydown", handleKeydown);
-});
+
 
 </script>
 

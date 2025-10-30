@@ -31,11 +31,13 @@ public class ImportService {
     @PersistenceContext
     private EntityManager em;
 
+    ImportOperation op;
+
     private static final Logger logger = Logger.getLogger(ImportService.class.getName());
 
     @Transactional
     public ImportOperation processImport(InputStream inputStream) {
-        ImportOperation op = new ImportOperation();
+        op = new ImportOperation();
         op.setTimestamp(LocalDateTime.now());
 
         try {
@@ -140,6 +142,9 @@ public class ImportService {
             return true;
         } catch (Exception e) {
             logger.severe("Ошибка при создании Movie: " + e.getMessage());
+            op.setStatus(ImportStatus.FAILED);
+            op.setAddedCount(0);
+            op.setErrorMessage("Ошибка импорта: " + e.getMessage());
             throw new RuntimeException("Ошибка создания Movie: " + e.getMessage(), e);
         }
     }
@@ -155,6 +160,9 @@ public class ImportService {
             return true;
         } catch (Exception e) {
             logger.severe("Ошибка при создании Coordinates: " + e.getMessage());
+            op.setStatus(ImportStatus.FAILED);
+            op.setAddedCount(0);
+            op.setErrorMessage("Ошибка импорта: " + e.getMessage());
             throw new RuntimeException("Ошибка создания Coordinates", e);
         }
     }
@@ -177,6 +185,9 @@ public class ImportService {
             return true;
         } catch (Exception e) {
             logger.severe("Ошибка при создании Location: " + e.getMessage());
+            op.setStatus(ImportStatus.FAILED);
+            op.setAddedCount(0);
+            op.setErrorMessage("Ошибка импорта: " + e.getMessage());
             throw new RuntimeException("Ошибка создания Location", e);
         }
     }
@@ -200,6 +211,9 @@ public class ImportService {
             return true;
         } catch (Exception e) {
             logger.severe("Ошибка при создании Person: " + e.getMessage());
+            op.setStatus(ImportStatus.FAILED);
+            op.setAddedCount(0);
+            op.setErrorMessage("Ошибка импорта: " + e.getMessage());
             throw new RuntimeException("Ошибка создания Person", e);
         }
     }
