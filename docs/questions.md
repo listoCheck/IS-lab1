@@ -1,7 +1,8 @@
 # Вопросы на защите лабы:
-- [ ] bean factory
-- [ ] application context
-- [ ] AOP
-- [ ] Hibernate native api
-
-//todo: попробовать избавиться от транзактионал
+- [x] bean factory
+- [x] application context
+- [x] AOP
+- [x] Hibernate native api
+- [x] stateless ejb
+- [x] JTA
+- [x] как изолируются друг от друга распределенные транзакции
