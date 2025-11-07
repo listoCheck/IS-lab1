@@ -107,7 +107,7 @@ ITALY;
 
 ## 2.UML-диаграммы классов и пакетов разработанного приложения.
 
-![img.png](assets/uml.png)
+![img.png](assets/uml1.png)
 
 ## 3.Исходный код системы или ссылка на репозиторий с исходным кодом.
 https://github.com/listoCheck/IS-labs/tree/lab1)
