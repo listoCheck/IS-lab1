@@ -13,6 +13,7 @@ import src.islab1jee.model.importobjects.ImportOperation;
 import src.islab1jee.model.location.Location;
 import src.islab1jee.model.movie.Movie;
 import src.islab1jee.model.person.Person;
+import src.islab1jee.repository.CoordinatesRepository;
 import src.islab1jee.repository.ImportRepository;
 
 import java.io.InputStream;
@@ -25,8 +26,10 @@ import java.util.logging.Logger;
 @ApplicationScoped
 public class ImportService {
 
-    @Inject
     private ImportRepository importRepository;
+    public ImportService() {
+        this.importRepository = new ImportRepository();
+    }
 
     @PersistenceContext
     private EntityManager em;

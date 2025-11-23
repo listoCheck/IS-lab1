@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { reactive, ref, computed, onMounted, onUnmounted } from "vue";
 import type { LocationDTO } from "../../ts/dto/LocationDTO.ts";
-//const baseUrl = "http://localhost:8080/IS-lab1JEE-1.0-SNAPSHOT/api";
-const baseUrl = "http://localhost:25102/IS-lab1JEE-1.0-SNAPSHOT/api";
+const baseUrl = "http://localhost:8080/IS-lab1JEE-1.0-SNAPSHOT/api";
+//const baseUrl = "http://localhost:25102/IS-lab1JEE-1.0-SNAPSHOT/api";
 const toast = ref("");
 
 const sortDir = ref<"asc" | "desc">("asc");
@@ -129,7 +129,7 @@ let refreshInterval: number | undefined;
 onMounted(() => {
     //window.addEventListener("keydown", handleKeydown);
     fetchLocations();
-    refreshInterval = window.setInterval(() => {fetchLocations();}, 5000);
+    //refreshInterval = window.setInterval(() => {fetchLocations();}, 5000);
 });
 
 onUnmounted(() => {

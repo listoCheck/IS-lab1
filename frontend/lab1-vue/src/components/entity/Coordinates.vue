@@ -5,8 +5,8 @@ import type {CoordinatesDTO} from "../../ts/dto/CoordinatesDTO.ts";
 import Movie from "./Movie.vue";
 
 const movieRef = ref<InstanceType<typeof Movie> | null>(null);
-//const baseUrl = "http://localhost:8080/IS-lab1JEE-1.0-SNAPSHOT/api";
-const baseUrl = "http://localhost:25102/IS-lab1JEE-1.0-SNAPSHOT/api";
+const baseUrl = "http://localhost:8080/IS-lab1JEE-1.0-SNAPSHOT/api";
+//const baseUrl = "http://localhost:25102/IS-lab1JEE-1.0-SNAPSHOT/api";
 const toast = ref("");
 
 const sortDir = ref<"asc" | "desc">("asc");
@@ -121,13 +121,13 @@ function prevPage() {
 function refresh() {
     fetchCoordinates();
 }
-
+let refreshInterval: number | undefined;
 defineExpose({refresh});
 
 onMounted(() => {
     //window.addEventListener("keydown", handleKeydown);
     fetchCoordinates();
-    refreshInterval = window.setInterval(() => {fetchCoordinates();}, 5000);
+    //refreshInterval = window.setInterval(() => {fetchCoordinates();}, 5000);
 });
 
 

@@ -15,17 +15,18 @@ import java.util.stream.Collectors;
 @ApplicationScoped
 public class CoordinatesService {
 
-    @Inject
-    private CoordinatesRepository repository;
+    private final CoordinatesRepository repository;
 
-    @Transactional
+    public CoordinatesService() {
+        this.repository = new CoordinatesRepository();
+    }
+
     public CoordinatesResponseDto create(CoordinatesRequestDto dto) {
         Coordinates entity = CoordinatesMapper.toEntity(dto);
         Coordinates saved = repository.save(entity);
         return CoordinatesMapper.toDto(saved);
     }
 
-    @Transactional
     public CoordinatesResponseDto update(Integer id, CoordinatesRequestDto dto) {
         Coordinates entity = repository.findById(id);
         if (entity == null) {
@@ -37,7 +38,6 @@ public class CoordinatesService {
         return CoordinatesMapper.toDto(updated);
     }
 
-    @Transactional
     public void delete(Integer id) {
         repository.delete(id);
     }
@@ -50,11 +50,6 @@ public class CoordinatesService {
         return CoordinatesMapper.toDto(entity);
     }
 
-    public List<CoordinatesResponseDto> getAll() {
-        return repository.findAll().stream()
-                .map(CoordinatesMapper::toDto)
-                .collect(Collectors.toList());
-    }
 
     public List<CoordinatesResponseDto> getPaged(int page, int size) {
 

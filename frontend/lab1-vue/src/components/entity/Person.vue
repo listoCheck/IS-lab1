@@ -4,8 +4,8 @@ import "../../css/entity.css";
 import type {LocationDTO} from "../../ts/dto/LocationDTO.ts";
 import type {PersonDTO} from "../../ts/dto/PersonDTO.ts";
 
-//const baseUrl = "http://localhost:8080/IS-lab1JEE-1.0-SNAPSHOT/api";
-const baseUrl = "http://localhost:25102/IS-lab1JEE-1.0-SNAPSHOT/api";
+const baseUrl = "http://localhost:8080/IS-lab1JEE-1.0-SNAPSHOT/api";
+//const baseUrl = "http://localhost:25102/IS-lab1JEE-1.0-SNAPSHOT/api";
 const toast = ref("");
 
 const colors = ["GREEN", "BLACK", "YELLOW", "BROWN"];
@@ -165,7 +165,7 @@ onMounted(() => {
     window.addEventListener("keydown", handleKeydown);
     fetchLocations();
     fetchPersons();
-    refreshInterval = window.setInterval(() => {fetchLocations();fetchPersons();}, 5000);
+    //refreshInterval = window.setInterval(() => {fetchLocations();fetchPersons();}, 5000);
 });
 
 

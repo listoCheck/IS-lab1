@@ -26,8 +26,11 @@ public class MovieService {
     @Inject
     private MovieRepository movieRepository;
 
-    @Inject
+
     private CoordinatesRepository coordinatesRepository;
+    public MovieService() {
+        this.coordinatesRepository = new CoordinatesRepository();
+    }
 
     @Inject
     private PersonRepository personRepository;
