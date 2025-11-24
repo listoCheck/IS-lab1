@@ -30,6 +30,9 @@ dependencies {
 
     implementation 'org.glassfish.jersey.media:jersey-media-multipart:3.1.0'
 
+    implementation 'org.ehcache:ehcache:3.10.8'
+    implementation 'javax.cache:cache-api:1.1.1'
+
 
     compileOnly "org.projectlombok:lombok:1.18.34"
     annotationProcessor "org.projectlombok:lombok:1.18.34"

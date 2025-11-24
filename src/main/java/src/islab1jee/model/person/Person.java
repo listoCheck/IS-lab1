@@ -1,9 +1,10 @@
 package src.islab1jee.model.person;
 
+import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
+import org.hibernate.annotations.*;
+import org.hibernate.annotations.Cache;
 import src.islab1jee.enums.Color;
 import src.islab1jee.enums.Country;
 
@@ -14,6 +15,8 @@ import src.islab1jee.model.location.Location;
 @Setter
 @Getter
 @Entity
+@Cacheable
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE, region = "PersonRegion")
 @Table(name = "person")
 public class Person {
     @Id

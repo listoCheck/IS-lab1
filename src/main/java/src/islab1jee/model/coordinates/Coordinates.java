@@ -7,13 +7,16 @@ import jakarta.persistence.Id;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
-
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Cache;
 
 
 @Setter
 @Getter
 @Entity
 @Table
+@Cacheable
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE, region = "CoordinatesRegion")
 public class Coordinates {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "coordinates_id_seq")
