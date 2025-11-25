@@ -15,6 +15,7 @@ import src.islab1jee.model.movie.Movie;
 import src.islab1jee.model.person.Person;
 import src.islab1jee.repository.CoordinatesRepository;
 import src.islab1jee.repository.ImportRepository;
+import src.islab1jee.utils.S3Service;
 
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
@@ -30,6 +31,8 @@ public class ImportService {
     public ImportService() {
         this.importRepository = new ImportRepository();
     }
+    @Inject
+    S3Service s3;
 
     @PersistenceContext
     private EntityManager em;
@@ -44,9 +47,16 @@ public class ImportService {
         op.setTimestamp(LocalDateTime.now());
 
         try {
-            String jsonText = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8)
+            String objectName = "import-" + UUID.randomUUID() + ".json";
+            InputStream cloneForS3 = inputStream;
+            byte[] stream = cloneForS3.readAllBytes();
+
+            String jsonTextToSave = new String(stream, StandardCharsets.UTF_8)
                     .replace("\uFEFF", "")
                     .trim();
+
+            s3.uploadFile(objectName, new java.io.ByteArrayInputStream(jsonTextToSave.getBytes(StandardCharsets.UTF_8)));
+            String jsonText = jsonTextToSave;
 
             StringBuilder sb = new StringBuilder();
             boolean insideJson = false;

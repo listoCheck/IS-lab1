@@ -15,5 +15,8 @@ http://127.0.0.1:25102/Web_2/
 5)check data base
 psql -h pg -d studs
 
-
-
+key_id:
+64a43acc4952200834f6add811209354
+key_secret:
+e08e8f4501066e2b67acf101cbbc3889
+curl -i --data-urlencode "grant_type=access_key" --data-urlencode "client_id=64a43acc4952200834f6add811209354" --data-urlencode "client_secret=e08e8f4501066e2b67acf101cbbc3889" "https://auth.iam.sbercloud.ru/auth/system/openid/token"

@@ -9,8 +9,8 @@ const selectedFile = ref<File | null>(null)
 const preview = ref<any[]>([])
 const message = ref('')
 const isLoading = ref(false)
-//const baseUrl = "http://localhost:8080/IS-lab1JEE-1.0-SNAPSHOT/api";
-const baseUrl = "http://localhost:25102/IS-lab1JEE-1.0-SNAPSHOT/api";
+const baseUrl = "http://localhost:8080/IS-lab1JEE-1.0-SNAPSHOT/api";
+//const baseUrl = "http://localhost:25102/IS-lab1JEE-1.0-SNAPSHOT/api";
 
 const handleFileSelect = (event: Event) => {
     const file = (event.target as HTMLInputElement).files?.[0]
