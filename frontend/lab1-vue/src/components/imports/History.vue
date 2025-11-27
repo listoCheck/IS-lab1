@@ -1,63 +1,63 @@
 <script setup lang="ts">
-import { ref, computed, onMounted, defineExpose } from 'vue'
+import { ref, computed, onMounted, defineExpose } from "vue"
 
-const baseUrl = "http://localhost:8080/IS-lab1JEE-1.0-SNAPSHOT/api";
-//const baseUrl = "http://localhost:25102/IS-lab1JEE-1.0-SNAPSHOT/api";
+const baseUrl = "http://localhost:8080/IS-lab1JEE-1.0-SNAPSHOT/api"
 
 const history = ref<any[]>([])
 const loading = ref(false)
 const error = ref<string | null>(null)
 
-const filterUser = ref('')
-const filterStatus = ref('')
-
+const filterStatus = ref("")
 const page = ref(1)
 const pageSize = ref(10)
 const total = ref(0)
 
-const totalPages = computed(() => Math.ceil(total.value / pageSize.value))
-
-const filteredHistory = computed(() =>
-    history.value.filter((r) => {
-        return (
-            (!filterUser.value || r.user?.toLowerCase().includes(filterUser.value.toLowerCase())) &&
-            (!filterStatus.value || r.status === filterStatus.value)
-        )
-    })
-)
+const totalPages = computed(() => Math.max(1, Math.ceil(total.value / pageSize.value)))
 
 const loadHistory = async () => {
     loading.value = true
     error.value = null
-    try {
-        const response = await fetch(`${baseUrl}/import/history?page=${page.value}&size=${pageSize.value}`)
-        if (!response.ok) throw new Error(`Ошибка: ${response.status}`)
-        const data = await response.json()
 
-        total.value = data.total || 0
-        history.value = (Array.isArray(data.content) ? data.content : []).map((r) => {
+    try {
+        const resp = await fetch(`${baseUrl}/import/history?page=${page.value}&size=${pageSize.value}`)
+        if (!resp.ok) throw new Error("Ошибка " + resp.status)
+
+        const data = await resp.json()
+
+        total.value = data.total ?? 0
+        const array = Array.isArray(data.content) ? data.content : []
+
+        history.value = array.map((r: any) => {
             if (Array.isArray(r.timestamp)) {
-                const [y, mo, d, h, mi, s, ns] = r.timestamp
-                r.timestamp = new Date(y, mo - 1, d, h, mi, s, Math.floor(ns / 1_000_000))
+                const [y, m, d, h, mi, s, ns] = r.timestamp
+                r.timestamp = new Date(y, m - 1, d, h, mi, s, Math.floor(ns / 1_000_000))
+            } else if (typeof r.timestamp === "string") {
+                r.timestamp = new Date(r.timestamp)
             }
             return r
         })
-    } catch (err: any) {
-        error.value = err.message
+    } catch (e: any) {
+        error.value = e.message
     } finally {
         loading.value = false
     }
 }
 
+const filteredHistory = computed(() =>
+    history.value.filter(r =>
+        (!filterStatus.value || r.status === filterStatus.value)
+    )
+)
+
 const formatDate = (ts: Date | null) => {
-    if (!ts) return '-'
-    return ts.toLocaleString('ru-RU', {
-        day: '2-digit',
-        month: '2-digit',
-        year: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit'
+    if (!ts) return "-"
+    return ts.toLocaleString("ru-RU", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit"
     })
 }
 
@@ -80,7 +80,7 @@ defineExpose({ loadHistory })
 </script>
 
 <template>
-    <div class="p-6 max-w-5xl mx-auto space-y-6">
+    <div class="p-6 max-w-6xl mx-auto space-y-6">
         <h1 class="text-2xl font-bold text-gray-800">История импортов</h1>
 
         <div class="flex flex-wrap items-center gap-3">
@@ -89,12 +89,13 @@ defineExpose({ loadHistory })
                 <option value="SUCCESS">Успешно</option>
                 <option value="FAILED">Ошибка</option>
             </select>
+
             <button
-                class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-60"
                 @click="loadHistory"
                 :disabled="loading"
+                class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-60"
             >
-                {{ loading ? 'Загрузка...' : 'Обновить' }}
+                {{ loading ? "Загрузка..." : "Обновить" }}
             </button>
         </div>
 
@@ -104,14 +105,16 @@ defineExpose({ loadHistory })
 
         <div v-if="!loading && filteredHistory.length" class="overflow-x-auto">
             <table class="w-full text-left border-collapse">
-                <thead class="bg-gray-100">
+                <thead class="bg-gray-100 text-gray-900">
                 <tr>
                     <th class="p-2 border">ID</th>
                     <th class="p-2 border">Статус</th>
                     <th class="p-2 border">Добавлено</th>
                     <th class="p-2 border">Дата</th>
+                    <th class="p-2 border">Файл</th>
                 </tr>
                 </thead>
+
                 <tbody>
                 <tr
                     v-for="record in filteredHistory"
@@ -119,19 +122,35 @@ defineExpose({ loadHistory })
                     class="hover:bg-gray-50 transition-colors"
                 >
                     <td class="p-2 border">{{ record.id }}</td>
-                    <td
-                        class="p-2 border font-semibold"
+
+                    <td class="p-2 border font-semibold"
                         :class="{
-                'text-green-600': record.status === 'SUCCESS',
-                'text-red-600': record.status === 'FAILED'
-              }"
+                                'text-green-600': record.status === 'SUCCESS',
+                                'text-red-600': record.status === 'FAILED'
+                            }"
                     >
                         {{ record.status }}
                     </td>
+
                     <td class="p-2 border">
-                        {{ record.status === 'SUCCESS' ? record.addedCount : '-' }}
+                        {{ record.status === "SUCCESS" ? record.addedCount : "-" }}
                     </td>
-                    <td class="p-2 border">{{ formatDate(record.timestamp) }}</td>
+
+                    <td class="p-2 border">
+                        {{ formatDate(record.timestamp) }}
+                    </td>
+
+                    <td class="p-2 border">
+                        <a
+                            v-if="record.s3Url"
+                            :href="record.s3Url"
+                            class="text-blue-400 underline"
+                            target="_blank"
+                        >
+                            Скачать
+                        </a>
+                        <span v-else>-</span>
+                    </td>
                 </tr>
                 </tbody>
             </table>
@@ -141,19 +160,26 @@ defineExpose({ loadHistory })
                     @click="prevPage"
                     :disabled="page === 1"
                     class="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-60"
-                >Назад</button>
+                >
+                    Назад
+                </button>
+
                 <span>Страница {{ page }} из {{ totalPages }}</span>
+
                 <button
                     @click="nextPage"
                     :disabled="page === totalPages"
                     class="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-60"
-                >Вперед</button>
+                >
+                    Вперед
+                </button>
             </div>
         </div>
 
         <div v-else-if="loading" class="text-gray-500 text-center mt-6">
             Загрузка истории...
         </div>
+
         <div v-else class="text-gray-500 text-center mt-6">
             История импортов пуста
         </div>

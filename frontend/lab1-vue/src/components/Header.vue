@@ -10,9 +10,9 @@ const emit = defineEmits(['toggleImport'])
         <div class="header-content">
             <img id="pic" :src="logoVT" alt="pic" />
             <div class="header-text">
-                <h1>Лабораторная работа по ИС №2</h1>
+                <h1>Лабораторная работа по ИС №3</h1>
                 <h2>ААА</h2>
-                <h2>Группа P3306, Вариант №33</h2>
+                <h2>Группа P3306, Вариант №222</h2>
             </div>
 
             <button class="import-btn" @click="emit('toggleImport')">

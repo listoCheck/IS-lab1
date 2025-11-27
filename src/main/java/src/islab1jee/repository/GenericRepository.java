@@ -34,11 +34,20 @@ public abstract class GenericRepository<T> {
         return emf.createEntityManager();
     }
 
+    private boolean entityHasId(T entity) {
+        try {
+            Object id = entity.getClass().getMethod("getId").invoke(entity);
+            return id != null;
+        } catch (Exception e) {
+            throw new RuntimeException("Невозможно получить id сущности", e);
+        }
+    }
+
     public T save(T entity) {
         EntityManager em = getEntityManager();
         try {
             em.getTransaction().begin();
-            if (em.contains(entity)) {
+            if (entityHasId(entity)) {
                 entity = em.merge(entity);
             } else {
                 em.persist(entity);
@@ -52,6 +61,7 @@ public abstract class GenericRepository<T> {
             em.close();
         }
     }
+
 
     public T findById(Integer id) {
         EntityManager em = getEntityManager();

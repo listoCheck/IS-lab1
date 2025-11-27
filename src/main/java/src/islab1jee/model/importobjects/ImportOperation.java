@@ -28,4 +28,7 @@ public class ImportOperation {
     @Column(length = 2048)
     private String errorMessage;
 
+    @Column(length = 2048)
+    private String s3Url;
+
 }

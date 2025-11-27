@@ -1,13 +1,11 @@
 package src.islab1jee.service;
 
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
 import src.islab1jee.model.coordinates.DTO.CoordinatesRequestDto;
 import src.islab1jee.model.coordinates.DTO.CoordinatesResponseDto;
-import jakarta.transaction.Transactional;
-import src.islab1jee.mapper.CoordinatesMapper;
 import src.islab1jee.model.coordinates.Coordinates;
 import src.islab1jee.repository.CoordinatesRepository;
+import src.islab1jee.mapper.CoordinatesMapper;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -32,6 +30,7 @@ public class CoordinatesService {
         if (entity == null) {
             throw new RuntimeException("Координаты с id=" + id + " не найдены");
         }
+
         entity.setX(dto.getX());
         entity.setY(dto.getY());
         Coordinates updated = repository.save(entity);
@@ -50,14 +49,10 @@ public class CoordinatesService {
         return CoordinatesMapper.toDto(entity);
     }
 
-
     public List<CoordinatesResponseDto> getPaged(int page, int size) {
-
         return repository.findPaged(page, size)
                 .stream()
                 .map(CoordinatesMapper::toDto)
                 .collect(Collectors.toList());
     }
-
-
 }

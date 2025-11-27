@@ -6,6 +6,7 @@ import java.util.concurrent.TimeUnit;
 import io.minio.GetPresignedObjectUrlArgs;
 import io.minio.MinioClient;
 import io.minio.PutObjectArgs;
+import io.minio.RemoveObjectArgs;
 import io.minio.http.Method;
 import jakarta.enterprise.context.ApplicationScoped;
 
@@ -65,4 +66,15 @@ public class S3Service {
             throw new RuntimeException("Ошибка при работе с S3 Cloud.ru", e);
         }
     }
+    public void deleteFile(String objectName) {
+        try {
+            minioClient.removeObject(RemoveObjectArgs.builder()
+                    .bucket(bucketName)
+                    .object(objectName)
+                    .build());
+        } catch (Exception e) {
+            throw new RuntimeException("Ошибка удаления файла из S3: " + e.getMessage(), e);
+        }
+    }
+
 }
