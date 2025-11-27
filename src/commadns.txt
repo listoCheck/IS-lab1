@@ -20,3 +20,10 @@ key_id:
 key_secret:
 e08e8f4501066e2b67acf101cbbc3889
 curl -i --data-urlencode "grant_type=access_key" --data-urlencode "client_id=64a43acc4952200834f6add811209354" --data-urlencode "client_secret=e08e8f4501066e2b67acf101cbbc3889" "https://auth.iam.sbercloud.ru/auth/system/openid/token"
+
+
+DROP TABLE IF EXISTS coordinates CASCADE;
+DROP TABLE IF EXISTS importoperation CASCADE;
+DROP TABLE IF EXISTS location CASCADE;
+DROP TABLE IF EXISTS movie CASCADE;
+DROP TABLE IF EXISTS person CASCADE;

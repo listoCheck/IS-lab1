@@ -2,7 +2,7 @@
 import { ref, computed, onMounted, defineExpose } from "vue"
 
 const baseUrl = "http://localhost:8080/IS-lab1JEE-1.0-SNAPSHOT/api"
-
+//const baseUrl = "http://localhost:25102/IS-lab1JEE-1.0-SNAPSHOT/api";
 const history = ref<any[]>([])
 const loading = ref(false)
 const error = ref<string | null>(null)

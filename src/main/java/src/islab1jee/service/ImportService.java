@@ -31,7 +31,6 @@ public class ImportService {
     ImportRepository importOperationRepo;
 
 
-
     private static final Logger logger = Logger.getLogger(ImportService.class.getName());
     private final CoordinatesRepository coordinatesRepo = new CoordinatesRepository();
     private final LocationRepository locationRepo = new LocationRepository();
@@ -54,7 +53,6 @@ public class ImportService {
             return op;
         }
 
-        // === твой парсинг JSON с очисткой BOM и лишних строк ===
         String originalJsonText = new String(rawBytes, StandardCharsets.UTF_8).replace("\uFEFF", "").trim();
         StringBuilder sb = new StringBuilder();
         boolean insideJson = false;
@@ -64,8 +62,6 @@ public class ImportService {
             if (insideJson) sb.append(line).append("\n");
         }
         String jsonTextToSave = sb.toString().trim();
-        // === конец парсинга ===
-
         String typeHint = "UnknownType";
         try {
             ObjectMapper mapper = new ObjectMapper();
@@ -109,7 +105,10 @@ public class ImportService {
             op.setStatus(src.islab1jee.enums.ImportStatus.SUCCESS);
             importOperationRepo.save(op);
         } else {
-            try { s3.deleteFile(objectName); } catch (Exception ignored) {}
+            try {
+                s3.deleteFile(objectName);
+            } catch (Exception ignored) {
+            }
             op.setStatus(src.islab1jee.enums.ImportStatus.FAILED);
             importOperationRepo.save(op);
         }
@@ -154,7 +153,6 @@ public class ImportService {
         return savedCount;
     }
 
-    // ================= Методы persist через GenericRepository =================
     private boolean persistCoordinates(JsonNode json) {
         Coordinates coords = buildCoordinates(json);
         coordinatesRepo.save(coords);
@@ -254,8 +252,9 @@ public class ImportService {
             return null;
         }
         String text = json.get(field).asText();
-        try { return Enum.valueOf(enumClass, text); }
-        catch (Exception e) {
+        try {
+            return Enum.valueOf(enumClass, text);
+        } catch (Exception e) {
             throw new IllegalArgumentException(
                     "Недопустимое значение '" + text + "' для поля " + field + ", ожидается: " +
                             Arrays.toString(enumClass.getEnumConstants()));
