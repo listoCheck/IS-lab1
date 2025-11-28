@@ -1,31 +1,49 @@
 package src.islab1jee.utils;
+
 import org.apache.commons.dbcp2.BasicDataSource;
 
 import javax.sql.DataSource;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
 
 public class DBCPDataSource {
 
-    private static BasicDataSource ds = new BasicDataSource();
+    private static final BasicDataSource ds = new BasicDataSource();
 
     static {
-        ds.setUrl("jdbc:postgresql://localhost:5432/studs");
-        ds.setUsername("s408145");
-        ds.setPassword("JLzD%6772");
-        ds.setDriverClassName("org.postgresql.Driver");
+        Properties properties = new Properties();
 
-        ds.setMinIdle(5);
-        ds.setMaxIdle(10);
-        ds.setMaxTotal(20);
-        ds.setMaxWaitMillis(10000);
+        try (InputStream input = DBCPDataSource.class.getClassLoader()
+                .getResourceAsStream("db.properties")) {
 
-        ds.setValidationQuery("SELECT 1");
-        ds.setTestOnBorrow(true);
+            if (input == null) {
+                throw new RuntimeException("Не найден файл конфигурации db.properties");
+            }
+
+            properties.load(input);
+
+        } catch (IOException e) {
+            throw new RuntimeException("Ошибка загрузки db.properties", e);
+        }
+
+        ds.setUrl(properties.getProperty("db.url"));
+        ds.setUsername(properties.getProperty("db.username"));
+        ds.setPassword(properties.getProperty("db.password"));
+        ds.setDriverClassName(properties.getProperty("db.driver"));
+
+        ds.setMinIdle(Integer.parseInt(properties.getProperty("db.minIdle")));
+        ds.setMaxIdle(Integer.parseInt(properties.getProperty("db.maxIdle")));
+        ds.setMaxTotal(Integer.parseInt(properties.getProperty("db.maxTotal")));
+        ds.setMaxWaitMillis(Long.parseLong(properties.getProperty("db.maxWaitMillis")));
+
+        ds.setValidationQuery(properties.getProperty("db.validationQuery"));
+        ds.setTestOnBorrow(Boolean.parseBoolean(properties.getProperty("db.testOnBorrow")));
     }
 
-    private DBCPDataSource() { }
+    private DBCPDataSource() {}
 
     public static DataSource getDataSource() {
         return ds;
     }
 }
-
