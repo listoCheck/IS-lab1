@@ -35,4 +35,4 @@
 | Лаба 2 | 📄 [docs/lab2.md](docs/lab2.md) |
 
 ## S3 хранилище
-<img src="https://console.cloud.ru/favicon.ico" height="70" alt="Jakarta EE" /> https://id.cloud.ru
+<img src="docs/assets/favicon.ico" alt="https://id.cloud.ru" /> https://id.cloud.ru
