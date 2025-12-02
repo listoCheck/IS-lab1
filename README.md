@@ -35,5 +35,4 @@
 | Лаба 2 | 📄 [docs/lab2.md](docs/lab2.md) |
 
 ## S3 хранилище
-
-использовал этот сайт: https://id.cloud.ru/login?tab=MGJmNzA5ODQtODA3NS00NjhiLThmMWYtYjM0ZTUyYzEwNjBlJmU5NWExZGI1LWE2MWMtNDI1Yi1hZTYyLTI2ZDNhN2UyMjRmNw%3D%3D.3fef8c7d128594c38db1b94cb59fa7a86a16a19ae4c684b8a70c4c7dcdd724a9
+<img src="https://console.cloud.ru/favicon.ico" height="70" alt="Jakarta EE" /> https://id.cloud.ru
